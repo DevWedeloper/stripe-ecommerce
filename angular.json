@@ -58,6 +58,7 @@
     }
   },
   "cli": {
-    "analytics": "c9f60118-e415-4026-a985-3687d30cd945"
+    "analytics": "c9f60118-e415-4026-a985-3687d30cd945",
+    "packageManager": "bun"
   }
 }
