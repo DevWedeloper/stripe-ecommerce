@@ -21,7 +21,8 @@
     "lib": ["ES2022", "dom"],
     "types": ["vitest/globals"],
     "useDefineForClassFields": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
