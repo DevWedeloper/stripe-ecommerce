@@ -8,7 +8,7 @@ import {
 } from 'drizzle-orm/pg-core';
 
 export const products = pgTable('products', {
-  id: integer('id').primaryKey(),
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
   description: text('description').notNull(),
   price: integer('price').notNull(),
@@ -18,7 +18,7 @@ export const products = pgTable('products', {
 });
 
 export const categories = pgTable('categories', {
-  id: integer('id').primaryKey(),
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull().unique(),
   parentCategoryId: integer('parent_category_id').references(
     (): AnyPgColumn => categories.id,
