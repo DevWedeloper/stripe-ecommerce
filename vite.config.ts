@@ -23,7 +23,12 @@ export default defineConfig(({ mode }) => ({
     optimizeDeps: {
       include: ['isomorphic-fetch'],
     },
-    noExternal: ['@analogjs/trpc', '@trpc/server', '@spartan-ng/**'],
+    noExternal: [
+      '@analogjs/trpc',
+      '@trpc/server',
+      '@spartan-ng/**',
+      '@ng-icons/**',
+    ],
   },
   plugins: [
     analog({
