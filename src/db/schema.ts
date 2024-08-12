@@ -13,7 +13,7 @@ export const products = pgTable('products', {
   description: text('description').notNull(),
   price: integer('price').notNull(),
   currency: text('currency').notNull(),
-  imageUrl: text('image_url'),
+  imagePath: text('image_path'),
   stock: integer('stock').notNull(),
 });
 
