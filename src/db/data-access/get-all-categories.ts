@@ -5,7 +5,7 @@ export type CategoryWithSubcategories = Categories & {
   subcategories: CategoryWithSubcategories[];
 };
 
-export async function getAllCategories() {
+export const getAllCategories = async () => {
   const categoriesData = await db.select().from(categories);
 
   const buildCategoryTree = (
@@ -22,4 +22,4 @@ export async function getAllCategories() {
 
   const categoryTree = buildCategoryTree(categoriesData);
   return categoryTree;
-}
+};
