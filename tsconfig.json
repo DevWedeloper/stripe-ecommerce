@@ -39,6 +39,9 @@
       ],
       "@spartan-ng/ui-input-helm": [
         "./libs/ui/ui-input-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-typography-helm": [
+        "./libs/ui/ui-typography-helm/src/index.ts"
       ]
     }
   },
