@@ -8,7 +8,6 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   root: __dirname,
-  cacheDir: `../node_modules/.vite`,
   build: {
     reportCompressedSize: true,
     target: ['es2020'],
