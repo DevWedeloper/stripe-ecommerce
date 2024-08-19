@@ -7,20 +7,18 @@ import {
   untracked,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  HlmPaginationContentDirective,
-  HlmPaginationDirective,
-  HlmPaginationEllipsisComponent,
-  HlmPaginationItemDirective,
-  HlmPaginationLinkDirective,
-  HlmPaginationNextComponent,
-  HlmPaginationPreviousComponent,
-} from '@spartan-ng/ui-pagination-helm';
 import { BrnSelectImports } from '@spartan-ng/ui-select-brain';
 import { HlmSelectImports } from '@spartan-ng/ui-select-helm';
+import { HlmPaginationContentDirective } from './hlm-pagination-content.directive';
+import { HlmPaginationEllipsisComponent } from './hlm-pagination-ellipsis.componet';
+import { HlmPaginationItemDirective } from './hlm-pagination-item.directive';
+import { HlmPaginationLinkDirective } from './hlm-pagination-link.directive';
+import { HlmPaginationNextComponent } from './hlm-pagination-next.componet';
+import { HlmPaginationPreviousComponent } from './hlm-pagination-previous.componet';
+import { HlmPaginationDirective } from './hlm-pagination.directive';
 
 @Component({
-  selector: 'spartan-numbered-pagination',
+  selector: 'hlm-numbered-pagination',
   template: `
     <div class="flex items-center justify-between gap-2 px-4 py-2">
       <div class="flex items-center gap-1 text-nowrap text-sm text-gray-600">
@@ -94,7 +92,7 @@ import { HlmSelectImports } from '@spartan-ng/ui-select-helm';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NumberedPaginationComponent {
+export class HlmNumberedPaginationComponent {
   /**
    * The current (active) page.
    */
