@@ -42,6 +42,9 @@
       ],
       "@spartan-ng/ui-typography-helm": [
         "./libs/ui/ui-typography-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-pagination-helm": [
+        "./libs/ui/ui-pagination-helm/src/index.ts"
       ]
     }
   },
