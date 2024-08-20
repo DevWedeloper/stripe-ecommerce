@@ -30,6 +30,8 @@ const getCategoryAndChildCategoryIds = async (
   return [categoryId, ...nestedChildCategoryIds.flat()];
 };
 
+const convertToQueryFormat = (name: string) => name.replace(/-/g, ' ');
+
 export const getProductsByCategoryName = async (
   categoryName: string,
   page: number = 1,
@@ -42,7 +44,12 @@ export const getProductsByCategoryName = async (
   const categoryResult = await db
     .select({ id: categories.id })
     .from(categories)
-    .where(eq(lower(categories.name), categoryName.toLocaleLowerCase()))
+    .where(
+      eq(
+        lower(categories.name),
+        convertToQueryFormat(categoryName.toLocaleLowerCase()),
+      ),
+    )
     .limit(1);
 
   if (categoryResult.length === 0) {
