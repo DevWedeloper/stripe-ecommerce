@@ -50,7 +50,7 @@
         "./libs/ui/ui-select-helm/src/index.ts"
       ],
       "@spartan-ng/ui-sonner-helm": [
-        ".\\libs/ui/ui-sonner-helm/src/index.ts"
+        "./libs/ui/ui-sonner-helm/src/index.ts"
       ]
     }
   },
