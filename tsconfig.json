@@ -54,6 +54,9 @@
       ],
       "@spartan-ng/ui-scrollarea-helm": [
         "./libs/ui/ui-scrollarea-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-popover-helm": [
+        "./libs/ui/ui-popover-helm/src/index.ts"
       ]
     }
   },
