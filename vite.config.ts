@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => ({
       '@trpc/server',
       '@spartan-ng/**',
       '@ng-icons/**',
+      'ngx-sonner',
     ],
   },
   plugins: [
