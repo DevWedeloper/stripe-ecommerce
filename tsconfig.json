@@ -57,6 +57,9 @@
       ],
       "@spartan-ng/ui-popover-helm": [
         "./libs/ui/ui-popover-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-card-helm": [
+        "./libs/ui/ui-card-helm/src/index.ts"
       ]
     }
   },
