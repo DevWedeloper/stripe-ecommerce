@@ -66,6 +66,9 @@
       ],
       "@spartan-ng/ui-skeleton-helm": [
         "./libs/ui/ui-skeleton-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-sheet-helm": [
+        "./libs/ui/ui-sheet-helm/src/index.ts"
       ]
     }
   },
