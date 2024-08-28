@@ -1,6 +1,6 @@
-import { getAllCategories } from 'src/db/data-access/get-all-categories';
+import { getCategoryTree } from 'src/server/use-cases/get-category-tree';
 import { publicProcedure, router } from '../trpc';
 
 export const categoriesRouter = router({
-  getAll: publicProcedure.query(async () => await getAllCategories()),
+  getTree: publicProcedure.query(async () => await getCategoryTree()),
 });
