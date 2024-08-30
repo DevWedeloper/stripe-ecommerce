@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ReplaySubject, combineLatest, map } from 'rxjs';
+import { ReplaySubject, combineLatest } from 'rxjs';
 
 const DarkModes = ['light', 'dark', 'system'] as const;
 export type DarkMode = (typeof DarkModes)[number];
@@ -25,13 +25,6 @@ export class ThemeService {
   private _darkMode$ = new ReplaySubject<'light' | 'dark' | 'system'>(1);
   private _systemDarkMode$ = new ReplaySubject<'light' | 'dark' | 'system'>(1);
   darkMode$ = this._darkMode$.asObservable();
-  isDarkMode$ = combineLatest([this.darkMode$, this._systemDarkMode$]).pipe(
-    map(
-      ([darkMode, systemDarkMode]) =>
-        darkMode === 'dark' ||
-        (darkMode === 'system' && systemDarkMode === 'dark'),
-    ),
-  );
 
   constructor() {
     this._systemDarkMode$.next(this._query.matches ? 'dark' : 'light');
@@ -50,15 +43,20 @@ export class ThemeService {
   }
 
   private toggleClassOnDarkModeChanges(): void {
-    this.isDarkMode$.pipe(takeUntilDestroyed()).subscribe((isDarkMode) => {
-      if (isDarkMode) {
-        this._renderer.addClass(this._document.documentElement, 'dark');
-      } else {
-        if (this._document.documentElement.className.includes('dark')) {
-          this._renderer.removeClass(this._document.documentElement, 'dark');
+    combineLatest([this.darkMode$, this._systemDarkMode$])
+      .pipe(takeUntilDestroyed())
+      .subscribe(([darkMode, systemDarkMode]) => {
+        if (
+          darkMode === 'dark' ||
+          (darkMode === 'system' && systemDarkMode === 'dark')
+        ) {
+          this._renderer.addClass(this._document.documentElement, 'dark');
+        } else {
+          if (this._document.documentElement.className.includes('dark')) {
+            this._renderer.removeClass(this._document.documentElement, 'dark');
+          }
         }
-      }
-    });
+      });
   }
 
   setDarkMode(newMode: DarkMode): void {
