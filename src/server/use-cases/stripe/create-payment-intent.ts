@@ -1,5 +1,5 @@
 import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
-import { stripe } from './utils';
+import { stripe } from './stripe';
 
 interface PaymentIntentParams {
   amountInCents: number;

@@ -1,5 +1,5 @@
 import { positiveIntSchema } from 'src/schemas/zod-schemas';
-import { createPaymentIntent } from 'src/server/use-cases/create-payment-intent';
+import { createPaymentIntent } from 'src/server/use-cases/stripe/create-payment-intent';
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
 
