@@ -6,6 +6,8 @@ import {
   withComponentInputBinding,
   withInMemoryScrolling,
 } from '@angular/router';
+import { provideNgxStripe } from 'ngx-stripe';
+import { environment } from 'src/environments/environment';
 import { provideTrpcClient } from 'src/trpc-client';
 
 export const appConfig: ApplicationConfig = {
@@ -20,5 +22,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideClientHydration(),
     provideTrpcClient(),
+    provideNgxStripe(environment.stripePublishableKey),
   ],
 };
