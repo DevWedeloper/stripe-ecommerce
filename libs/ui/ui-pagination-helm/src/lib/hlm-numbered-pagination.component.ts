@@ -10,11 +10,11 @@ import { FormsModule } from '@angular/forms';
 import { BrnSelectImports } from '@spartan-ng/ui-select-brain';
 import { HlmSelectImports } from '@spartan-ng/ui-select-helm';
 import { HlmPaginationContentDirective } from './hlm-pagination-content.directive';
-import { HlmPaginationEllipsisComponent } from './hlm-pagination-ellipsis.componet';
+import { HlmPaginationEllipsisComponent } from './hlm-pagination-ellipsis.component';
 import { HlmPaginationItemDirective } from './hlm-pagination-item.directive';
 import { HlmPaginationLinkDirective } from './hlm-pagination-link.directive';
-import { HlmPaginationNextComponent } from './hlm-pagination-next.componet';
-import { HlmPaginationPreviousComponent } from './hlm-pagination-previous.componet';
+import { HlmPaginationNextComponent } from './hlm-pagination-next.component';
+import { HlmPaginationPreviousComponent } from './hlm-pagination-previous.component';
 import { HlmPaginationDirective } from './hlm-pagination.directive';
 
 @Component({
