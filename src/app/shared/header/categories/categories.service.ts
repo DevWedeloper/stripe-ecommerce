@@ -45,7 +45,7 @@ export class CategoriesService {
     initialValue: [],
   });
 
-  initialLoading = toSignal(this.initialLoading$, {
+  isInitialLoading = toSignal(this.initialLoading$, {
     initialValue: true,
   });
 

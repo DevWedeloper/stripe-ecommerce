@@ -36,7 +36,7 @@ import { SubcategoriesComponent } from './subcategories.component';
     </button>
     <ng-template #categoriesTpl>
       <hlm-menu class="w-40">
-        @if (!initialLoading()) {
+        @if (!isInitialLoading()) {
           @for (category of categories(); track $index) {
             @if (category.subcategories.length > 0) {
               <button hlmMenuItem [brnMenuTriggerFor]="subcategory">
@@ -72,7 +72,7 @@ import { SubcategoriesComponent } from './subcategories.component';
 export class CategoriesComponent {
   private categoriesService = inject(CategoriesService);
   protected categories = this.categoriesService.categories;
-  protected initialLoading = this.categoriesService.initialLoading;
+  protected isInitialLoading = this.categoriesService.isInitialLoading;
   protected hasError = this.categoriesService.hasError;
 
   protected redirectToCategory = redirectToCategory;
