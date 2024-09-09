@@ -62,7 +62,7 @@ import { SubcategoriesComponent } from './subcategories.component';
           </div>
         }
         @if (hasError()) {
-          <div>An error occurred...</div>
+          <p>An error occurred...</p>
         }
       </hlm-menu>
     </ng-template>
