@@ -59,7 +59,7 @@ import { CartItemComponent } from './cart-item.component';
           @for (product of cart(); track product.id) {
             <app-cart-item
               [product]="product"
-              (removeFromCartChange)="removeFromCart($event)"
+              (removeFromCartChange)="removeFromCart(product.id)"
             />
           } @empty {
             <div>Empty cart...</div>

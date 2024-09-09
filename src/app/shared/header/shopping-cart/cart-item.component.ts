@@ -40,7 +40,7 @@ import { getS3ImageUrl } from '../../utils';
       hlmBtn
       variant="destructive"
       class="w-full"
-      (click)="removeFromCartChange.emit(product().id)"
+      (click)="removeFromCartChange.emit()"
     >
       <hlm-icon size="sm" class="mr-2" name="lucideTrash2" />
       Remove
@@ -50,7 +50,7 @@ import { getS3ImageUrl } from '../../utils';
 })
 export class CartItemComponent {
   product = input.required<ProductWithQuantity>();
-  removeFromCartChange = output<number>();
+  removeFromCartChange = output();
 
   protected getS3ImageUrl = getS3ImageUrl;
 }
