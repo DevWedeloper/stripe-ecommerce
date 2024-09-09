@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
-import { lucideShoppingCart, lucideTrash2 } from '@ng-icons/lucide';
+import { lucideShoppingCart } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import {
@@ -18,7 +18,7 @@ import {
 import { HlmPopoverContentDirective } from '@spartan-ng/ui-popover-helm';
 import { HlmScrollAreaComponent } from '@spartan-ng/ui-scrollarea-helm';
 import { ShoppingCartService } from '../../shopping-cart.service';
-import { getS3ImageUrl } from '../../utils';
+import { CartItemComponent } from './cart-item.component';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -33,8 +33,9 @@ import { getS3ImageUrl } from '../../utils';
     BrnPopoverTriggerDirective,
     BrnPopoverContentDirective,
     HlmPopoverContentDirective,
+    CartItemComponent,
   ],
-  providers: [provideIcons({ lucideShoppingCart, lucideTrash2 })],
+  providers: [provideIcons({ lucideShoppingCart })],
   template: `
     <brn-popover>
       <button
@@ -56,32 +57,10 @@ import { getS3ImageUrl } from '../../utils';
       <div hlmPopoverContent *brnPopoverContent="let ctx" class="w-80 p-2">
         <hlm-scroll-area class="h-96">
           @for (product of cart(); track product.id) {
-            <div class="mb-2">
-              <div class="mb-2 flex items-center">
-                <img
-                  [src]="getS3ImageUrl(product.imagePath)"
-                  [alt]="product.name"
-                  class="mr-2 h-16 w-16 rounded-md object-cover"
-                />
-                <div class="flex-1">
-                  <h4 class="text-lg font-semibold">{{ product.name }}</h4>
-                  <p class="text-sm">{{ product.description }}</p>
-                  <p class="text-sm font-semibold">
-                    {{ product.price | currency: product.currency }} x
-                    {{ product.quantity }}
-                  </p>
-                </div>
-              </div>
-              <button
-                hlmBtn
-                variant="destructive"
-                class="w-full"
-                (click)="removeFromCart(product.id)"
-              >
-                <hlm-icon size="sm" class="mr-2" name="lucideTrash2" />
-                Remove
-              </button>
-            </div>
+            <app-cart-item
+              [product]="product"
+              (removeFromCartChange)="removeFromCart($event)"
+            />
           } @empty {
             <div>Empty cart...</div>
           }
@@ -129,6 +108,4 @@ export class ShoppingCartComponent {
     this.closePopover();
     this.router.navigate(['checkout'], { replaceUrl: true });
   }
-
-  protected getS3ImageUrl = getS3ImageUrl;
 }
