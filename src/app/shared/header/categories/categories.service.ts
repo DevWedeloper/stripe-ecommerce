@@ -25,6 +25,7 @@ export class CategoriesService {
   private categoriesSuccess$ = this.categories$.pipe(
     filter((notification) => notification.kind === 'N'),
     dematerialize(),
+    share(),
   );
 
   private categoriesError$ = this.categories$.pipe(
