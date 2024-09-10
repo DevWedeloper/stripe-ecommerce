@@ -1,15 +1,7 @@
 import { getCategoryIdByName } from 'src/db/data-access/get-category-id-by-name';
 import { getPaginatedProductsByCategory } from 'src/db/data-access/get-paginated-products-by-category';
 import { getSubcategoryIdByParentId } from 'src/db/data-access/get-subcategory-id-by-parent-id';
-import { Products } from 'src/db/schema';
-
-type PaginatedProducts = {
-  page: number;
-  pageSize: number;
-  totalPages: number;
-  totalProducts: number;
-  products: Products[];
-};
+import { PaginatedProducts } from '../types/paginated-products.type';
 
 const getCategoryAndChildCategoryIds = async (
   categoryId: number,
