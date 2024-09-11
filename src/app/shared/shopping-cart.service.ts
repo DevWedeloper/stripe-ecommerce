@@ -1,6 +1,8 @@
 import { computed, Injectable, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { Products } from 'src/db/schema';
+import { showError } from './utils';
 
 export type ProductWithQuantity = Products & {
   quantity: number;
@@ -31,6 +33,12 @@ export class ShoppingCartService {
   getCart = computed(() => this.cart());
 
   error$ = new Subject<string>();
+
+  constructor() {
+    this.error$
+      .pipe(takeUntilDestroyed())
+      .subscribe((error) => showError(error));
+  }
 
   addToCart(product: ProductWithQuantity): void {
     const cartProduct = this.cart().find((p) => p.id === product.id);
