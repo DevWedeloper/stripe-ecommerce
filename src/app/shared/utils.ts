@@ -13,7 +13,7 @@ export const parseToPositiveInt = (value: any, fallback: number): number => {
 };
 
 export const showError = (message: string): void => {
-  toast.error(`${message}`, {
+  toast.error(message, {
     action: {
       label: 'Dismiss',
       onClick: () => {},
