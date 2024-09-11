@@ -1,7 +1,7 @@
 import { environment } from 'src/environments/environment';
 import { positiveIntSchema } from 'src/schemas/zod-schemas';
 
-export const getS3ImageUrl = (imagePath: string | null) => {
+export const getS3ImageUrl = (imagePath: string | null): string => {
   const s3Url = environment.s3Url;
   return `${s3Url}/${imagePath}`;
 };
