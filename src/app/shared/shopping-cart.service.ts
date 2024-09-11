@@ -32,7 +32,7 @@ export class ShoppingCartService {
 
   getCart = computed(() => this.cart());
 
-  error$ = new Subject<string>();
+  private error$ = new Subject<string>();
 
   constructor() {
     this.error$
