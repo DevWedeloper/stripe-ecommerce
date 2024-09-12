@@ -1,6 +1,6 @@
 import { inArray, sql } from 'drizzle-orm';
-import { db } from '..';
-import { Products, productCategories, products } from '../schema';
+import { db } from '../..';
+import { Products, productCategories, products } from '../../schema';
 
 export const getPaginatedProductsByCategory = async (
   categoryIds: number[],

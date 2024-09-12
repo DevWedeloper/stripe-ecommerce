@@ -1,5 +1,5 @@
 import { getCategoryIdByName } from 'src/db/data-access/category/get-category-id-by-name';
-import { getPaginatedProductsByCategory } from 'src/db/data-access/get-paginated-products-by-category';
+import { getPaginatedProductsByCategory } from 'src/db/data-access/product/get-paginated-products-by-category';
 import { getSubcategoryIdByParentId } from 'src/db/data-access/category/get-subcategory-id-by-parent-id';
 import { PaginatedProducts } from '../types/paginated-products.type';
 

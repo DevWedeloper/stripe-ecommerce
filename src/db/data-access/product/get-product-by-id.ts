@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '..';
-import { Products, products } from '../schema';
+import { db } from '../..';
+import { Products, products } from '../../schema';
 
 export const getProductById = async (id: number): Promise<Products | null> => {
   const [product] = await db
