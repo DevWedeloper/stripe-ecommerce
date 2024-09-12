@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
-import { db } from '..';
-import { categories } from '../schema';
-import { lower } from './utils';
+import { db } from '../..';
+import { categories } from '../../schema';
+import { lower } from '../utils';
 
 export const getCategoryIdByName = async (
   categoryName: string,

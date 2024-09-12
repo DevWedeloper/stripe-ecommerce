@@ -1,4 +1,4 @@
-import { getAllCategories } from 'src/db/data-access/get-all-categories';
+import { getAllCategories } from 'src/db/data-access/category/get-all-categories';
 import { Categories } from 'src/db/schema';
 
 export type CategoryWithSubcategories = Categories & {

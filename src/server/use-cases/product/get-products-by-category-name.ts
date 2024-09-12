@@ -1,6 +1,6 @@
-import { getCategoryIdByName } from 'src/db/data-access/get-category-id-by-name';
+import { getCategoryIdByName } from 'src/db/data-access/category/get-category-id-by-name';
 import { getPaginatedProductsByCategory } from 'src/db/data-access/get-paginated-products-by-category';
-import { getSubcategoryIdByParentId } from 'src/db/data-access/get-subcategory-id-by-parent-id';
+import { getSubcategoryIdByParentId } from 'src/db/data-access/category/get-subcategory-id-by-parent-id';
 import { PaginatedProducts } from '../types/paginated-products.type';
 
 const getCategoryAndChildCategoryIds = async (

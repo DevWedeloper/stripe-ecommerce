@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '..';
-import { categories } from '../schema';
+import { db } from '../..';
+import { categories } from '../../schema';
 
 export const getSubcategoryIdByParentId = async (
   parentId: number,
