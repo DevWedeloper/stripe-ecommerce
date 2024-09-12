@@ -1,6 +1,7 @@
 import { inArray, sql } from 'drizzle-orm';
 import { db } from '../..';
 import { Products, productCategories, products } from '../../schema';
+import { formatPaginatedResult } from '../utils';
 
 export const getPaginatedProductsByCategory = async (
   categoryIds: number[],
@@ -25,8 +26,8 @@ export const getPaginatedProductsByCategory = async (
     .offset(offset)
     .limit(pageSize);
 
-  const productsArray = productResult.map((result) => result.products);
-  const totalProducts = productResult[0]?.totalCount || 0;
+  const { products: productsArray, totalProducts } =
+    formatPaginatedResult(productResult);
 
   return {
     products: productsArray,
