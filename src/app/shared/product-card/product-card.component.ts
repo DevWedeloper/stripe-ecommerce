@@ -1,25 +1,29 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { Products } from 'src/db/schema';
-import { getS3ImageUrl } from '../utils';
+import { decodeBlurHashToImage, getS3ImageUrl } from '../utils';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [RouterLink, CurrencyPipe, HlmCardDirective],
+  imports: [RouterLink, CurrencyPipe, NgOptimizedImage, HlmCardDirective],
   template: `
     <a
       hlmCard
       class="mx-auto block max-w-sm overflow-hidden rounded-lg border-2 border-border bg-background transition delay-150 ease-in-out hover:scale-105"
       [routerLink]="'/products/' + product().id"
     >
-      <img
-        [src]="getS3ImageUrl(product().imagePath)"
-        [alt]="product().name"
-        class="h-48 w-full object-cover"
-      />
+      <div class="relative h-48 w-full">
+        <img
+          [ngSrc]="getS3ImageUrl(product().imagePath)"
+          [alt]="product().name"
+          class="object-cover"
+          [placeholder]="decodeBlurHashToImage(product().placeholder!)"
+          fill
+        />
+      </div>
       <div class="p-4">
         <h2 class="mb-2 text-xl font-semibold">{{ product().name }}</h2>
         <p class="mb-4">{{ product().description }}</p>
@@ -39,4 +43,5 @@ export class ProductCardComponent {
   product = input.required<Products>();
 
   protected getS3ImageUrl = getS3ImageUrl;
+  protected decodeBlurHashToImage = decodeBlurHashToImage;
 }
