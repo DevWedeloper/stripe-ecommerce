@@ -17,6 +17,7 @@ export const products = pgTable(
     price: integer('price').notNull(),
     currency: text('currency').notNull(),
     imagePath: text('image_path'),
+    placeholder: text('placeholder'),
     stock: integer('stock').notNull(),
   },
   (table) => ({
