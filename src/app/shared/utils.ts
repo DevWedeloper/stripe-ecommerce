@@ -24,7 +24,7 @@ export const showError = (message: string): void => {
   });
 };
 
-export const decodeBlurHashToImage = (blurHash: string): string => {
+const decodeBlurHashToImage = (blurHash: string): string => {
   const width = 32;
   const height = 32;
   const pixels = decode(blurHash, width, height);
