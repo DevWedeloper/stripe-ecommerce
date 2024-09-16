@@ -43,6 +43,7 @@
     "@stripe/stripe-js": "^4.2.0",
     "@trpc/client": "^10.45.2",
     "@trpc/server": "^10.45.2",
+    "blurhash": "^2.0.5",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "drizzle-orm": "^0.32.2",
