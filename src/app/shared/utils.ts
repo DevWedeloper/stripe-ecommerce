@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { positiveIntSchema } from 'src/schemas/zod-schemas';
 import { PaginatedProducts } from 'src/server/use-cases/types/paginated-products.type';
 
-export const getS3ImageUrl = (imagePath: string | null): string => {
+const getS3ImageUrl = (imagePath: string | null): string => {
   const s3Url = environment.s3Url;
   return `${s3Url}/${imagePath}`;
 };
