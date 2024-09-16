@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { Products } from 'src/db/schema';
-import { decodeBlurHashToImage, getS3ImageUrl } from '../utils';
 
 @Component({
   selector: 'app-product-card',
@@ -17,10 +16,10 @@ import { decodeBlurHashToImage, getS3ImageUrl } from '../utils';
     >
       <div class="relative h-48 w-full">
         <img
-          [ngSrc]="getS3ImageUrl(product().imagePath)"
+          [ngSrc]="product().imagePath!"
           [alt]="product().name"
           class="object-cover"
-          [placeholder]="decodeBlurHashToImage(product().placeholder!)"
+          [placeholder]="product().placeholder!"
           fill
         />
       </div>
@@ -41,7 +40,4 @@ import { decodeBlurHashToImage, getS3ImageUrl } from '../utils';
 })
 export class ProductCardComponent {
   product = input.required<Products>();
-
-  protected getS3ImageUrl = getS3ImageUrl;
-  protected decodeBlurHashToImage = decodeBlurHashToImage;
 }
