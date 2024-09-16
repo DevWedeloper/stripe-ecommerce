@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { Products } from 'src/db/schema';
-import { environment } from 'src/environments/environment';
+import { getS3ImageUrl } from '../utils';
 
 @Component({
   selector: 'app-product-card',
@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
       [routerLink]="'/products/' + product().id"
     >
       <img
-        [src]="s3Url + '/' + product().imagePath"
+        [src]="getS3ImageUrl(product().imagePath)"
         [alt]="product().name"
         class="h-48 w-full object-cover"
       />
@@ -38,5 +38,5 @@ import { environment } from 'src/environments/environment';
 export class ProductCardComponent {
   product = input.required<Products>();
 
-  protected s3Url = environment.s3Url;
+  protected getS3ImageUrl = getS3ImageUrl;
 }
