@@ -2,6 +2,7 @@ import { decode } from 'blurhash';
 import { toast } from 'ngx-sonner';
 import { environment } from 'src/environments/environment';
 import { positiveIntSchema } from 'src/schemas/zod-schemas';
+import { PaginatedProducts } from 'src/server/use-cases/types/paginated-products.type';
 
 export const getS3ImageUrl = (imagePath: string | null): string => {
   const s3Url = environment.s3Url;
@@ -43,3 +44,13 @@ export const decodeBlurHashToImage = (blurHash: string): string => {
     return '';
   }
 };
+
+export const transformProductImagePaths = (
+  data: PaginatedProducts,
+): PaginatedProducts => ({
+  ...data,
+  products: data.products.map((product) => ({
+    ...product,
+    imagePath: product.imagePath ? getS3ImageUrl(product.imagePath) : null,
+  })),
+});
