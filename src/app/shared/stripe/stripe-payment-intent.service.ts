@@ -76,10 +76,13 @@ export class StripePaymentIntentService {
   isLoading = computed(() => this.status() === 'loading');
 
   constructor() {
-    effect(() => {
-      if (this.hasError() && this.errorMessage())
-        showError(this.errorMessage()!);
-    });
+    effect(
+      () => {
+        if (this.hasError() && this.errorMessage())
+          showError(this.errorMessage()!);
+      },
+      { allowSignalWrites: true },
+    );
   }
 }
 
