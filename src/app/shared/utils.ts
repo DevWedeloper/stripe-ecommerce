@@ -46,16 +46,6 @@ export const decodeBlurHashToImage = (blurHash: string): string => {
   }
 };
 
-export const transformProductImagePaths = (
-  data: PaginatedProducts,
-): PaginatedProducts => ({
-  ...data,
-  products: data.products.map((product) => ({
-    ...product,
-    imagePath: product.imagePath ? getS3ImageUrl(product.imagePath) : null,
-  })),
-});
-
 export const transformProductImagePathAndPlaceholder = (
   product: Products,
 ): Products => ({
