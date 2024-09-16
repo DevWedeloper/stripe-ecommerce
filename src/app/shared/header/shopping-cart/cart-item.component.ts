@@ -10,7 +10,6 @@ import { lucideTrash2 } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { ProductWithQuantity } from '../../shopping-cart.service';
-import { getS3ImageUrl } from '../../utils';
 
 @Component({
   selector: 'app-cart-item',
@@ -23,7 +22,7 @@ import { getS3ImageUrl } from '../../utils';
   template: `
     <div class="mb-2 flex items-center">
       <img
-        [src]="getS3ImageUrl(product().imagePath)"
+        [src]="product().imagePath"
         [alt]="product().name"
         class="mr-2 h-16 w-16 rounded-md object-cover"
       />
@@ -51,6 +50,4 @@ import { getS3ImageUrl } from '../../utils';
 export class CartItemComponent {
   product = input.required<ProductWithQuantity>();
   removeFromCartChange = output();
-
-  protected getS3ImageUrl = getS3ImageUrl;
 }

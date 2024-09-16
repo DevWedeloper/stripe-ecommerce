@@ -2,7 +2,6 @@ import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { hlmMuted } from '@spartan-ng/ui-typography-helm';
 import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
-import { getS3ImageUrl } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-view-cart',
@@ -14,7 +13,7 @@ import { getS3ImageUrl } from 'src/app/shared/utils';
         <div hlmCard class="grid grid-cols-3">
           <div class="flex justify-center">
             <img
-              [src]="getS3ImageUrl(product.imagePath)"
+              [src]="product.imagePath"
               [alt]="product.name"
               class="h-16 w-16 rounded object-cover"
             />
@@ -52,6 +51,4 @@ import { getS3ImageUrl } from 'src/app/shared/utils';
 export class ViewCartComponent {
   cart = input.required<ProductWithQuantity[]>();
   total = input.required<number>();
-
-  protected getS3ImageUrl = getS3ImageUrl;
 }
