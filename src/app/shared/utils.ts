@@ -54,3 +54,16 @@ export const transformProductImagePaths = (
     imagePath: product.imagePath ? getS3ImageUrl(product.imagePath) : null,
   })),
 });
+
+export const transformProductImagePathsAndPlaceholders = (
+  data: PaginatedProducts,
+): PaginatedProducts => ({
+  ...data,
+  products: data.products.map((product) => ({
+    ...product,
+    imagePath: product.imagePath ? getS3ImageUrl(product.imagePath) : null,
+    placeholder: product.placeholder
+      ? decodeBlurHashToImage(product.placeholder)
+      : null,
+  })),
+});
