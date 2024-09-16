@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,18 +14,27 @@ import { ProductWithQuantity } from '../../shopping-cart.service';
 @Component({
   selector: 'app-cart-item',
   standalone: true,
-  imports: [CurrencyPipe, HlmButtonDirective, HlmIconComponent],
+  imports: [
+    CurrencyPipe,
+    NgOptimizedImage,
+    HlmButtonDirective,
+    HlmIconComponent,
+  ],
   providers: [provideIcons({ lucideTrash2 })],
   host: {
     class: 'mb-2 block',
   },
   template: `
     <div class="mb-2 flex items-center">
-      <img
-        [src]="product().imagePath"
-        [alt]="product().name"
-        class="mr-2 h-16 w-16 rounded-md object-cover"
-      />
+      <div class="relative mr-2 h-16 w-16 rounded-md">
+        <img
+          [ngSrc]="product().imagePath!"
+          [alt]="product().name"
+          class="object-cover"
+          [placeholder]="product().placeholder!"
+          fill
+        />
+      </div>
       <div class="flex-1">
         <h4 class="text-lg font-semibold">{{ product().name }}</h4>
         <p class="text-sm">{{ product().description }}</p>

@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { hlmMuted } from '@spartan-ng/ui-typography-helm';
 import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
@@ -6,16 +6,18 @@ import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
 @Component({
   selector: 'app-view-cart',
   standalone: true,
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, NgOptimizedImage],
   template: `
     <div class="flex flex-col gap-2 p-4">
       @for (product of cart(); track product.id) {
         <div hlmCard class="grid grid-cols-3">
-          <div class="flex justify-center">
+          <div class="relative flex h-16 w-16 justify-center rounded">
             <img
-              [src]="product.imagePath"
+              [ngSrc]="product.imagePath!"
               [alt]="product.name"
-              class="h-16 w-16 rounded object-cover"
+              class="object-cover"
+              [placeholder]="product.placeholder!"
+              fill
             />
           </div>
 
