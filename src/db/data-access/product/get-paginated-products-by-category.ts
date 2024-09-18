@@ -1,7 +1,7 @@
-import { getTableColumns, inArray, sql } from 'drizzle-orm';
+import { getTableColumns, inArray } from 'drizzle-orm';
 import { db } from '../..';
 import { Products, productCategories, products } from '../../schema';
-import { formatPaginatedResult } from '../utils';
+import { formatPaginatedResult, totalCount } from '../utils';
 
 export const getPaginatedProductsByCategory = async (
   categoryIds: number[],
@@ -11,7 +11,7 @@ export const getPaginatedProductsByCategory = async (
   const productResult = await db
     .selectDistinct({
       ...getTableColumns(products),
-      totalCount: sql<number>`count(*) over() AS full_count`,
+      totalCount,
     })
     .from(products)
     .where(
