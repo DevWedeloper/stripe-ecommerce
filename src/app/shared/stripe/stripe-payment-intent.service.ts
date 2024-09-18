@@ -1,5 +1,5 @@
-import { computed, effect, inject, Injectable } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { computed, inject, Injectable } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import {
   dematerialize,
   filter,
@@ -63,12 +63,6 @@ export class StripePaymentIntentService {
 
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
 
-  private error = toSignal(this.paymentIntentError$, { initialValue: null });
-
-  private hasError = computed(() => this.status() === 'error');
-
-  private errorMessage = computed(() => this.error()?.message);
-
   clientSecret = toSignal(this.clientSecret$, {
     initialValue: null,
   });
@@ -76,13 +70,9 @@ export class StripePaymentIntentService {
   isLoading = computed(() => this.status() === 'loading');
 
   constructor() {
-    effect(
-      () => {
-        if (this.hasError() && this.errorMessage())
-          showError(this.errorMessage()!);
-      },
-      { allowSignalWrites: true },
-    );
+    this.paymentIntentError$
+      .pipe(takeUntilDestroyed())
+      .subscribe((error) => showError(error.message));
   }
 }
 
