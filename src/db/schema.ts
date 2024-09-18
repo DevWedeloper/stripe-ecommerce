@@ -20,12 +20,12 @@ export const products = pgTable(
     placeholder: text('placeholder'),
     stock: integer('stock').notNull(),
   },
-  (table) => ({
+  (t) => ({
     searchIndex: index('search_index').using(
       'gin',
       sql`(
-        setweight(to_tsvector('english', ${table.name}), 'A') ||
-        setweight(to_tsvector('english', ${table.description}), 'B')
+        setweight(to_tsvector('english', ${t.name}), 'A') ||
+        setweight(to_tsvector('english', ${t.description}), 'B')
       )`,
     ),
   }),
