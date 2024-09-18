@@ -4,6 +4,8 @@ import { Products } from '../schema';
 
 export const lower = (col: Column) => sql<string>`lower(${col})`;
 
+export const totalCount = sql<number>`count(*) over() AS full_count`;
+
 type ProductWithTotalCount = Products & {
   totalCount: number;
 };
