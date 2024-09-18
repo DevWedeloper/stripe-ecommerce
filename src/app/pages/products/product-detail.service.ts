@@ -1,5 +1,5 @@
-import { computed, effect, inject, Injectable } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { computed, inject, Injectable } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import {
   dematerialize,
@@ -68,25 +68,15 @@ export class ProductDetailService {
     this.productError$.pipe(map(() => 'error' as const)),
   ).pipe(startWith('initial' as const));
 
-  private error = toSignal(this.productError$, { initialValue: null });
-
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
-
-  private hasError = computed(() => this.status() === 'error');
-
-  private errorMessage = computed(() => this.error()?.message);
 
   product = toSignal(this.productSuccess$, { initialValue: null });
 
   isLoading = computed(() => this.status() === 'loading');
 
   constructor() {
-    effect(
-      () => {
-        if (this.hasError() && this.errorMessage())
-          showError(this.errorMessage()!);
-      },
-      { allowSignalWrites: true },
-    );
+    this.productError$
+      .pipe(takeUntilDestroyed())
+      .subscribe((error) => showError(error.message));
   }
 }
