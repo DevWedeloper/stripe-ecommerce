@@ -54,5 +54,34 @@ export const productCategories = pgTable(
   }),
 );
 
+export const tags = pgTable(
+  'tags',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    name: text('name').notNull().unique(),
+  },
+  (t) => ({
+    searchIndex: index('tags_search_index').using(
+      'gin',
+      sql`to_tsvector('english', ${t.name})`,
+    ),
+  }),
+);
+
+export const productTags = pgTable(
+  'product_tags',
+  {
+    productId: integer('product_id')
+      .notNull()
+      .references(() => products.id),
+    tagId: integer('tag_id')
+      .notNull()
+      .references(() => tags.id),
+  },
+  (t) => ({
+    uniqueConstraint: unique().on(t.productId, t.tagId),
+  }),
+);
+
 export type Products = InferSelectModel<typeof products>;
 export type Categories = InferSelectModel<typeof categories>;
