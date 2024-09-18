@@ -55,3 +55,33 @@ FROM
         (ip.name = 'Refrigerator C' AND c.name = 'Refrigerators') OR
         (ip.name = 'Washing Machine D' AND c.name = 'Washing Machines')
     );
+
+-- Step 1: Truncate the tables to clear existing data
+TRUNCATE TABLE tags, product_tags RESTART IDENTITY CASCADE;
+
+-- Step 2: Insert tags and retrieve their IDs
+WITH inserted_tags AS (
+    INSERT INTO tags (name)
+    VALUES 
+        ('New Arrival'),
+        ('Discount'),
+        ('Best Seller'),
+        ('High Quality'),
+        ('Eco-Friendly')
+    RETURNING id, name
+)
+
+-- Step 3: Insert product tags
+INSERT INTO product_tags (product_id, tag_id)
+SELECT
+    p.id AS product_id,
+    t.id AS tag_id
+FROM
+    inserted_tags t
+    JOIN products p ON (
+        (t.name = 'New Arrival' AND p.name IN ('Smartphone A', 'Laptop B')) OR
+        (t.name = 'Discount' AND p.name IN ('Washing Machine D')) OR
+        (t.name = 'Best Seller' AND p.name IN ('Refrigerator C')) OR
+        (t.name = 'High Quality' AND p.name IN ('Smartphone A', 'Laptop B', 'Refrigerator C')) OR
+        (t.name = 'Eco-Friendly' AND p.name IN ('Refrigerator C'))
+    );
