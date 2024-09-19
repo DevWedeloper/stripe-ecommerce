@@ -22,9 +22,9 @@ export const getPaginatedProductsByKeyword = async (
       totalCount,
     })
     .from(products)
-    .groupBy(products.id)
     .leftJoin(productTags, eq(products.id, productTags.productId))
     .leftJoin(tags, eq(productTags.tagId, tags.id))
+    .groupBy(products.id)
     .having(
       sql`(
         ${matchQuery} @@ websearch_to_tsquery('english', ${keyword})
