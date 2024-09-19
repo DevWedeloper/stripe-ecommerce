@@ -1,4 +1,4 @@
-import { getTableColumns, inArray } from 'drizzle-orm';
+import { eq, getTableColumns, inArray } from 'drizzle-orm';
 import { db } from '../..';
 import { Products, productCategories, products } from '../../schema';
 import { formatPaginatedResult, totalCount } from '../utils';
@@ -14,15 +14,8 @@ export const getPaginatedProductsByCategory = async (
       totalCount,
     })
     .from(products)
-    .where(
-      inArray(
-        products.id,
-        db
-          .select({ productId: productCategories.productId })
-          .from(productCategories)
-          .where(inArray(productCategories.categoryId, categoryIds)),
-      ),
-    )
+    .innerJoin(productCategories, eq(products.id, productCategories.productId))
+    .where(inArray(productCategories.categoryId, categoryIds))
     .offset(offset)
     .limit(pageSize);
 
