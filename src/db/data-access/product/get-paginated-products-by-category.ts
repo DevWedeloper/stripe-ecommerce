@@ -8,7 +8,7 @@ export const getPaginatedProductsByCategory = async (
   offset: number,
   pageSize: number,
 ): Promise<{ products: Products[]; totalProducts: number }> => {
-  const productResult = await db
+  const productsResult = await db
     .selectDistinct({
       ...getTableColumns(products),
       totalCount,
@@ -27,7 +27,7 @@ export const getPaginatedProductsByCategory = async (
     .limit(pageSize);
 
   const { products: productsArray, totalProducts } =
-    formatPaginatedResult(productResult);
+    formatPaginatedResult(productsResult);
 
   return {
     products: productsArray,
