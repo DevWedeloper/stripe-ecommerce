@@ -8,6 +8,7 @@ import {
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { ProductDetailService } from 'src/app/pages/products/product-detail.service';
+import { GoBackButtonComponent } from 'src/app/shared/go-back-button.component';
 import { QuantitySelectorComponent } from 'src/app/shared/quantity-selector.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { Products } from 'src/db/schema';
@@ -23,9 +24,11 @@ import { ProductDetailSkeletonComponent } from './product-detail-skeleton.compon
     HlmCardDirective,
     QuantitySelectorComponent,
     ProductDetailSkeletonComponent,
+    GoBackButtonComponent,
   ],
   providers: [ProductDetailService],
   template: `
+    <app-go-back-button text="Go back" navigateBack />
     @if (!isLoading()) {
       @if (product()) {
         <div
