@@ -9,7 +9,7 @@ import { Products } from 'src/db/schema';
   standalone: true,
   imports: [RouterLink, CurrencyPipe, NgOptimizedImage, HlmCardDirective],
   host: {
-    class: 'block w-full',
+    class: 'flex w-full justify-center',
   },
   template: `
     <a
