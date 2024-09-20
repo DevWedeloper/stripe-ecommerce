@@ -8,10 +8,13 @@ import { Products } from 'src/db/schema';
   selector: 'app-product-card',
   standalone: true,
   imports: [RouterLink, CurrencyPipe, NgOptimizedImage, HlmCardDirective],
+  host: {
+    class: 'block w-full',
+  },
   template: `
     <a
       hlmCard
-      class="mx-auto block max-w-sm overflow-hidden rounded-lg border-2 border-border bg-background transition delay-150 ease-in-out hover:scale-105"
+      class="flex h-full max-w-sm flex-col overflow-hidden rounded-lg border-2 border-border bg-background transition delay-150 ease-in-out hover:scale-105"
       [routerLink]="'/products/' + product().id"
     >
       <div class="relative h-48 w-full">
@@ -23,10 +26,10 @@ import { Products } from 'src/db/schema';
           fill
         />
       </div>
-      <div class="p-4">
+      <div class="flex grow flex-col p-4">
         <h2 class="mb-2 text-xl font-semibold">{{ product().name }}</h2>
         <p class="mb-4">{{ product().description }}</p>
-        <div class="mb-2 flex items-center justify-between">
+        <div class="mb-2 mt-auto flex items-center justify-between">
           <span class="text-lg font-bold">
             {{ product().price | currency: product().currency }}
           </span>
