@@ -51,10 +51,10 @@ export class SearchBarComponent {
   protected keyword = signal<string>('');
 
   protected onSubmit(form: NgForm): void {
-    if (!this.keyword()) return;
+    if (!this.keyword().trim()) return;
 
     this.router.navigate(['/search'], {
-      queryParams: { keyword: this.keyword() },
+      queryParams: { keyword: this.keyword().trim() },
     });
     form.resetForm();
   }
