@@ -1,6 +1,6 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   combineLatest,
   dematerialize,
@@ -25,32 +25,20 @@ import { TrpcClient } from 'src/trpc-client';
   providedIn: 'root',
 })
 export class ProductListsService {
-  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
 
-  private navigationEnd$ = this.router.events.pipe(
-    filter((e) => e instanceof NavigationEnd),
-  );
-
-  private categoryName$ = this.navigationEnd$.pipe(
-    map((event) => {
-      const url = event.url;
-      const path = url.split('?')[0];
-      return path.split('/').pop() || '';
-    }),
-    share(),
-  );
-
   private filter$ = combineLatest([
+    this.route.params,
     this.route.queryParams,
-    this.categoryName$,
   ]).pipe(
-    map(([queryParams, name]) => {
+    map(([params, queryParams]) => {
+      const { categoryName } = params;
       const { page, pageSize } = queryParams;
 
       const pageValue = parseToPositiveInt(page, 1);
       const pageSizeValue = parseToPositiveInt(pageSize, 10);
+      const name = String(categoryName) || '';
 
       return { name, page: pageValue, pageSize: pageSizeValue };
     }),
@@ -101,8 +89,6 @@ export class ProductListsService {
       products: [],
     },
   });
-
-  categoryName = toSignal(this.categoryName$, { initialValue: '' });
 
   page = computed(() => this.productData().page);
   pageSize = computed(() => this.productData().pageSize);
