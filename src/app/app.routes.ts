@@ -1,0 +1,40 @@
+import { Routes, UrlSegment } from '@angular/router';
+
+export const routes: Routes = [
+  {
+    path: 'products/category',
+    redirectTo: 'not-found',
+    pathMatch: 'full',
+  },
+  {
+    path: 'products/category',
+    children: [
+      {
+        matcher: (url) => {
+          const alphabeticRegex = /^[A-Za-z-]+$/;
+          const isValid = url.every((segment) =>
+            alphabeticRegex.test(segment.path),
+          );
+
+          if (isValid && url.length > 0) {
+            return {
+              consumed: url,
+              posParams: {
+                path: new UrlSegment(
+                  url.map((segment) => segment.path).join('/'),
+                  {},
+                ),
+                categoryName: new UrlSegment(url[url.length - 1].path, {}),
+              },
+            };
+          }
+          return null;
+        },
+        loadComponent: () =>
+          import('./pages/products/category/product-lists.component').then(
+            (m) => m.ProductListsComponent,
+          ),
+      },
+    ],
+  },
+];
