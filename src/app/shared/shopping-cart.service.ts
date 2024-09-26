@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { Products } from 'src/db/schema';
 import { showError } from './utils';
@@ -13,6 +13,8 @@ export type ProductWithQuantity = Products & {
 })
 export class ShoppingCartService {
   private cart = signal<ProductWithQuantity[]>([]);
+
+  editable$ = new Subject<boolean>();
 
   total = computed(() => {
     const items = this.cart();
@@ -32,6 +34,8 @@ export class ShoppingCartService {
 
   getCart = computed(() => this.cart());
 
+  isEditable = toSignal(this.editable$, { initialValue: true });
+
   private error$ = new Subject<string>();
 
   constructor() {
@@ -41,6 +45,8 @@ export class ShoppingCartService {
   }
 
   addToCart(product: ProductWithQuantity): void {
+    if (!this.isEditable()) return;
+
     const cartProduct = this.cart().find((p) => p.id === product.id);
     if (!cartProduct) {
       this.cart.update((cart) => [...cart, product]);
@@ -66,12 +72,16 @@ export class ShoppingCartService {
   }
 
   removeFromCart(productId: number): void {
+    if (!this.isEditable()) return;
+
     this.cart.update((cart) =>
       cart.filter((product) => product.id !== productId),
     );
   }
 
   updateQuantity(productId: number, quantity: number): void {
+    if (!this.isEditable()) return;
+    
     const cartProduct = this.cart().find((product) => product.id === productId);
 
     if (!cartProduct) return;
