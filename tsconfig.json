@@ -75,6 +75,9 @@
       ],
       "@spartan-ng/ui-alert-helm": [
         "./libs/ui/ui-alert-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-dialog-helm": [
+        "./libs/ui/ui-dialog-helm/src/index.ts"
       ]
     }
   },
