@@ -38,11 +38,6 @@ import { HlmDialogCloseDirective } from './hlm-dialog-close.directive';
     } @else {
       <ng-content />
     }
-
-    <button brnDialogClose hlm>
-      <span class="sr-only">Close</span>
-      <hlm-icon class="flex h-4 w-4" size="none" name="lucideX" />
-    </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
