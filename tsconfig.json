@@ -78,9 +78,6 @@
       ],
       "@spartan-ng/ui-dialog-helm": [
         "./libs/ui/ui-dialog-helm/src/index.ts"
-      ],
-      "@spartan-ng/ui-alertdialog-helm": [
-        "./libs/ui/ui-alertdialog-helm/src/index.ts"
       ]
     }
   },
