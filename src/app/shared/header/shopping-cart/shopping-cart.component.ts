@@ -59,6 +59,7 @@ import { CartItemComponent } from './cart-item.component';
           @for (product of cart(); track product.id) {
             <app-cart-item
               [product]="product"
+              [isEditable]="isEditable()"
               (removeFromCartChange)="removeFromCart(product.id)"
             />
           } @empty {
@@ -95,6 +96,7 @@ export class ShoppingCartComponent {
 
   protected cart = this.shoppingCartService.getCart;
   protected totalQuantity = this.shoppingCartService.totalQuantity;
+  protected isEditable = this.shoppingCartService.isEditable;
 
   protected closePopover(): void {
     this.brnPopoverComponent().close(null);

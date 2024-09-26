@@ -49,6 +49,7 @@ import { ProductWithQuantity } from '../../shopping-cart.service';
       variant="destructive"
       class="w-full"
       (click)="removeFromCartChange.emit()"
+      [disabled]="!isEditable()"
     >
       <hlm-icon size="sm" class="mr-2" name="lucideTrash2" />
       Remove
@@ -58,5 +59,6 @@ import { ProductWithQuantity } from '../../shopping-cart.service';
 })
 export class CartItemComponent {
   product = input.required<ProductWithQuantity>();
+  isEditable = input.required<boolean>();
   removeFromCartChange = output();
 }
