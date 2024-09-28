@@ -6,10 +6,10 @@ import {
 } from '@angular/core';
 import { HlmNumberedPaginationComponent } from '@spartan-ng/ui-pagination-helm';
 import { hlmH1 } from '@spartan-ng/ui-typography-helm';
-import { ProductListsService } from 'src/app/pages/products/category/product-lists.service';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { ProductCardComponent } from 'src/app/shared/product-card/product-card.component';
 import { ProductCardListSkeletonComponent } from 'src/app/shared/product-card/skeleton/product-card-list-skeleton.component';
+import { ProductListsService } from './product-lists.service';
 
 @Component({
   selector: 'app-product-lists',
