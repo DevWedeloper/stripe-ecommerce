@@ -31,7 +31,7 @@ export const routes: Routes = [
           return null;
         },
         loadComponent: () =>
-          import('./pages/products/category/product-lists.component').then(
+          import('./pages/(main)/products/category/product-lists.component').then(
             (m) => m.ProductListsComponent,
           ),
       },
