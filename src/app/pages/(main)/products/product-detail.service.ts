@@ -12,10 +12,7 @@ import {
   startWith,
   switchMap,
 } from 'rxjs';
-import {
-  showError,
-  transformProductImagePathAndPlaceholder,
-} from 'src/app/shared/utils';
+import { showError, transformProductImageObjects } from 'src/app/shared/utils';
 import { TrpcClient } from 'src/trpc-client';
 
 @Injectable({
@@ -49,9 +46,7 @@ export class ProductDetailService {
     filter((notification) => notification.kind === 'N'),
     dematerialize(),
     map((product) =>
-      product === null
-        ? null
-        : transformProductImagePathAndPlaceholder(product),
+      product === null ? null : transformProductImageObjects(product),
     ),
     share(),
   );
