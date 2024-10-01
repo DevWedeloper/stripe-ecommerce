@@ -2,7 +2,7 @@ import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
-import { Products } from 'src/db/schema';
+import { ProductsWithThumbnail } from 'src/db/types';
 
 @Component({
   selector: 'app-product-card',
@@ -42,5 +42,5 @@ import { Products } from 'src/db/schema';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCardComponent {
-  product = input.required<Products>();
+  product = input.required<ProductsWithThumbnail>();
 }
