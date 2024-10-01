@@ -42,32 +42,36 @@ WITH inserted_products AS (
     RETURNING id, name
 ),
 inserted_images AS (
-    INSERT INTO product_images (product_id, image_path, placeholder)
+    INSERT INTO product_images (product_id, image_path, placeholder, is_thumbnail)
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/smartphone_a.webp' AS image_path,
-        'LAS$ovt7~qt7t7fQt7j[IUay%Mj[' AS placeholder
+        'LAS$ovt7~qt7t7fQt7j[IUay%Mj[' AS placeholder,
+        true AS is_thumbnail
     FROM inserted_products ip
     WHERE ip.name = 'Smartphone A'
     UNION ALL
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/smartphone_a.webp',
-        'LAS$ovt7~qt7t7fQt7j[IUay%Mj['
+        'LAS$ovt7~qt7t7fQt7j[IUay%Mj[',
+        false
     FROM inserted_products ip
     WHERE ip.name = 'Smartphone A'
     UNION ALL
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/smartphone_a.webp',
-        'LAS$ovt7~qt7t7fQt7j[IUay%Mj['
+        'LAS$ovt7~qt7t7fQt7j[IUay%Mj[',
+        false
     FROM inserted_products ip
     WHERE ip.name = 'Smartphone A'
     UNION ALL
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/smartphone_a.webp',
-        'LAS$ovt7~qt7t7fQt7j[IUay%Mj['
+        'LAS$ovt7~qt7t7fQt7j[IUay%Mj[',
+        false
     FROM inserted_products ip
     WHERE ip.name = 'Smartphone A'
 
@@ -76,21 +80,24 @@ inserted_images AS (
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/laptop_b.webp' AS image_path,
-        'LQRW0bt7?bof~qWBM{ay4nof%Mj[' AS placeholder
+        'LQRW0bt7?bof~qWBM{ay4nof%Mj[' AS placeholder,
+        true AS is_thumbnail
     FROM inserted_products ip
     WHERE ip.name = 'Laptop B'
     UNION ALL
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/laptop_b.webp',
-        'LQRW0bt7?bof~qWBM{ay4nof%Mj['
+        'LQRW0bt7?bof~qWBM{ay4nof%Mj[',
+        false
     FROM inserted_products ip
     WHERE ip.name = 'Laptop B'
     UNION ALL
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/laptop_b.webp',
-        'LQRW0bt7?bof~qWBM{ay4nof%Mj['
+        'LQRW0bt7?bof~qWBM{ay4nof%Mj[',
+        false
     FROM inserted_products ip
     WHERE ip.name = 'Laptop B'
 
@@ -99,14 +106,16 @@ inserted_images AS (
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/refrigerator_c.webp' AS image_path,
-        'LSRp8-WB~qxu-;WBIUt7xuayRjay' AS placeholder
+        'LSRp8-WB~qxu-;WBIUt7xuayRjay' AS placeholder,
+        true AS is_thumbnail
     FROM inserted_products ip
     WHERE ip.name = 'Refrigerator C'
     UNION ALL
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/refrigerator_c.webp',
-        'LSRp8-WB~qxu-;WBIUt7xuayRjay'
+        'LSRp8-WB~qxu-;WBIUt7xuayRjay',
+        false
     FROM inserted_products ip
     WHERE ip.name = 'Refrigerator C'
 
@@ -115,7 +124,8 @@ inserted_images AS (
     SELECT
         ip.id AS product_id,
         'storage/v1/object/public/product-images/washing_machine_d.webp' AS image_path,
-        'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ' AS placeholder
+        'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ' AS placeholder,
+        true AS is_thumbnail
     FROM inserted_products ip
     WHERE ip.name = 'Washing Machine D'
 )
