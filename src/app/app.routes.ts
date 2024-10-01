@@ -8,6 +8,7 @@ export const routes: Routes = [
   },
   {
     path: 'products/category',
+    loadComponent: () => import('./pages/(main).page').then(m => m.default),
     children: [
       {
         matcher: (url) => {
