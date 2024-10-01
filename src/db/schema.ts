@@ -16,8 +16,6 @@ export const products = pgTable(
     description: text('description').notNull(),
     price: integer('price').notNull(),
     currency: text('currency').notNull(),
-    imagePath: text('image_path'),
-    placeholder: text('placeholder'),
     stock: integer('stock').notNull(),
   },
   (t) => ({
@@ -30,6 +28,15 @@ export const products = pgTable(
     ),
   }),
 );
+
+export const productImages = pgTable('product_images', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  productId: integer('product_id')
+    .references(() => products.id)
+    .notNull(),
+  imagePath: text('image_path').notNull(),
+  placeholder: text('placeholder').notNull(),
+});
 
 export const categories = pgTable('categories', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),

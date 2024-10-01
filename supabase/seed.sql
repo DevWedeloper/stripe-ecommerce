@@ -31,15 +31,93 @@ SELECT
 -- Step 1: Truncate the tables to clear existing data
 TRUNCATE TABLE products, product_categories RESTART IDENTITY CASCADE;
 
--- Step 2: Insert products and retrieve their IDs
+-- Step 2: Insert products and images, and retrieve their IDs
 WITH inserted_products AS (
-    INSERT INTO products (name, description, price, currency, image_path, placeholder, stock)
+    INSERT INTO products (name, description, price, currency, stock)
     VALUES
-        ('Smartphone A', 'High-quality smartphone with latest features', 699, 'USD', 'storage/v1/object/public/product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', 50),
-        ('Laptop B', 'Powerful laptop for gaming and productivity', 999, 'USD', 'storage/v1/object/public/product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', 30),
-        ('Refrigerator C', 'Energy-efficient refrigerator with large capacity', 1199, 'USD', 'storage/v1/object/public/product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', 20),
-        ('Washing Machine D', 'Automatic washing machine with multiple modes', 499, 'USD', 'storage/v1/object/public/product-images/washing_machine_d.webp', 'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ', 40)
+        ('Smartphone A', 'High-quality smartphone with latest features', 699, 'USD', 50),
+        ('Laptop B', 'Powerful laptop for gaming and productivity', 999, 'USD', 30),
+        ('Refrigerator C', 'Energy-efficient refrigerator with large capacity', 1199, 'USD', 20),
+        ('Washing Machine D', 'Automatic washing machine with multiple modes', 499, 'USD', 40)
     RETURNING id, name
+),
+inserted_images AS (
+    INSERT INTO product_images (product_id, image_path, placeholder)
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/smartphone_a.webp' AS image_path,
+        'LAS$ovt7~qt7t7fQt7j[IUay%Mj[' AS placeholder
+    FROM inserted_products ip
+    WHERE ip.name = 'Smartphone A'
+    UNION ALL
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/smartphone_a.webp',
+        'LAS$ovt7~qt7t7fQt7j[IUay%Mj['
+    FROM inserted_products ip
+    WHERE ip.name = 'Smartphone A'
+    UNION ALL
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/smartphone_a.webp',
+        'LAS$ovt7~qt7t7fQt7j[IUay%Mj['
+    FROM inserted_products ip
+    WHERE ip.name = 'Smartphone A'
+    UNION ALL
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/smartphone_a.webp',
+        'LAS$ovt7~qt7t7fQt7j[IUay%Mj['
+    FROM inserted_products ip
+    WHERE ip.name = 'Smartphone A'
+
+    UNION ALL
+
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/laptop_b.webp' AS image_path,
+        'LQRW0bt7?bof~qWBM{ay4nof%Mj[' AS placeholder
+    FROM inserted_products ip
+    WHERE ip.name = 'Laptop B'
+    UNION ALL
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/laptop_b.webp',
+        'LQRW0bt7?bof~qWBM{ay4nof%Mj['
+    FROM inserted_products ip
+    WHERE ip.name = 'Laptop B'
+    UNION ALL
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/laptop_b.webp',
+        'LQRW0bt7?bof~qWBM{ay4nof%Mj['
+    FROM inserted_products ip
+    WHERE ip.name = 'Laptop B'
+
+    UNION ALL
+
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/refrigerator_c.webp' AS image_path,
+        'LSRp8-WB~qxu-;WBIUt7xuayRjay' AS placeholder
+    FROM inserted_products ip
+    WHERE ip.name = 'Refrigerator C'
+    UNION ALL
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/refrigerator_c.webp',
+        'LSRp8-WB~qxu-;WBIUt7xuayRjay'
+    FROM inserted_products ip
+    WHERE ip.name = 'Refrigerator C'
+
+    UNION ALL
+
+    SELECT
+        ip.id AS product_id,
+        'storage/v1/object/public/product-images/washing_machine_d.webp' AS image_path,
+        'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ' AS placeholder
+    FROM inserted_products ip
+    WHERE ip.name = 'Washing Machine D'
 )
 
 -- Step 3: Insert product categories
