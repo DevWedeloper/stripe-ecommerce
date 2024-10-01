@@ -1,5 +1,6 @@
 import { getProductById as fetchProductById } from 'src/db/data-access/product/get-product-by-id';
-import { Products } from 'src/db/schema';
+import { ProductsWithAllImages } from 'src/db/types';
 
-export const getProductById = async (id: number): Promise<Products | null> =>
-  fetchProductById(id);
+export const getProductById = async (
+  id: number,
+): Promise<ProductsWithAllImages | null> => fetchProductById(id);
