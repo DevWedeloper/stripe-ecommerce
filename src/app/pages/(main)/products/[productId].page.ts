@@ -10,7 +10,7 @@ import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { GoBackButtonComponent } from 'src/app/shared/go-back-button.component';
 import { QuantitySelectorComponent } from 'src/app/shared/quantity-selector.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
-import { Products } from 'src/db/schema';
+import { ProductsWithThumbnail } from 'src/db/types';
 import { ProductDetailSkeletonComponent } from './product-detail-skeleton.component';
 import { ProductDetailService } from './product-detail.service';
 
@@ -92,7 +92,7 @@ export default class ProductDetailPageComponent {
   protected product = this.productDetailService.product;
   protected isLoading = this.productDetailService.isLoading;
 
-  protected addToCart(product: Products): void {
+  protected addToCart(product: ProductsWithThumbnail): void {
     this.shoppingCartService.addToCart({
       ...product,
       quantity: this.quantity(),
