@@ -1,9 +1,9 @@
-import { Products } from 'src/db/schema';
+import { ProductsWithThumbnail } from 'src/db/types';
 
 export type PaginatedProducts = {
   page: number;
   pageSize: number;
   totalPages: number;
   totalProducts: number;
-  products: Products[];
+  products: ProductsWithThumbnail[];
 };
