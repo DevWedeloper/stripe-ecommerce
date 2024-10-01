@@ -1,10 +1,10 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
-import { Products } from 'src/db/schema';
+import { ProductsWithThumbnail } from 'src/db/types';
 import { showError } from './utils';
 
-export type ProductWithQuantity = Products & {
+export type ProductWithQuantity = ProductsWithThumbnail & {
   quantity: number;
 };
 
@@ -81,7 +81,7 @@ export class ShoppingCartService {
 
   updateQuantity(productId: number, quantity: number): void {
     if (!this.isEditable()) return;
-    
+
     const cartProduct = this.cart().find((product) => product.id === productId);
 
     if (!cartProduct) return;
