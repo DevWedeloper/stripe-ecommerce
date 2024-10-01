@@ -1,11 +1,13 @@
 import { InferSelectModel, sql } from 'drizzle-orm';
 import {
   AnyPgColumn,
+  boolean,
   index,
   integer,
   pgTable,
   text,
   unique,
+  uniqueIndex,
 } from 'drizzle-orm/pg-core';
 
 export const products = pgTable(
@@ -29,14 +31,23 @@ export const products = pgTable(
   }),
 );
 
-export const productImages = pgTable('product_images', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  productId: integer('product_id')
-    .references(() => products.id)
-    .notNull(),
-  imagePath: text('image_path').notNull(),
-  placeholder: text('placeholder').notNull(),
-});
+export const productImages = pgTable(
+  'product_images',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    productId: integer('product_id')
+      .references(() => products.id)
+      .notNull(),
+    imagePath: text('image_path').notNull(),
+    placeholder: text('placeholder').notNull(),
+    isThumbnail: boolean('is_thumbnail').default(false),
+  },
+  (t) => ({
+    uniqueThumbnail: uniqueIndex('unique_thumbnail_per_product')
+      .on(t.productId, t.isThumbnail)
+      .where(sql`(${t.isThumbnail} = true)`),
+  }),
+);
 
 export const categories = pgTable('categories', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
@@ -92,3 +103,4 @@ export const productTags = pgTable(
 
 export type Products = InferSelectModel<typeof products>;
 export type Categories = InferSelectModel<typeof categories>;
+export type ProductImages = InferSelectModel<typeof productImages>;
