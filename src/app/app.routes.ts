@@ -3,7 +3,7 @@ import { Routes, UrlSegment } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'products/category',
-    redirectTo: 'not-found',
+    redirectTo: '',
     pathMatch: 'full',
   },
   {

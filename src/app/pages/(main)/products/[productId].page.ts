@@ -1,3 +1,4 @@
+import { RouteMeta } from '@analogjs/router';
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -13,6 +14,15 @@ import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { ProductsWithThumbnail } from 'src/db/types';
 import { ProductDetailSkeletonComponent } from './product-detail-skeleton.component';
 import { ProductDetailService } from './product-detail.service';
+
+export const routeMeta: RouteMeta = {
+  canActivate: [
+    (route) => {
+      const { productId } = route.params;
+      return Number.isInteger(productId) && productId > 0;
+    },
+  ],
+};
 
 @Component({
   selector: 'app-product-detail',
