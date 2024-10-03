@@ -46,13 +46,24 @@ const decodeBlurHashToImage = (blurHash: string): string => {
   }
 };
 
+const transformImagePathAndPlaceholder = (
+  imagePath: string | null,
+  placeholder: string | null,
+) => ({
+  imagePath: imagePath ? getS3ImageUrl(imagePath) : '',
+  placeholder: placeholder ? decodeBlurHashToImage(placeholder) : '',
+});
+
 export const transformProductImageObjects = (
   products: ProductsWithAllImages,
 ): ProductsWithAllImages => ({
   ...products,
+  ...transformImagePathAndPlaceholder(products.imagePath, products.placeholder),
   imageObjects: products.imageObjects.map((imageObject) => ({
-    imagePath: getS3ImageUrl(imageObject.imagePath),
-    placeholder: decodeBlurHashToImage(imageObject.placeholder),
+    ...transformImagePathAndPlaceholder(
+      imageObject.imagePath,
+      imageObject.placeholder,
+    ),
   })),
 });
 
@@ -60,10 +71,7 @@ const transformProductImagePathAndPlaceholder = (
   product: ProductsWithThumbnail,
 ): ProductsWithThumbnail => ({
   ...product,
-  imagePath: product.imagePath ? getS3ImageUrl(product.imagePath) : null,
-  placeholder: product.placeholder
-    ? decodeBlurHashToImage(product.placeholder)
-    : null,
+  ...transformImagePathAndPlaceholder(product.imagePath, product.placeholder),
 });
 
 export const transformProductImagePathsAndPlaceholders = (
