@@ -2,13 +2,13 @@ import { Routes, UrlSegment } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'products/category',
+    path: 'category',
     redirectTo: '',
     pathMatch: 'full',
   },
   {
-    path: 'products/category',
-    loadComponent: () => import('./pages/(main).page').then(m => m.default),
+    path: 'category',
+    loadComponent: () => import('./pages/(main).page').then((m) => m.default),
     children: [
       {
         matcher: (url) => {
@@ -17,7 +17,7 @@ export const routes: Routes = [
             alphabeticRegex.test(segment.path),
           );
 
-          if (isValid && url.length > 0) {
+          if (url.length > 0 && isValid) {
             return {
               consumed: url,
               posParams: {
@@ -32,7 +32,7 @@ export const routes: Routes = [
           return null;
         },
         loadComponent: () =>
-          import('./pages/(main)/products/category/product-lists.component').then(
+          import('./pages/(main)/category/product-lists.component').then(
             (m) => m.ProductListsComponent,
           ),
       },
