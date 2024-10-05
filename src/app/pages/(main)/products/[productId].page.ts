@@ -1,4 +1,3 @@
-import { RouteMeta } from '@analogjs/router';
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -14,15 +13,7 @@ import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { ProductsWithThumbnail } from 'src/db/types';
 import { ProductDetailSkeletonComponent } from './product-detail-skeleton.component';
 import { ProductDetailService } from './product-detail.service';
-
-export const routeMeta: RouteMeta = {
-  canActivate: [
-    (route) => {
-      const { productId } = route.params;
-      return Number.isInteger(productId) && productId > 0;
-    },
-  ],
-};
+import { ProductImageGalleryComponent } from './product-image-gallery.component';
 
 @Component({
   selector: 'app-product-detail',
@@ -35,6 +26,7 @@ export const routeMeta: RouteMeta = {
     QuantitySelectorComponent,
     ProductDetailSkeletonComponent,
     GoBackButtonComponent,
+    ProductImageGalleryComponent,
   ],
   providers: [ProductDetailService],
   template: `
@@ -46,12 +38,9 @@ export const routeMeta: RouteMeta = {
           class="grid animate-fade-in grid-cols-1 gap-8 p-4 md:grid-cols-2"
         >
           <div class="relative h-[600px] w-full rounded-lg">
-            <img
-              [ngSrc]="product()!.imagePath!"
+            <app-product-image-gallery
+              [imageObjects]="product()!.imageObjects"
               [alt]="product()!.name"
-              class="object-cover"
-              [placeholder]="product()!.placeholder!"
-              fill
             />
           </div>
 
