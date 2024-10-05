@@ -18,25 +18,27 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
       'sticky inset-0 z-10 block min-h-14 border-b border-border bg-background p-2',
   },
   template: `
-    <div class="hidden justify-between md:flex">
-      <app-categories />
-      <app-search-bar />
-      <div class="flex gap-2">
-        <app-shopping-cart />
-        <app-dark-mode />
-      </div>
-    </div>
-
-    <div class="flex flex-col gap-2 md:hidden">
-      <div class="flex justify-between">
+    <nav>
+      <div class="hidden justify-between md:flex">
         <app-categories />
+        <app-search-bar />
         <div class="flex gap-2">
           <app-shopping-cart />
           <app-dark-mode />
         </div>
       </div>
-      <app-search-bar />
-    </div>
+
+      <div class="flex flex-col gap-2 md:hidden">
+        <div class="flex justify-between">
+          <app-categories />
+          <div class="flex gap-2">
+            <app-shopping-cart />
+            <app-dark-mode />
+          </div>
+        </div>
+        <app-search-bar />
+      </div>
+    </nav>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
