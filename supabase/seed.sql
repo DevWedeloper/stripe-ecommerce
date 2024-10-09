@@ -1,5 +1,5 @@
 -- Step 1: Truncate the tables to clear existing data
-TRUNCATE TABLE categories RESTART IDENTITY CASCADE;
+TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images RESTART IDENTITY CASCADE;
 
 -- Step 2: Insert general categories and retrieve their IDs
 WITH inserted_categories AS (
@@ -27,9 +27,6 @@ UNION ALL
 SELECT
     'Washing Machines' AS name,
     (SELECT id FROM inserted_categories WHERE name = 'Home Appliances') AS parent_category_id;
-
--- Step 1: Truncate the tables to clear existing data
-TRUNCATE TABLE products, product_categories RESTART IDENTITY CASCADE;
 
 -- Step 2: Insert products and images, and retrieve their IDs
 WITH inserted_products AS (
@@ -143,9 +140,6 @@ FROM
         (ip.name = 'Refrigerator C' AND c.name = 'Refrigerators') OR
         (ip.name = 'Washing Machine D' AND c.name = 'Washing Machines')
     );
-
--- Step 1: Truncate the tables to clear existing data
-TRUNCATE TABLE tags, product_tags RESTART IDENTITY CASCADE;
 
 -- Step 2: Insert tags and retrieve their IDs
 WITH inserted_tags AS (
