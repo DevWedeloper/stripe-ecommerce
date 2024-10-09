@@ -29,24 +29,33 @@ WITH inserted_products AS (
 ),
 inserted_images AS (
     INSERT INTO product_images (product_id, image_path, placeholder, is_thumbnail)
-    VALUES
-        -- Smartphone A images
-        ((SELECT id FROM inserted_products WHERE name = 'Smartphone A'), 'storage/v1/object/public/product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', true),
-        ((SELECT id FROM inserted_products WHERE name = 'Smartphone A'), 'storage/v1/object/public/product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false),
-        ((SELECT id FROM inserted_products WHERE name = 'Smartphone A'), 'storage/v1/object/public/product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false),
-        ((SELECT id FROM inserted_products WHERE name = 'Smartphone A'), 'storage/v1/object/public/product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false),
+    SELECT 
+        ip.id, 
+        v.image_path, 
+        v.placeholder, 
+        v.is_thumbnail
+    FROM inserted_products ip
+    JOIN (
+        VALUES
+            -- Smartphone A images
+            ('Smartphone A', 'storage/v1/object/public/product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', true),
+            ('Smartphone A', 'storage/v1/object/public/product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false),
+            ('Smartphone A', 'storage/v1/object/public/product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false),
+            ('Smartphone A', 'storage/v1/object/public/product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false),
 
-        -- Laptop B images
-        ((SELECT id FROM inserted_products WHERE name = 'Laptop B'), 'storage/v1/object/public/product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', true),
-        ((SELECT id FROM inserted_products WHERE name = 'Laptop B'), 'storage/v1/object/public/product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false),
-        ((SELECT id FROM inserted_products WHERE name = 'Laptop B'), 'storage/v1/object/public/product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false),
+            -- Laptop B images
+            ('Laptop B', 'storage/v1/object/public/product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', true),
+            ('Laptop B', 'storage/v1/object/public/product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false),
+            ('Laptop B', 'storage/v1/object/public/product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false),
 
-        -- Refrigerator C images
-        ((SELECT id FROM inserted_products WHERE name = 'Refrigerator C'), 'storage/v1/object/public/product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', true),
-        ((SELECT id FROM inserted_products WHERE name = 'Refrigerator C'), 'storage/v1/object/public/product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', false),
+            -- Refrigerator C images
+            ('Refrigerator C', 'storage/v1/object/public/product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', true),
+            ('Refrigerator C', 'storage/v1/object/public/product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', false),
 
-        -- Washing Machine D images
-        ((SELECT id FROM inserted_products WHERE name = 'Washing Machine D'), 'storage/v1/object/public/product-images/washing_machine_d.webp', 'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ', true)
+            -- Washing Machine D images
+            ('Washing Machine D', 'storage/v1/object/public/product-images/washing_machine_d.webp', 'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ', true)
+    ) AS v(product_name, image_path, placeholder, is_thumbnail)
+    ON v.product_name = ip.name
 )
 
 INSERT INTO product_categories (product_id, category_id)
