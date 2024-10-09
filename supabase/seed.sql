@@ -1,7 +1,5 @@
--- Step 1: Truncate the tables to clear existing data
 TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images RESTART IDENTITY CASCADE;
 
--- Step 2: Insert general categories and retrieve their IDs
 WITH inserted_categories AS (
     INSERT INTO categories (name)
     VALUES 
@@ -10,7 +8,6 @@ WITH inserted_categories AS (
     RETURNING id, name
 )
 
--- Step 3: Insert inner categories for the retrieved IDs
 INSERT INTO categories (name, parent_category_id)
 SELECT v.name, c.id
 FROM (VALUES
@@ -21,7 +18,6 @@ FROM (VALUES
 ) AS v(name, parent)
 JOIN inserted_categories c ON c.name = v.parent;
 
--- Step 2: Insert products and images, and retrieve their IDs
 WITH inserted_products AS (
     INSERT INTO products (name, description, price, currency, stock)
     VALUES
@@ -53,7 +49,6 @@ inserted_images AS (
         ((SELECT id FROM inserted_products WHERE name = 'Washing Machine D'), 'storage/v1/object/public/product-images/washing_machine_d.webp', 'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ', true)
 )
 
--- Step 3: Insert product categories
 INSERT INTO product_categories (product_id, category_id)
 SELECT
     ip.id AS product_id,
@@ -67,7 +62,6 @@ FROM
         (ip.name = 'Washing Machine D' AND c.name = 'Washing Machines')
     );
 
--- Step 2: Insert tags and retrieve their IDs
 WITH inserted_tags AS (
     INSERT INTO tags (name)
     VALUES 
@@ -79,7 +73,6 @@ WITH inserted_tags AS (
     RETURNING id, name
 )
 
--- Step 3: Insert product tags
 INSERT INTO product_tags (product_id, tag_id)
 SELECT
     p.id AS product_id,
