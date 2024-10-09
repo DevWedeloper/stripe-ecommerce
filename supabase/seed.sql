@@ -12,21 +12,14 @@ WITH inserted_categories AS (
 
 -- Step 3: Insert inner categories for the retrieved IDs
 INSERT INTO categories (name, parent_category_id)
-SELECT
-    'Smartphones' AS name,
-    (SELECT id FROM inserted_categories WHERE name = 'Electronics') AS parent_category_id
-UNION ALL
-SELECT
-    'Laptops' AS name,
-    (SELECT id FROM inserted_categories WHERE name = 'Electronics') AS parent_category_id
-UNION ALL
-SELECT
-    'Refrigerators' AS name,
-    (SELECT id FROM inserted_categories WHERE name = 'Home Appliances') AS parent_category_id
-UNION ALL
-SELECT
-    'Washing Machines' AS name,
-    (SELECT id FROM inserted_categories WHERE name = 'Home Appliances') AS parent_category_id;
+SELECT v.name, c.id
+FROM (VALUES
+    ('Smartphones', 'Electronics'),
+    ('Laptops', 'Electronics'),
+    ('Refrigerators', 'Home Appliances'),
+    ('Washing Machines', 'Home Appliances')
+) AS v(name, parent)
+JOIN inserted_categories c ON c.name = v.parent;
 
 -- Step 2: Insert products and images, and retrieve their IDs
 WITH inserted_products AS (
