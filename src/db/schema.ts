@@ -16,9 +16,7 @@ export const products = pgTable(
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     name: text('name').notNull(),
     description: text('description').notNull(),
-    price: integer('price').notNull(),
     currency: text('currency').notNull(),
-    stock: integer('stock').notNull(),
   },
   (t) => ({
     searchIndex: index('search_index').using(
@@ -28,6 +26,23 @@ export const products = pgTable(
         setweight(to_tsvector('english', ${t.description}), 'B')
       )`,
     ),
+  }),
+);
+
+export const productItems = pgTable(
+  'product_items',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    productId: integer('product_id')
+      .references(() => products.id)
+      .notNull(),
+    sku: text('sku').notNull(),
+    stock: integer('stock').notNull(),
+    price: integer('price').notNull(),
+  },
+  (t) => ({
+    uniqueConstraint: unique().on(t.productId, t.sku),
+    productIdIdx: index('product_items_product_id_idx').on(t.productId),
   }),
 );
 
@@ -46,6 +61,7 @@ export const productImages = pgTable(
     uniqueThumbnail: uniqueIndex('unique_thumbnail_per_product')
       .on(t.productId, t.isThumbnail)
       .where(sql`(${t.isThumbnail} = true)`),
+    productIdIdx: index('product_images_product_id_idx').on(t.productId),
   }),
 );
 
@@ -69,6 +85,43 @@ export const productCategories = pgTable(
   },
   (t) => ({
     uniqueConstraint: unique().on(t.productId, t.categoryId),
+  }),
+);
+
+export const variations = pgTable('variations', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  categoryId: integer('category_id')
+    .notNull()
+    .references(() => categories.id),
+  name: text('name').notNull(),
+});
+
+export const variationOptions = pgTable(
+  'variation_options',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    variationId: integer('variation_id')
+      .notNull()
+      .references(() => variations.id),
+    value: text('value').notNull(),
+  },
+  (t) => ({
+    variationIdIdx: index('variation_id_idx').on(t.variationId),
+  }),
+);
+
+export const productConfiguration = pgTable(
+  'product_configuration',
+  {
+    productItemId: integer('product_item_id').references(() => productItems.id),
+    variationOptionId: integer('variation_option_id').references(
+      () => variationOptions.id,
+    ),
+    variationId: integer('variation_id').references(() => variations.id),
+  },
+  (t) => ({
+    uniqueOptionConstraint: unique().on(t.productItemId, t.variationOptionId),
+    uniqueVariationConstraint: unique().on(t.productItemId, t.variationId),
   }),
 );
 
@@ -102,5 +155,8 @@ export const productTags = pgTable(
 );
 
 export type Products = InferSelectModel<typeof products>;
+export type ProductItems = InferSelectModel<typeof productItems>;
 export type Categories = InferSelectModel<typeof categories>;
 export type ProductImages = InferSelectModel<typeof productImages>;
+export type Variations = InferSelectModel<typeof variations>;
+export type VariationOptions = InferSelectModel<typeof variationOptions>;
