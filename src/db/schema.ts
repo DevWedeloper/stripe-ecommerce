@@ -5,6 +5,7 @@ import {
   index,
   integer,
   pgTable,
+  primaryKey,
   text,
   unique,
   uniqueIndex,
@@ -84,7 +85,7 @@ export const productCategories = pgTable(
       .references(() => categories.id),
   },
   (t) => ({
-    uniqueConstraint: unique().on(t.productId, t.categoryId),
+    pk: primaryKey({ columns: [t.productId, t.categoryId] }),
   }),
 );
 
@@ -120,7 +121,7 @@ export const productConfiguration = pgTable(
     variationId: integer('variation_id').references(() => variations.id),
   },
   (t) => ({
-    uniqueOptionConstraint: unique().on(t.productItemId, t.variationOptionId),
+    pk: primaryKey({ columns: [t.productItemId, t.variationOptionId] }),
     uniqueVariationConstraint: unique().on(t.productItemId, t.variationId),
   }),
 );
@@ -150,7 +151,7 @@ export const productTags = pgTable(
       .references(() => tags.id),
   },
   (t) => ({
-    uniqueConstraint: unique().on(t.productId, t.tagId),
+    pk: primaryKey({ columns: [t.productId, t.tagId] }),
   }),
 );
 
