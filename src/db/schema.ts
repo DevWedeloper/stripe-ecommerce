@@ -69,9 +69,9 @@ export const productImages = pgTable(
 export const categories = pgTable('categories', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull().unique(),
-  parentCategoryId: integer('parent_category_id').references(
-    (): AnyPgColumn => categories.id,
-  ),
+  parentCategoryId: integer('parent_category_id')
+    .references((): AnyPgColumn => categories.id)
+    .notNull(),
 });
 
 export const productCategories = pgTable(
@@ -114,11 +114,13 @@ export const variationOptions = pgTable(
 export const productConfiguration = pgTable(
   'product_configuration',
   {
-    productItemId: integer('product_item_id').references(() => productItems.id),
+    productItemId: integer('product_item_id')
+    .notNull().references(() => productItems.id),
     variationOptionId: integer('variation_option_id').references(
       () => variationOptions.id,
     ),
-    variationId: integer('variation_id').references(() => variations.id),
+    variationId: integer('variation_id')
+    .notNull().references(() => variations.id),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.productItemId, t.variationOptionId] }),
