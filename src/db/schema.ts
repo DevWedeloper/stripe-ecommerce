@@ -72,8 +72,7 @@ export const categories = pgTable(
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     name: text('name').notNull(),
     parentCategoryId: integer('parent_category_id')
-      .references((): AnyPgColumn => categories.id)
-      .notNull(),
+      .references((): AnyPgColumn => categories.id),
   },
   (t) => ({
     nameIdx: uniqueIndex('categories_name_idx').on(t.name),
