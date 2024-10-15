@@ -6,7 +6,7 @@ export const lower = (col: Column) => sql<string>`lower(${col})`;
 
 export const totalCount = sql<number>`count(*) over() AS full_count`;
 
-type ProductWithTotalCount = ProductsWithThumbnail & {
+export type ProductWithTotalCount = ProductsWithThumbnail & {
   totalCount: number;
 };
 
