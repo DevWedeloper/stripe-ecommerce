@@ -1,4 +1,4 @@
-TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images RESTART IDENTITY CASCADE;
+TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images, product_items, variations, variation_options, product_configuration RESTART IDENTITY CASCADE;
 
 WITH inserted_categories AS (
     INSERT INTO categories (name)
@@ -19,13 +19,62 @@ FROM (VALUES
 JOIN inserted_categories c ON c.name = v.parent;
 
 WITH inserted_products AS (
-    INSERT INTO products (name, description, price, currency, stock)
+    INSERT INTO products (name, description, currency)
     VALUES
-        ('Smartphone A', 'High-quality smartphone with latest features', 699, 'USD', 50),
-        ('Laptop B', 'Powerful laptop for gaming and productivity', 999, 'USD', 30),
-        ('Refrigerator C', 'Energy-efficient refrigerator with large capacity', 1199, 'USD', 20),
-        ('Washing Machine D', 'Automatic washing machine with multiple modes', 499, 'USD', 40)
+        ('Smartphone A', 'High-quality smartphone with latest features', 'USD'),
+        ('Laptop B', 'Powerful laptop for gaming and productivity', 'USD'),
+        ('Refrigerator C', 'Energy-efficient refrigerator with large capacity', 'USD'),
+        ('Washing Machine D', 'Automatic washing machine with multiple modes', 'USD')
     RETURNING id, name
+),
+inserted_items AS (
+    INSERT INTO product_items (product_id, sku, stock, price)
+    SELECT ip.id, v.sku, v.stock, v.price
+    FROM (
+        VALUES
+            -- Smartphone A combinations
+            ('Smartphone A', 'SKU_A_64GB_Black', 30, 699),
+            ('Smartphone A', 'SKU_A_64GB_Blue', 0, 699),
+            ('Smartphone A', 'SKU_A_64GB_Red', 20, 649),
+            ('Smartphone A', 'SKU_A_128GB_Black', 15, 749),
+            ('Smartphone A', 'SKU_A_128GB_Blue', 10, 699),
+            ('Smartphone A', 'SKU_A_128GB_Red', 5, 699),
+            ('Smartphone A', 'SKU_A_256GB_Black', 25, 799),
+            ('Smartphone A', 'SKU_A_256GB_Blue', 0, 749),
+            ('Smartphone A', 'SKU_A_256GB_Red', 18, 799),
+
+            -- Laptop B combinations
+            ('Laptop B', 'SKU_B_8GB_Gray', 30, 999),
+            ('Laptop B', 'SKU_B_8GB_Silver', 5, 949),
+            ('Laptop B', 'SKU_B_8GB_Black', 0, 999),
+            ('Laptop B', 'SKU_B_16GB_Gray', 25, 1099),
+            ('Laptop B', 'SKU_B_16GB_Silver', 20, 1099),
+            ('Laptop B', 'SKU_B_16GB_Black', 15, 999),
+            ('Laptop B', 'SKU_B_32GB_Gray', 10, 1199),
+            ('Laptop B', 'SKU_B_32GB_Silver', 0, 1149),
+            ('Laptop B', 'SKU_B_32GB_Black', 12, 1199),
+
+            -- Refrigerator C combinations
+            ('Refrigerator C', 'SKU_C_300L_White', 20, 1199),
+            ('Refrigerator C', 'SKU_C_300L_Silver', 0, 1199),
+            ('Refrigerator C', 'SKU_C_300L_Black', 15, 1149),
+            ('Refrigerator C', 'SKU_C_400L_White', 25, 1299),
+            ('Refrigerator C', 'SKU_C_400L_Silver', 20, 1249),
+            ('Refrigerator C', 'SKU_C_400L_Black', 10, 1299),
+            ('Refrigerator C', 'SKU_C_500L_White', 5, 1399),
+            ('Refrigerator C', 'SKU_C_500L_Silver', 0, 1349), 
+            ('Refrigerator C', 'SKU_C_500L_Black', 15, 1349),
+
+            -- Washing Machine D combinations
+            ('Washing Machine D', 'SKU_D_FrontLoad_White', 40, 499),
+            ('Washing Machine D', 'SKU_D_FrontLoad_Gray', 0, 479), 
+            ('Washing Machine D', 'SKU_D_FrontLoad_Silver', 35, 489),
+            ('Washing Machine D', 'SKU_D_TopLoad_White', 30, 459),
+            ('Washing Machine D', 'SKU_D_TopLoad_Gray', 20, 439),
+            ('Washing Machine D', 'SKU_D_TopLoad_Silver', 0, 439)  
+    ) AS v(product_name, sku, stock, price)
+    JOIN inserted_products ip ON ip.name = v.product_name
+    RETURNING id, product_id
 ),
 inserted_images AS (
     INSERT INTO product_images (product_id, image_path, placeholder, is_thumbnail)
@@ -95,3 +144,129 @@ FROM
         (t.name = 'High Quality' AND p.name IN ('Smartphone A', 'Laptop B', 'Refrigerator C')) OR
         (t.name = 'Eco-Friendly' AND p.name IN ('Refrigerator C'))
     );
+
+INSERT INTO variations (name, category_id)
+SELECT v.variation_name, c.id
+FROM (
+    VALUES 
+        -- Variations for Smartphones
+        ('Color', 'Smartphones'),
+        ('Storage Capacity', 'Smartphones'),
+
+        -- Variations for Laptops
+        ('Color', 'Laptops'),
+        ('RAM Size', 'Laptops'),
+
+        -- Variations for Refrigerators
+        ('Color', 'Refrigerators'),
+        ('Capacity', 'Refrigerators'),
+
+        -- Variations for Washing Machines
+        ('Color', 'Washing Machines'),
+        ('Load Type', 'Washing Machines')
+) AS v(variation_name, category_name)
+JOIN categories c ON c.name = v.category_name;
+
+INSERT INTO variation_options (variation_id, value)
+SELECT v.id, o.value
+FROM (
+    -- Fetching variations and adding options
+    VALUES
+        -- Options for "Color" in "Smartphones"
+        ('Color', 'Smartphones', 'Red'),
+        ('Color', 'Smartphones', 'Blue'),
+        ('Color', 'Smartphones', 'Black'),
+
+        -- Options for "Storage Capacity" in "Smartphones"
+        ('Storage Capacity', 'Smartphones', '64GB'),
+        ('Storage Capacity', 'Smartphones', '128GB'),
+        ('Storage Capacity', 'Smartphones', '256GB'),
+
+        -- Options for "Color" in "Laptops"
+        ('Color', 'Laptops', 'Gray'),
+        ('Color', 'Laptops', 'Silver'),
+        ('Color', 'Laptops', 'Black'),
+
+        -- Options for "RAM Size" in "Laptops"
+        ('RAM Size', 'Laptops', '8GB'),
+        ('RAM Size', 'Laptops', '16GB'),
+        ('RAM Size', 'Laptops', '32GB'),
+
+        -- Options for "Color" in "Refrigerators"
+        ('Color', 'Refrigerators', 'White'),
+        ('Color', 'Refrigerators', 'Silver'),
+        ('Color', 'Refrigerators', 'Black'),
+
+        -- Options for "Capacity" in "Refrigerators"
+        ('Capacity', 'Refrigerators', '300L'),
+        ('Capacity', 'Refrigerators', '400L'),
+        ('Capacity', 'Refrigerators', '500L'),
+
+        -- Options for "Color" in "Washing Machines"
+        ('Color', 'Washing Machines', 'White'),
+        ('Color', 'Washing Machines', 'Gray'),
+        ('Color', 'Washing Machines', 'Silver'),
+
+        -- Options for "Load Type" in "Washing Machines"
+        ('Load Type', 'Washing Machines', 'Front Load'),
+        ('Load Type', 'Washing Machines', 'Top Load')
+) AS o(variation_name, category_name, value)
+JOIN variations v ON v.name = o.variation_name
+JOIN categories c ON c.id = v.category_id AND c.name = o.category_name;
+
+WITH product_variation_mapping AS (
+    SELECT 
+        pi.id AS product_item_id,
+        vo.id AS variation_option_id,
+        v.id AS variation_id,
+        p.name AS product_name,
+        v.name AS variation_name,
+        vo.value AS option_value
+    FROM 
+        product_items pi
+    JOIN products p ON p.id = pi.product_id
+    JOIN product_categories pc ON pc.product_id = p.id 
+    JOIN categories c ON c.id = pc.category_id  
+    JOIN variations v ON v.category_id = c.id
+    JOIN variation_options vo ON vo.variation_id = v.id
+    WHERE
+        -- Ensure each product_item corresponds only to unique variation options
+        (p.name = 'Smartphone A' AND (
+            (vo.value IN ('Black') AND pi.sku IN ('SKU_A_64GB_Black', 'SKU_A_128GB_Black', 'SKU_A_256GB_Black')) OR
+            (vo.value IN ('Blue') AND pi.sku IN ('SKU_A_64GB_Blue', 'SKU_A_128GB_Blue', 'SKU_A_256GB_Blue')) OR
+            (vo.value IN ('Red') AND pi.sku IN ('SKU_A_64GB_Red', 'SKU_A_128GB_Red', 'SKU_A_256GB_Red')) OR
+            (vo.value IN ('64GB') AND pi.sku IN ('SKU_A_64GB_Black', 'SKU_A_64GB_Blue', 'SKU_A_64GB_Red')) OR
+            (vo.value IN ('128GB') AND pi.sku IN ('SKU_A_128GB_Black', 'SKU_A_128GB_Blue', 'SKU_A_128GB_Red')) OR
+            (vo.value IN ('256GB') AND pi.sku IN ('SKU_A_256GB_Black', 'SKU_A_256GB_Blue', 'SKU_A_256GB_Red'))
+        ))
+        OR (p.name = 'Laptop B' AND (
+            (vo.value IN ('Gray') AND pi.sku IN ('SKU_B_8GB_Gray', 'SKU_B_16GB_Gray', 'SKU_B_32GB_Gray')) OR
+            (vo.value IN ('Silver') AND pi.sku IN ('SKU_B_8GB_Silver', 'SKU_B_16GB_Silver', 'SKU_B_32GB_Silver')) OR
+            (vo.value IN ('Black') AND pi.sku IN ('SKU_B_8GB_Black', 'SKU_B_16GB_Black', 'SKU_B_32GB_Black')) OR
+            (vo.value IN ('8GB') AND pi.sku IN ('SKU_B_8GB_Gray', 'SKU_B_8GB_Silver', 'SKU_B_8GB_Black')) OR
+            (vo.value IN ('16GB') AND pi.sku IN ('SKU_B_16GB_Gray', 'SKU_B_16GB_Silver', 'SKU_B_16GB_Black')) OR
+            (vo.value IN ('32GB') AND pi.sku IN ('SKU_B_32GB_Gray', 'SKU_B_32GB_Silver', 'SKU_B_32GB_Black'))
+        ))
+        OR (p.name = 'Refrigerator C' AND (
+            (vo.value IN ('White') AND pi.sku IN ('SKU_C_300L_White', 'SKU_C_400L_White', 'SKU_C_500L_White')) OR
+            (vo.value IN ('Silver') AND pi.sku IN ('SKU_C_300L_Silver', 'SKU_C_400L_Silver', 'SKU_C_500L_Silver')) OR
+            (vo.value IN ('Black') AND pi.sku IN ('SKU_C_300L_Black', 'SKU_C_400L_Black', 'SKU_C_500L_Black')) OR
+            (vo.value IN ('300L') AND pi.sku IN ('SKU_C_300L_White', 'SKU_C_300L_Silver', 'SKU_C_300L_Black')) OR
+            (vo.value IN ('400L') AND pi.sku IN ('SKU_C_400L_White', 'SKU_C_400L_Silver', 'SKU_C_400L_Black')) OR
+            (vo.value IN ('500L') AND pi.sku IN ('SKU_C_500L_White', 'SKU_C_500L_Silver', 'SKU_C_500L_Black'))
+        ))
+        OR (p.name = 'Washing Machine D' AND (
+            (vo.value IN ('White') AND pi.sku IN ('SKU_D_FrontLoad_White', 'SKU_D_TopLoad_White')) OR
+            (vo.value IN ('Gray') AND pi.sku IN ('SKU_D_FrontLoad_Gray', 'SKU_D_TopLoad_Gray')) OR
+            (vo.value IN ('Silver') AND pi.sku IN ('SKU_D_FrontLoad_Silver', 'SKU_D_TopLoad_Silver')) OR
+            (vo.value IN ('Front Load') AND pi.sku IN ('SKU_D_FrontLoad_White', 'SKU_D_FrontLoad_Gray', 'SKU_D_FrontLoad_Silver')) OR
+            (vo.value IN ('Top Load') AND pi.sku IN ('SKU_D_TopLoad_White', 'SKU_D_TopLoad_Gray', 'SKU_D_TopLoad_Silver'))
+        ))
+)
+INSERT INTO product_configuration (product_item_id, variation_option_id, variation_id)
+SELECT 
+    product_item_id,
+    variation_option_id,
+    variation_id
+FROM 
+    product_variation_mapping;
