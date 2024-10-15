@@ -66,13 +66,19 @@ export const productImages = pgTable(
   }),
 );
 
-export const categories = pgTable('categories', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  name: text('name').notNull().unique(),
-  parentCategoryId: integer('parent_category_id')
-    .references((): AnyPgColumn => categories.id)
-    .notNull(),
-});
+export const categories = pgTable(
+  'categories',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    name: text('name').notNull(),
+    parentCategoryId: integer('parent_category_id')
+      .references((): AnyPgColumn => categories.id)
+      .notNull(),
+  },
+  (t) => ({
+    nameIdx: uniqueIndex('categories_name_idx').on(t.name),
+  }),
+);
 
 export const productCategories = pgTable(
   'product_categories',
@@ -115,12 +121,14 @@ export const productConfiguration = pgTable(
   'product_configuration',
   {
     productItemId: integer('product_item_id')
-    .notNull().references(() => productItems.id),
+      .notNull()
+      .references(() => productItems.id),
     variationOptionId: integer('variation_option_id').references(
       () => variationOptions.id,
     ),
     variationId: integer('variation_id')
-    .notNull().references(() => variations.id),
+      .notNull()
+      .references(() => variations.id),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.productItemId, t.variationOptionId] }),
