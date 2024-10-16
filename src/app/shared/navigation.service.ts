@@ -16,6 +16,11 @@ export class NavigationService {
     this.setQueryParams({ pageSize });
   }
 
+  setCustomParam(key: string, value: string | number): void {
+    const param = { [key]: value };
+    this.setQueryParams(param);
+  }
+
   private setQueryParams = (queryParams: {
     [key: string]: string | number;
   }): void => {
