@@ -1,29 +1,176 @@
 import { Column, eq, getTableColumns, sql } from 'drizzle-orm';
-import { ImageObject, ProductsWithAllImages } from 'src/db/types';
+import {
+  ImageObject,
+  ProductDetails,
+  ProductItemObject,
+  VariationObject,
+} from 'src/db/types';
 import { db } from '../..';
-import { productImages, products } from '../../schema';
+import {
+  productConfiguration,
+  productImages,
+  productItems,
+  products,
+  variationOptions,
+  variations,
+} from '../../schema';
 
 export const getProductById = async (
   id: number,
-): Promise<ProductsWithAllImages | null> => {
+): Promise<ProductDetails | null> => {
   const maxQuery = (col: Column) =>
     sql<string>`
       max(case when ${productImages.isThumbnail} = true then ${col} end)
     `;
 
-  const [product] = await db
+  const imageObjectQuery = db.$with('image_object_query').as(
+    db
+      .select({
+        productId: productImages.productId,
+        imagePath: maxQuery(productImages.imagePath).as('image_path'),
+        placeholder: maxQuery(productImages.placeholder).as('placeholder'),
+        imageObjects: sql<ImageObject[]>`
+          array_agg(
+            json_build_object(
+              'imagePath', ${productImages.imagePath}, 
+              'placeholder', ${productImages.placeholder}
+            )
+          )
+        `.as('image_objects'),
+      })
+      .from(productImages)
+      .where(eq(productImages.productId, id))
+      .groupBy(productImages.productId),
+  );
+
+  const productItemDetailsQuery = db.$with('product_item_details_query').as(
+    db
+      .select({
+        productId: productItems.productId,
+        id: productItems.id,
+        sku: productItems.sku,
+        stock: productItems.stock,
+        price: productItems.price,
+        variationName: variations.name,
+        variationValue: variationOptions.value,
+      })
+      .from(productItems)
+      .leftJoin(
+        productConfiguration,
+        eq(productItems.id, productConfiguration.productItemId),
+      )
+      .leftJoin(
+        variationOptions,
+        eq(productConfiguration.variationOptionId, variationOptions.id),
+      )
+      .leftJoin(variations, eq(variationOptions.variationId, variations.id))
+      .where(eq(productItems.productId, id)),
+  );
+
+  const productItemVariationsQuery = db
+    .$with('product_item_variations_query')
+    .as(
+      db
+        .select({
+          productId: productItemDetailsQuery.productId,
+          id: productItemDetailsQuery.id,
+          sku: productItemDetailsQuery.sku,
+          stock: productItemDetailsQuery.stock,
+          price: productItemDetailsQuery.price,
+          variations: sql<VariationObject[]>`
+            array_agg(
+              json_build_object(
+                'name', ${productItemDetailsQuery.variationName},
+                'value', ${productItemDetailsQuery.variationValue}
+              )
+            )
+          `.as('variations'),
+        })
+        .from(productItemDetailsQuery)
+        .groupBy(
+          productItemDetailsQuery.productId,
+          productItemDetailsQuery.id,
+          productItemDetailsQuery.sku,
+          productItemDetailsQuery.stock,
+          productItemDetailsQuery.price,
+        ),
+    );
+
+  const productItemAggregateQuery = db.$with('product_item_aggregate_query').as(
+    db
+      .with(productItemVariationsQuery)
+      .select({
+        productId: productItemVariationsQuery.productId,
+        items: sql<ProductItemObject[]>`
+          array_agg(
+            json_build_object(
+              'id', ${productItemVariationsQuery.id},
+              'sku', ${productItemVariationsQuery.sku},
+              'stock', ${productItemVariationsQuery.stock},
+              'price', ${productItemVariationsQuery.price},
+              'variations', ${productItemVariationsQuery.variations}
+            )
+          )
+        `.as('product_items'),
+      })
+      .from(productItemVariationsQuery)
+      .groupBy(productItemVariationsQuery.productId),
+  );
+
+  const variationsQuery = db.$with('variations_query').as(
+    db
+      .select({
+        productId: productItemDetailsQuery.productId,
+        variations: sql<VariationObject[]>`
+          array_agg(
+            distinct jsonb_build_object(
+              'name', ${productItemDetailsQuery.variationName},
+              'value', ${productItemDetailsQuery.variationValue}
+            )
+          )
+        `.as('variations'),
+      })
+      .from(productItemDetailsQuery)
+      .groupBy(productItemDetailsQuery.productId),
+  );
+
+  const query = db
+    .with(
+      imageObjectQuery,
+      productItemDetailsQuery,
+      productItemAggregateQuery,
+      variationsQuery,
+    )
     .select({
       ...getTableColumns(products),
-      imagePath: maxQuery(productImages.imagePath),
-      placeholder: maxQuery(productImages.placeholder),
-      imageObjects: sql<
-        ImageObject[]
-      >`array_agg(json_build_object('imagePath', ${productImages.imagePath}, 'placeholder', ${productImages.placeholder}))`,
+      imagePath: imageObjectQuery.imagePath,
+      placeholder: imageObjectQuery.placeholder,
+      imageObjects: imageObjectQuery.imageObjects,
+      items: productItemAggregateQuery.items,
+      variations: variationsQuery.variations,
     })
     .from(products)
-    .leftJoin(productImages, eq(productImages.productId, products.id))
+    .leftJoin(imageObjectQuery, eq(imageObjectQuery.productId, products.id))
+    .leftJoin(
+      productItemAggregateQuery,
+      eq(productItemAggregateQuery.productId, products.id),
+    )
+    .leftJoin(variationsQuery, eq(variationsQuery.productId, products.id))
     .where(eq(products.id, id))
-    .groupBy(products.id)
     .limit(1);
+
+  const [result] = await query;
+
+  const product = {
+    ...result,
+    variations: result.variations.reduce<Record<string, string[]>>(
+      (acc, { name: key, value }) => ({
+        ...acc,
+        [key]: acc[key] ? [...acc[key], value] : [value],
+      }),
+      {},
+    ),
+  };
+
   return product || null;
 };
