@@ -18,7 +18,7 @@ export type ImageObject = Pick<
 >;
 
 export type ProductDetails = Products & {
-  productItems: ProductItemObject[];
+  items: ProductItemObject[];
 } & NullishImageObject & {
     imageObjects: ImageObject[];
   } & { variations: Record<string, string[]> };
