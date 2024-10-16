@@ -15,6 +15,9 @@ export const parseToPositiveInt = (value: any, fallback: number): number => {
   return result.success ? result.data : fallback;
 };
 
+export const convertToURLFormat = (name: string) =>
+  name.replace(/\s+/g, '-').toLowerCase();
+
 export const showError = (message: string): void => {
   toast.error(message, {
     action: {

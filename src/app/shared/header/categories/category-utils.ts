@@ -1,4 +1,4 @@
-const convertToURLFormat = (name: string) => name.replace(/\s+/g, '-');
+import { convertToURLFormat } from '../../utils';
 
 export const redirectToCategory = (path: string) =>
-  `/category/${convertToURLFormat(path.toLowerCase())}`;
+  `/category/${convertToURLFormat(path)}`;
