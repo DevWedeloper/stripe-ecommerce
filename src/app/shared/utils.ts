@@ -1,6 +1,6 @@
 import { decode } from 'blurhash';
 import { toast } from 'ngx-sonner';
-import { ProductDetails, ProductsWithThumbnail } from 'src/db/types';
+import { ProductDetails, ProductWithImageAndPricing } from 'src/db/types';
 import { environment } from 'src/environments/environment';
 import { positiveIntSchema } from 'src/schemas/zod-schemas';
 import { PaginatedProducts } from 'src/server/use-cases/types/paginated-products.type';
@@ -72,8 +72,8 @@ export const transformProductImageObjects = (
 });
 
 const transformProductImagePathAndPlaceholder = (
-  product: ProductsWithThumbnail,
-): ProductsWithThumbnail => ({
+  product: ProductWithImageAndPricing,
+): ProductWithImageAndPricing => ({
   ...product,
   ...transformImagePathAndPlaceholder(product.imagePath, product.placeholder),
 });
