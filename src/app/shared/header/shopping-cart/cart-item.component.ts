@@ -9,7 +9,8 @@ import { provideIcons } from '@ng-icons/core';
 import { lucideTrash2 } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { ProductWithQuantity } from '../../shopping-cart.service';
+import { ItemVariationComponent } from '../../item-variation.component';
+import { CartItem } from '../../shopping-cart.service';
 
 @Component({
   selector: 'app-cart-item',
@@ -19,6 +20,7 @@ import { ProductWithQuantity } from '../../shopping-cart.service';
     NgOptimizedImage,
     HlmButtonDirective,
     HlmIconComponent,
+    ItemVariationComponent,
   ],
   providers: [provideIcons({ lucideTrash2 })],
   host: {
@@ -28,19 +30,20 @@ import { ProductWithQuantity } from '../../shopping-cart.service';
     <div class="mb-2 flex items-center">
       <div class="relative mr-2 h-16 w-16 rounded-md">
         <img
-          [ngSrc]="product().imagePath!"
-          [alt]="product().name"
+          [ngSrc]="item().imagePath!"
+          [alt]="item().name"
           class="object-cover"
-          [placeholder]="product().placeholder!"
+          [placeholder]="item().placeholder!"
           fill
         />
       </div>
       <div class="flex-1">
-        <h4 class="text-lg font-semibold">{{ product().name }}</h4>
-        <p class="text-sm">{{ product().description }}</p>
+        <h4 class="text-lg font-semibold">{{ item().name }}</h4>
+        <app-item-variation [variations]="item().variations" />
+        <p class="text-sm">{{ item().description }}</p>
         <p class="text-sm font-semibold">
-          {{ product().price | currency: product().currency }} x
-          {{ product().quantity }}
+          {{ item().price | currency: item().currency }} x
+          {{ item().quantity }}
         </p>
       </div>
     </div>
@@ -58,7 +61,7 @@ import { ProductWithQuantity } from '../../shopping-cart.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartItemComponent {
-  product = input.required<ProductWithQuantity>();
+  item = input.required<CartItem>();
   isEditable = input.required<boolean>();
   removeFromCartChange = output();
 }
