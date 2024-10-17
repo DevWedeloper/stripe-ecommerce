@@ -26,7 +26,8 @@ export type ProductDetails = Products &
     variations: Record<string, string[]>;
   };
 
-export type ProductsWithThumbnail = Products & NullishImageObject;
+export type ProductWithImageAndPricing = Products &
+  NullishImageObject & { lowestPrice: number };
 
 export type ProductItemObject = {
   id: ProductItems['id'];
