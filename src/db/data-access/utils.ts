@@ -1,37 +1,35 @@
 import type { Column } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
-import { ProductsWithThumbnail } from '../types';
+import { ProductWithImageAndPricing } from '../types';
 
 export const lower = (col: Column) => sql<string>`lower(${col})`;
 
 export const totalCount = sql<number>`count(*) over() AS full_count`;
 
-export type ProductWithTotalCount = ProductsWithThumbnail & {
+export type ProductWithTotalCount = ProductWithImageAndPricing & {
   totalCount: number;
 };
 
 export const formatPaginatedResult = (
   productArray: ProductWithTotalCount[],
-): { products: ProductsWithThumbnail[]; totalProducts: number } => {
+): { products: ProductWithImageAndPricing[]; totalProducts: number } => {
   const products = productArray.map(
     ({
       id,
       name,
       description,
-      price,
+      lowestPrice,
       currency,
       imagePath,
       placeholder,
-      stock,
     }) => ({
       id,
       name,
       description,
-      price,
+      lowestPrice,
       currency,
       imagePath,
       placeholder,
-      stock,
     }),
   );
   const totalProducts = productArray[0]?.totalCount || 0;
