@@ -1,47 +1,21 @@
-import { getCategoryIdByName } from 'src/db/data-access/category/get-category-id-by-name';
-import { getPaginatedProductsByCategory } from 'src/db/data-access/product/get-paginated-products-by-category';
-import { getSubcategoryIdByParentId } from 'src/db/data-access/category/get-subcategory-id-by-parent-id';
+import { getPaginatedProductsByCategoryName } from 'src/db/data-access/product/get-paginated-products-by-category-name';
 import { PaginatedProducts } from '../types/paginated-products.type';
 
-const getCategoryAndChildCategoryIds = async (
-  categoryId: number,
-): Promise<number[]> => {
-  const childCategories = await getSubcategoryIdByParentId(categoryId);
-
-  const nestedChildCategoryIds = await Promise.all(
-    childCategories.map((id) => getCategoryAndChildCategoryIds(id)),
-  );
-
-  return [categoryId, ...nestedChildCategoryIds.flat()];
-};
-
-const convertToQueryFormat = (name: string) => name.replace(/-/g, ' ');
+const convertToQueryFormat = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 
 export const getProductsByCategoryName = async (
   categoryName: string,
   page: number = 1,
   pageSize: number = 10,
 ): Promise<PaginatedProducts> => {
-  const categoryId = await getCategoryIdByName(
-    convertToQueryFormat(categoryName),
-  );
-
-  if (!categoryId) {
-    return {
-      page,
-      pageSize,
-      totalPages: 0,
-      totalProducts: 0,
-      products: [],
-    };
-  }
-
-  const allCategoryIds = await getCategoryAndChildCategoryIds(categoryId);
-
   const offset = (page - 1) * pageSize;
 
-  const { products, totalProducts } = await getPaginatedProductsByCategory(
-    allCategoryIds,
+  const { products, totalProducts } = await getPaginatedProductsByCategoryName(
+    convertToQueryFormat(categoryName),
     offset,
     pageSize,
   );
