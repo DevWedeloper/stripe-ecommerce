@@ -3,27 +3,24 @@ import { createPaymentIntent } from 'src/server/use-cases/stripe/create-payment-
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
 
-const productWithQuantitySchema = z.object({
-  id: z.number().int().positive(),
-  name: z.string().min(1),
-  description: z.string().min(1),
-  price: z.number().positive(),
-  currency: z.string().min(1),
-  imagePath: z.string().nullable(),
-  stock: z.number().int().nonnegative(),
-  quantity: z.number().int().nonnegative(),
+const cartItemSchema = z.object({
+  productId: z.number(),
+  sku: z.string(),
+  quantity: z.number(),
 });
+
+const cartSchema = z.array(cartItemSchema);
 
 export const stripeRouter = router({
   createPaymentIntent: publicProcedure
     .input(
       z.object({
-        amountInCents: positiveIntSchema,
-        products: z.array(productWithQuantitySchema),
+        totalAmountInCents: positiveIntSchema,
+        cart: cartSchema,
       }),
     )
     .mutation(
-      async ({ input: { amountInCents, products } }) =>
-        await createPaymentIntent({ amountInCents, products }),
+      async ({ input: { totalAmountInCents, cart } }) =>
+        await createPaymentIntent({ totalAmountInCents, cart }),
     ),
 });
