@@ -1,5 +1,5 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import {
   dematerialize,
   filter,
@@ -11,6 +11,7 @@ import {
   take,
 } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
+import { showError } from '../../utils';
 
 @Injectable({
   providedIn: 'root',
@@ -55,4 +56,10 @@ export class CategoriesService {
   });
 
   hasError = computed(() => this.status() === 'error');
+
+  constructor() {
+    this.categoriesError$
+      .pipe(takeUntilDestroyed())
+      .subscribe((error) => showError(error.message));
+  }
 }
