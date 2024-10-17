@@ -56,11 +56,13 @@ import { CartItemComponent } from './cart-item.component';
       </button>
       <div hlmPopoverContent *brnPopoverContent="let ctx" class="w-80 p-2">
         <hlm-scroll-area class="h-96">
-          @for (product of cart(); track product.id) {
+          @for (item of cart(); track $index) {
             <app-cart-item
-              [product]="product"
+              [item]="item"
               [isEditable]="isEditable()"
-              (removeFromCartChange)="removeFromCart(product.id)"
+              (removeFromCartChange)="
+                removeFromCart(item.productId, item.sku)
+              "
             />
           } @empty {
             <div>Empty cart...</div>
@@ -102,8 +104,8 @@ export class ShoppingCartComponent {
     this.brnPopoverComponent().close(null);
   }
 
-  protected removeFromCart(productId: number) {
-    this.shoppingCartService.removeFromCart(productId);
+  protected removeFromCart(productId: number, sku: string) {
+    this.shoppingCartService.removeFromCart(productId, sku);
   }
 
   protected proceedToCheckout(): void {
