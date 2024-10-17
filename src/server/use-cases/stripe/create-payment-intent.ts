@@ -1,26 +1,30 @@
-import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
+import { ProductItems } from 'src/db/schema';
 import { stripe } from './stripe';
 
 interface PaymentIntentParams {
-  amountInCents: number;
-  products: ProductWithQuantity[];
+  totalAmountInCents: number;
+  cart: {
+    productId: ProductItems['productId'];
+    sku: ProductItems['sku'];
+    quantity: number;
+  }[];
 }
 
 export const createPaymentIntent = async ({
-  amountInCents,
-  products,
+  totalAmountInCents,
+  cart,
 }: PaymentIntentParams) => {
   const serializedProducts = JSON.stringify(
-    products.map(({ id, quantity }) => ({ id, quantity })),
+    cart.map(({ productId, sku, quantity }) => ({ productId, sku, quantity })),
   );
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: amountInCents,
+    amount: totalAmountInCents,
     currency: 'usd',
     metadata: {
       products: serializedProducts,
     },
   });
-  
+
   return paymentIntent;
 };
