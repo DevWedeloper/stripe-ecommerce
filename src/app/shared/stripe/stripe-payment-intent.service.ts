@@ -25,13 +25,13 @@ export class StripePaymentIntentService {
   createPaymentIntent$ = new Subject<void>();
 
   private total = this.shoppingCartService.total;
-  private products = this.shoppingCartService.getCart;
+  private cart = this.shoppingCartService.getCart;
 
   private paymentIntent$ = this.createPaymentIntent$.pipe(
     switchMap(() =>
       this._trpc.stripe.createPaymentIntent.mutate({
-        amountInCents: convertToCents(this.total()),
-        products: this.products(),
+        totalAmountInCents: convertToCents(this.total()),
+        cart: this.cart(),
       }),
     ),
     materialize(),
