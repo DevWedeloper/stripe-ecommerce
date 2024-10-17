@@ -1,12 +1,16 @@
 import { sql } from 'drizzle-orm';
 import { db } from 'src/db';
+import { ProductWithImageAndPricing } from 'src/db/types';
 import { formatPaginatedResult, ProductWithTotalCount } from '../utils';
 
 export const getPaginatedProductsByCategoryName = async (
   categoryName: string,
   offset: number,
   pageSize: number,
-): Promise<any> => {
+): Promise<{
+  products: ProductWithImageAndPricing[];
+  totalProducts: number;
+}> => {
   const query = sql`
     with recursive subcategories as (
       select id, name, parent_category_id
@@ -19,7 +23,7 @@ export const getPaginatedProductsByCategoryName = async (
       from categories c
       inner join subcategories s on c.parent_category_id = s.id
     ),
-    
+
     filtered_categories as (
       select id
       from subcategories
@@ -28,6 +32,12 @@ export const getPaginatedProductsByCategoryName = async (
         from categories
         where parent_category_id is not null
       )
+    ),
+
+    product_lowest_prices as (
+      select product_id, min(price) as lowestPrice
+      from product_items
+      group by product_id
     )
 
     select distinct
@@ -37,13 +47,15 @@ export const getPaginatedProductsByCategoryName = async (
       p.currency, 
       pi.image_path as "imagePath", 
       pi.placeholder, 
+      plp.lowestPrice as "lowestPrice", 
       count(*) over() as "fullCount"
     from products p
-    left join product_images pi on pi.product_id = p.id and pi.is_thumbnail = true
     inner join product_categories pc on pc.product_id = p.id
+    inner join product_lowest_prices plp on plp.product_id = p.id 
+    left join product_images pi on pi.product_id = p.id and pi.is_thumbnail = true
     where pc.category_id in (select id from filtered_categories)
     offset ${offset}
-    limit ${pageSize}
+    limit ${pageSize};
   `;
 
   const productsResult = (await db.execute(query)) as ProductWithTotalCount[];
