@@ -17,21 +17,21 @@ import { CartPageItemsComponent } from './cart-page-items.component';
   ],
   template: `
     <div class="flex flex-col gap-2">
-      @for (product of cart(); track product.id) {
+      @for (item of cart(); track $index) {
         <app-cart-page-items
           class="hidden md:block"
-          [product]="product"
+          [item]="item"
           [isEditable]="isEditable()"
-          (quantityChange)="updateQuantity(product.id, $event)"
-          (removeFromCartChange)="removeFromCart(product.id)"
+          (quantityChange)="updateQuantity(item.productId, item.sku, $event)"
+          (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
         />
 
         <app-cart-page-items-mobile
           class="block md:hidden"
-          [product]="product"
+          [item]="item"
           [isEditable]="isEditable()"
-          (quantityChange)="updateQuantity(product.id, $event)"
-          (removeFromCartChange)="removeFromCart(product.id)"
+          (quantityChange)="updateQuantity(item.productId, item.sku, $event)"
+          (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
         />
       } @empty {
         <div>Empty cart...</div>
@@ -65,12 +65,12 @@ export default class ShoppingCartPageComponent {
   protected total = this.shoppingCartService.total;
   protected isEditable = this.shoppingCartService.isEditable;
 
-  protected removeFromCart(productId: number) {
-    this.shoppingCartService.removeFromCart(productId);
+  protected removeFromCart(productId: number, sku: string) {
+    this.shoppingCartService.removeFromCart(productId, sku);
   }
 
-  protected updateQuantity(productId: number, quantity: number) {
-    this.shoppingCartService.updateQuantity(productId, quantity);
+  protected updateQuantity(productId: number, sku: string, quantity: number) {
+    this.shoppingCartService.updateQuantity(productId, sku, quantity);
   }
 
   protected proceedToCheckout(): void {
