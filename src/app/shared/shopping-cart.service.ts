@@ -1,18 +1,28 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
-import { ProductsWithThumbnail } from 'src/db/types';
+import { ProductItems } from 'src/db/schema';
+import { ProductItemObject, ProductWithImageAndPricing } from 'src/db/types';
 import { showError } from './utils';
 
-export type ProductWithQuantity = ProductsWithThumbnail & {
+export type CartItem = Omit<
+  ProductWithImageAndPricing & ProductItemObject,
+  'id' | 'lowestPrice'
+> & {
+  productId: number;
   quantity: number;
+};
+
+type UniqueItemIdentifier = {
+  productId: ProductItems['productId'];
+  sku: ProductItems['sku'];
 };
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingCartService {
-  private cart = signal<ProductWithQuantity[]>([]);
+  private cart = signal<CartItem[]>([]);
 
   editable$ = new Subject<boolean>();
 
@@ -44,57 +54,58 @@ export class ShoppingCartService {
       .subscribe((error) => showError(error));
   }
 
-  addToCart(product: ProductWithQuantity): void {
+  addToCart(item: CartItem): void {
     if (!this.isEditable()) return;
 
-    const cartProduct = this.cart().find((p) => p.id === product.id);
-    if (!cartProduct) {
-      this.cart.update((cart) => [...cart, product]);
+    const cartItem = this.cart().find((i) => isSameItem(i, item));
+    if (!cartItem) {
+      this.cart.update((cart) => [...cart, item]);
       return;
     }
 
-    if (product.quantity + cartProduct.quantity > cartProduct.stock) {
+    if (item.quantity + cartItem.quantity > cartItem.stock) {
       this.error$.next(
-        `Cannot add ${product.quantity} more ${product.name}(s) to the cart. 
-    You already have ${cartProduct.quantity} in the cart, but only 
-    ${cartProduct.stock} are in stock.`,
+        `Cannot add ${item.quantity} more ${item.name}(s) to the cart. 
+    You already have ${cartItem.quantity} in the cart, but only 
+    ${cartItem.stock} are in stock.`,
       );
       return;
     }
 
     this.cart.update((cart) =>
       cart.map((p) =>
-        p.id === product.id
-          ? { ...p, quantity: p.quantity + product.quantity }
+        isSameItem(p, item)
+          ? { ...p, quantity: p.quantity + item.quantity }
           : p,
       ),
     );
   }
 
-  removeFromCart(productId: number): void {
+  removeFromCart(productId: number, sku: string): void {
     if (!this.isEditable()) return;
 
     this.cart.update((cart) =>
-      cart.filter((product) => product.id !== productId),
+      cart.filter((item) => item.productId !== productId && item.sku !== sku),
     );
   }
 
-  updateQuantity(productId: number, quantity: number): void {
+  updateQuantity(productId: number, sku: string, quantity: number): void {
     if (!this.isEditable()) return;
 
-    const cartProduct = this.cart().find((product) => product.id === productId);
+    const identifier: UniqueItemIdentifier = { productId, sku };
+    const cartItem = this.cart().find((item) => isSameItem(item, identifier));
 
-    if (!cartProduct) return;
+    if (!cartItem) return;
 
-    if (quantity > cartProduct.stock) return;
+    if (quantity > cartItem.stock) return;
 
     if (quantity < 1) return;
 
-    if (cartProduct.quantity === quantity) return;
+    if (cartItem.quantity === quantity) return;
 
     this.cart.update((cart) =>
       cart.map((product) =>
-        product.id === productId ? { ...product, quantity } : product,
+        isSameItem(product, identifier) ? { ...product, quantity } : product,
       ),
     );
   }
@@ -103,3 +114,10 @@ export class ShoppingCartService {
     this.cart.set([]);
   }
 }
+
+const isSameItem = (
+  currentItem: UniqueItemIdentifier,
+  newItem: UniqueItemIdentifier,
+): boolean =>
+  currentItem.productId === newItem.productId &&
+  currentItem.sku === newItem.sku;
