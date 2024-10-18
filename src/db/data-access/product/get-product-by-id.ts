@@ -15,9 +15,13 @@ import {
   variations,
 } from '../../schema';
 
+type ProductWithModifiedVariations = Omit<ProductDetails, 'variations'> & {
+  variations: VariationObject[];
+};
+
 export const getProductById = async (
   id: number,
-): Promise<ProductDetails | null> => {
+): Promise<ProductWithModifiedVariations | null> => {
   const maxQuery = (col: Column) =>
     sql<string>`
       max(case when ${productImages.isThumbnail} = true then ${col} end)
@@ -161,16 +165,5 @@ export const getProductById = async (
 
   const [result] = await query;
 
-  const product = {
-    ...result,
-    variations: result.variations.reduce<Record<string, string[]>>(
-      (acc, { name: key, value }) => ({
-        ...acc,
-        [key]: acc[key] ? [...acc[key], value] : [value],
-      }),
-      {},
-    ),
-  };
-
-  return product || null;
+  return result || null;
 };
