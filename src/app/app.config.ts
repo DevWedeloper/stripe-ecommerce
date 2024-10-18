@@ -19,7 +19,19 @@ export const appConfig: ApplicationConfig = {
     provideFileRouter(
       withComponentInputBinding(),
       withInMemoryScrolling({
-        scrollPositionRestoration: 'enabled',
+        get scrollPositionRestoration() {
+          if (typeof window === 'undefined') {
+            return 'enabled' as const;
+          }
+
+          const { pathname } = window.location;
+
+          if (pathname.startsWith('/product')) {
+            return 'disabled' as const;
+          }
+
+          return 'enabled' as const;
+        },
       }),
     ),
     provideHttpClient(withFetch()),
