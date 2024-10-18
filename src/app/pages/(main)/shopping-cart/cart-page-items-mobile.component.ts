@@ -10,8 +10,9 @@ import { lucideTrash2 } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { ItemVariationComponent } from 'src/app/shared/item-variation.component';
 import { QuantitySelectorComponent } from 'src/app/shared/quantity-selector.component';
-import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
+import { CartItem } from 'src/app/shared/shopping-cart.service';
 
 @Component({
   selector: 'app-cart-page-items-mobile',
@@ -23,6 +24,7 @@ import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
     HlmIconComponent,
     HlmCardDirective,
     QuantitySelectorComponent,
+    ItemVariationComponent,
   ],
   providers: [provideIcons({ lucideTrash2 })],
   template: `
@@ -31,26 +33,24 @@ import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
         class="relative col-span-1 flex h-16 w-16 items-center justify-center rounded"
       >
         <img
-          [ngSrc]="product().imagePath!"
-          [alt]="product().name"
+          [ngSrc]="item().imagePath!"
+          [alt]="item().name"
           class="object-cover"
-          [placeholder]="product().placeholder!"
+          [placeholder]="item().placeholder!"
           fill
         />
       </div>
 
       <div class="col-span-2 flex flex-col justify-between">
-        <h2 class="text-xl font-semibold">{{ product().name }}</h2>
+        <h2 class="text-xl font-semibold">{{ item().name }}</h2>
+        <app-item-variation [variations]="item().variations" />
         <div class="flex items-center justify-between">
           <p class="text-lg font-semibold">
-            {{
-              product().price * product().quantity
-                | currency: product().currency
-            }}
+            {{ item().price * item().quantity | currency: item().currency }}
           </p>
           <app-quantity-selector
-            [quantity]="product().quantity"
-            [stock]="product().stock"
+            [quantity]="item().quantity"
+            [stock]="item().stock"
             (quantityChange)="quantityChange.emit($event)"
           />
         </div>
@@ -71,7 +71,7 @@ import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartPageItemsMobileComponent {
-  product = input.required<ProductWithQuantity>();
+  item = input.required<CartItem>();
   isEditable = input.required<boolean>();
   quantityChange = output<number>();
   removeFromCartChange = output<void>();
