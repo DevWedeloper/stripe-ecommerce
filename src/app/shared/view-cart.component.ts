@@ -1,12 +1,13 @@
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { hlmMuted } from '@spartan-ng/ui-typography-helm';
-import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
+import { CartItem } from 'src/app/shared/shopping-cart.service';
+import { ItemVariationComponent } from './item-variation.component';
 
 @Component({
   selector: 'app-view-cart',
   standalone: true,
-  imports: [CurrencyPipe, NgOptimizedImage],
+  imports: [CurrencyPipe, NgOptimizedImage, ItemVariationComponent],
   template: `
     <div class="flex flex-col gap-2 p-4">
       @for (product of cart(); track product.id) {
@@ -23,6 +24,7 @@ import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
 
           <div class="flex flex-col items-start justify-center">
             <h2 class="text-lg font-semibold">{{ product.name }}</h2>
+            <app-item-variation [variations]="product.variations" />
             <span>Qty {{ product.quantity }}</span>
           </div>
 
@@ -51,6 +53,6 @@ import { ProductWithQuantity } from 'src/app/shared/shopping-cart.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewCartComponent {
-  cart = input.required<ProductWithQuantity[]>();
+  cart = input.required<CartItem[]>();
   total = input.required<number>();
 }
