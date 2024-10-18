@@ -1,7 +1,8 @@
-import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
+import { CurrencyPipe, KeyValuePipe, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -10,7 +11,6 @@ import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { GoBackButtonComponent } from 'src/app/shared/go-back-button.component';
 import { QuantitySelectorComponent } from 'src/app/shared/quantity-selector.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
-import { ProductsWithThumbnail } from 'src/db/types';
 import { ProductDetailSkeletonComponent } from './product-detail-skeleton.component';
 import { ProductDetailService } from './product-detail.service';
 import { ProductImageGalleryComponent } from './product-image-gallery.component';
@@ -20,6 +20,7 @@ import { ProductImageGalleryComponent } from './product-image-gallery.component'
   standalone: true,
   imports: [
     CurrencyPipe,
+    KeyValuePipe,
     NgOptimizedImage,
     HlmButtonDirective,
     HlmCardDirective,
@@ -49,28 +50,55 @@ import { ProductImageGalleryComponent } from './product-image-gallery.component'
               {{ product()!.name }}
             </h1>
             <p class="mb-4">{{ product()!.description }}</p>
-            <div class="mb-4 text-xl font-semibold">
-              Price:
-              {{ product()!.price | currency: product()!.currency }}
+            <div>
+              @for (
+                variation of product()!.variations | keyvalue;
+                track $index
+              ) {
+                <p class="mb-2 font-bold">{{ variation.key }}</p>
+                <div class="mb-2 flex gap-2">
+                  @for (value of variation.value; track $index) {
+                    <button
+                      hlmBtn
+                      size="sm"
+                      (click)="changeVariation(variation.key, value)"
+                    >
+                      {{ value }}
+                    </button>
+                  }
+                </div>
+              }
             </div>
-            <div class="mb-4">
-              Stock:
-              {{ product()!.stock > 0 ? product()!.stock : 'Out of stock' }}
-            </div>
+            @if (currentItem()) {
+              <div class="mb-4 text-xl font-semibold">
+                Price:
+                {{ currentItem()!.price | currency: product()!.currency }}
+              </div>
+              <div class="mb-4">
+                Stock:
+                {{
+                  currentItem()!.stock > 0
+                    ? currentItem()!.stock
+                    : 'Out of stock'
+                }}
+              </div>
 
-            <app-quantity-selector
-              [(quantity)]="quantity"
-              [stock]="product()!.stock"
-              class="mb-4"
-            />
+              <app-quantity-selector
+                [(quantity)]="itemState().quantity"
+                [stock]="currentItem()!.stock"
+                class="mb-4"
+              />
 
-            <button
-              hlmBtn
-              [disabled]="product()!.stock <= 0"
-              (click)="addToCart(product()!)"
-            >
-              Add to Cart
-            </button>
+              <button
+                hlmBtn
+                [disabled]="
+                  currentItem()!.stock <= 0 || itemState().quantity() <= 0
+                "
+                (click)="addToCart()"
+              >
+                Add to Cart
+              </button>
+            }
           </div>
         </div>
       } @else {
@@ -86,15 +114,36 @@ export default class ProductDetailPageComponent {
   private productDetailService = inject(ProductDetailService);
   private shoppingCartService = inject(ShoppingCartService);
 
-  protected quantity = signal(1);
-
   protected product = this.productDetailService.product;
+  protected currentItem = this.productDetailService.currentItem;
   protected isLoading = this.productDetailService.isLoading;
 
-  protected addToCart(product: ProductsWithThumbnail): void {
+  protected itemState = computed(() => ({
+    currentItem: this.currentItem(),
+    quantity: signal(0),
+  }));
+
+  protected addToCart(): void {
+    const product = this.product()!;
+    const currentItem = this.currentItem()!;
+    const quantity = this.itemState().quantity();
+
     this.shoppingCartService.addToCart({
-      ...product,
-      quantity: this.quantity(),
+      name: product.name,
+      description: product.description,
+      currency: product.currency,
+      imagePath: product.imagePath,
+      placeholder: product.placeholder,
+      sku: currentItem.sku,
+      stock: currentItem.stock,
+      price: currentItem.price,
+      variations: currentItem.variations,
+      productId: product.id,
+      quantity: quantity,
     });
+  }
+
+  protected changeVariation(key: string, value: string): void {
+    this.productDetailService.updateProductVariation(key, value);
   }
 }
