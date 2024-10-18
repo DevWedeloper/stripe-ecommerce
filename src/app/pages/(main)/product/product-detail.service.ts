@@ -2,6 +2,7 @@ import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import {
+  combineLatest,
   dematerialize,
   filter,
   map,
@@ -12,7 +13,12 @@ import {
   startWith,
   switchMap,
 } from 'rxjs';
-import { showError, transformProductImageObjects } from 'src/app/shared/utils';
+import { NavigationService } from 'src/app/shared/navigation.service';
+import {
+  convertToURLFormat,
+  showError,
+  transformProductImageObjects,
+} from 'src/app/shared/utils';
 import { TrpcClient } from 'src/trpc-client';
 
 @Injectable({
@@ -21,6 +27,7 @@ import { TrpcClient } from 'src/trpc-client';
 export class ProductDetailService {
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
+  private navigationService = inject(NavigationService);
 
   private productId$ = this.route.params.pipe(
     map((params) => {
@@ -33,6 +40,10 @@ export class ProductDetailService {
 
       return id;
     }),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
+
+  private queryParams$ = this.route.queryParams.pipe(
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
@@ -65,7 +76,56 @@ export class ProductDetailService {
 
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
 
+  private variationNames$ = this.productSuccess$.pipe(
+    map((product) =>
+      product
+        ? Object.keys(product.variations).map((key) => convertToURLFormat(key))
+        : [],
+    ),
+  );
+
+  private currentVariation$ = combineLatest([
+    this.variationNames$,
+    this.queryParams$,
+  ]).pipe(
+    map(([names, queryParams]) =>
+      names.map((name) => ({
+        [name]: queryParams[name] as string | undefined,
+      })),
+    ),
+  );
+
+  private currentItem$ = combineLatest([
+    this.currentVariation$,
+    this.productSuccess$,
+  ]).pipe(
+    map(([variations, product]) => {
+      const hasUndefinedVariations = variations.some((variation) =>
+        Object.values(variation).some((value) => value === undefined),
+      );
+
+      if (product && variations.length > 0 && !hasUndefinedVariations) {
+        return product.items.find((item) =>
+          variations.every((variation) => {
+            const [variationName, variationValue] =
+              Object.entries(variation)[0];
+
+            return item.variations.some(
+              (itemVariation) =>
+                variationValue &&
+                convertToURLFormat(itemVariation.name) === variationName &&
+                convertToURLFormat(itemVariation.value) === variationValue,
+            );
+          }),
+        );
+      }
+      return null;
+    }),
+  );
+
   product = toSignal(this.productSuccess$, { initialValue: null });
+
+  currentItem = toSignal(this.currentItem$, { initialValue: null });
 
   isLoading = computed(() => this.status() === 'loading');
 
@@ -73,5 +133,12 @@ export class ProductDetailService {
     this.productError$
       .pipe(takeUntilDestroyed())
       .subscribe((error) => showError(error.message));
+  }
+
+  updateProductVariation(key: string, value: string): void {
+    this.navigationService.setCustomParam(
+      convertToURLFormat(key),
+      convertToURLFormat(value),
+    );
   }
 }
