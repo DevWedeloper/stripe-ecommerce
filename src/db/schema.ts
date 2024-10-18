@@ -6,6 +6,7 @@ import {
   integer,
   pgTable,
   primaryKey,
+  smallint,
   text,
   unique,
   uniqueIndex,
@@ -114,6 +115,7 @@ export const variationOptions = pgTable(
       .notNull()
       .references(() => variations.id),
     value: text('value').notNull(),
+    order: smallint('order'),
   },
   (t) => ({
     variationIdIdx: index('variation_id_idx').on(t.variationId),
