@@ -167,8 +167,8 @@ FROM (
 ) AS v(variation_name, category_name)
 JOIN categories c ON c.name = v.category_name;
 
-INSERT INTO variation_options (variation_id, value)
-SELECT v.id, o.value
+INSERT INTO variation_options (variation_id, value, order)
+SELECT v.id, o.value, ROW_NUMBER() OVER (PARTITION BY o.category_name ORDER BY o.value)
 FROM (
     -- Fetching variations and adding options
     VALUES
