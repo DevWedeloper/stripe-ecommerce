@@ -168,49 +168,49 @@ FROM (
 JOIN categories c ON c.name = v.category_name;
 
 INSERT INTO variation_options (variation_id, value, "order")
-SELECT v.id, o.value, ROW_NUMBER() OVER (PARTITION BY o.category_name ORDER BY o.value)
+SELECT v.id, o.value, o."order"
 FROM (
-    -- Fetching variations and adding options
+    -- Fetching variations and adding options with manual order
     VALUES
-        -- Options for "Color" in "Smartphones"
-        ('Color', 'Smartphones', 'Red'),
-        ('Color', 'Smartphones', 'Blue'),
-        ('Color', 'Smartphones', 'Black'),
+        -- Options for "Color" in "Smartphones" (order explicitly set)
+        ('Color', 'Smartphones', 'Red', 1),
+        ('Color', 'Smartphones', 'Blue', 2),
+        ('Color', 'Smartphones', 'Black', 3),
 
-        -- Options for "Storage Capacity" in "Smartphones"
-        ('Storage Capacity', 'Smartphones', '64GB'),
-        ('Storage Capacity', 'Smartphones', '128GB'),
-        ('Storage Capacity', 'Smartphones', '256GB'),
+        -- Options for "Storage Capacity" in "Smartphones" (order explicitly set)
+        ('Storage Capacity', 'Smartphones', '64GB', 1),
+        ('Storage Capacity', 'Smartphones', '128GB', 2),
+        ('Storage Capacity', 'Smartphones', '256GB', 3),
 
-        -- Options for "Color" in "Laptops"
-        ('Color', 'Laptops', 'Gray'),
-        ('Color', 'Laptops', 'Silver'),
-        ('Color', 'Laptops', 'Black'),
+        -- Options for "Color" in "Laptops" (order explicitly set)
+        ('Color', 'Laptops', 'Gray', 1),
+        ('Color', 'Laptops', 'Silver', 2),
+        ('Color', 'Laptops', 'Black', 3),
 
-        -- Options for "RAM Size" in "Laptops"
-        ('RAM Size', 'Laptops', '8GB'),
-        ('RAM Size', 'Laptops', '16GB'),
-        ('RAM Size', 'Laptops', '32GB'),
+        -- Options for "RAM Size" in "Laptops" (order explicitly set)
+        ('RAM Size', 'Laptops', '8GB', 1),
+        ('RAM Size', 'Laptops', '16GB', 2),
+        ('RAM Size', 'Laptops', '32GB', 3),
 
-        -- Options for "Color" in "Refrigerators"
-        ('Color', 'Refrigerators', 'White'),
-        ('Color', 'Refrigerators', 'Silver'),
-        ('Color', 'Refrigerators', 'Black'),
+        -- Options for "Color" in "Refrigerators" (order explicitly set)
+        ('Color', 'Refrigerators', 'White', 1),
+        ('Color', 'Refrigerators', 'Silver', 2),
+        ('Color', 'Refrigerators', 'Black', 3),
 
-        -- Options for "Capacity" in "Refrigerators"
-        ('Capacity', 'Refrigerators', '300L'),
-        ('Capacity', 'Refrigerators', '400L'),
-        ('Capacity', 'Refrigerators', '500L'),
+        -- Options for "Capacity" in "Refrigerators" (order explicitly set)
+        ('Capacity', 'Refrigerators', '300L', 1),
+        ('Capacity', 'Refrigerators', '400L', 2),
+        ('Capacity', 'Refrigerators', '500L', 3),
 
-        -- Options for "Color" in "Washing Machines"
-        ('Color', 'Washing Machines', 'White'),
-        ('Color', 'Washing Machines', 'Gray'),
-        ('Color', 'Washing Machines', 'Silver'),
+        -- Options for "Color" in "Washing Machines" (order explicitly set)
+        ('Color', 'Washing Machines', 'White', 1),
+        ('Color', 'Washing Machines', 'Gray', 2),
+        ('Color', 'Washing Machines', 'Silver', 3),
 
-        -- Options for "Load Type" in "Washing Machines"
-        ('Load Type', 'Washing Machines', 'Front Load'),
-        ('Load Type', 'Washing Machines', 'Top Load')
-) AS o(variation_name, category_name, value)
+        -- Options for "Load Type" in "Washing Machines" (order explicitly set)
+        ('Load Type', 'Washing Machines', 'Front Load', 1),
+        ('Load Type', 'Washing Machines', 'Top Load', 2)
+) AS o(variation_name, category_name, value, "order")
 JOIN variations v ON v.name = o.variation_name
 JOIN categories c ON c.id = v.category_id AND c.name = o.category_name;
 
