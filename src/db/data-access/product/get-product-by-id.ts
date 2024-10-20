@@ -57,6 +57,7 @@ export const getProductById = async (
         price: productItems.price,
         variationName: variations.name,
         variationValue: variationOptions.value,
+        variationOptionsOrder: variationOptions.order,
       })
       .from(productItems)
       .leftJoin(
@@ -129,7 +130,8 @@ export const getProductById = async (
           array_agg(
             distinct jsonb_build_object(
               'name', ${productItemDetailsQuery.variationName},
-              'value', ${productItemDetailsQuery.variationValue}
+              'value', ${productItemDetailsQuery.variationValue},
+              'order', ${productItemDetailsQuery.variationOptionsOrder}
             )
           )
         `.as('variations'),
