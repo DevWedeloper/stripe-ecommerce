@@ -73,7 +73,7 @@ import { CartItemComponent } from './cart-item.component';
             hlmBtn
             class="w-full"
             (click)="closePopover()"
-            routerLink="shopping-cart"
+            routerLink="/shopping-cart"
           >
             View Cart
           </a>
