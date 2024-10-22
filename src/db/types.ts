@@ -40,4 +40,5 @@ export type ProductItemObject = {
 export type VariationObject = {
   name: Variations['name'];
   value: VariationOptions['value'];
+  order: VariationOptions['order'];
 };
