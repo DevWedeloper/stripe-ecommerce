@@ -4,7 +4,7 @@ import { ProductWithImageAndPricing } from '../types';
 
 export const lower = (col: Column) => sql<string>`lower(${col})`;
 
-export const totalCount = sql<number>`count(*) over() AS full_count`;
+export const totalCount = sql<number>`count(*) over()`;
 
 export type ProductWithTotalCount = ProductWithImageAndPricing & {
   totalCount: number;
