@@ -1,4 +1,4 @@
-import { and, desc, eq, getTableColumns, sql } from 'drizzle-orm';
+import { desc, eq, getTableColumns, sql } from 'drizzle-orm';
 import { db } from 'src/db';
 import {
   productImages,
@@ -21,61 +21,82 @@ export const getPaginatedProductsByKeyword = async (
   const matchQuery = sql`
     setweight(to_tsvector('english', ${products.name}), 'A') ||
     setweight(to_tsvector('english', ${products.description}), 'B') ||
-    setweight(to_tsvector('english', string_agg(${tags.name}, ' ')), 'C')
+    setweight(to_tsvector('english', ${tags.name}), 'C')
   `;
 
-  const productLowestPrices = db.$with('product_lowest_prices').as(
+  const productsQuery = db.$with('products_query').as(
+    db
+      .selectDistinctOn([products.id], {
+        ...getTableColumns(products),
+        rank: sql<number>`ts_rank(${matchQuery}, websearch_to_tsquery('english', ${keyword}))`.as(
+          'rank',
+        ),
+        rankCd:
+          sql<number>`ts_rank_cd(${matchQuery}, websearch_to_tsquery('english', ${keyword}))`.as(
+            'rank_cd',
+          ),
+        totalCount: totalCount.as('full_count'),
+      })
+      .from(products)
+      .leftJoin(productTags, eq(products.id, productTags.productId))
+      .leftJoin(tags, eq(productTags.tagId, tags.id))
+      .having(
+        sql`(
+          ${matchQuery} @@ websearch_to_tsquery('english', ${keyword})
+        )`,
+      )
+      .groupBy(products.id, tags.id)
+      .orderBy((t) => [products.id, desc(t.rank)])
+      .offset(offset)
+      .limit(pageSize),
+  );
+
+  const thumbnailQuery = db.$with('thumbnail_query').as(
+    db
+      .select({
+        productId: productImages.productId,
+        imagePath: productImages.imagePath,
+        placeholder: productImages.placeholder,
+      })
+      .from(productImages)
+      .where(eq(productImages.isThumbnail, true)),
+  );
+
+  const productLowestPricesQuery = db.$with('product_lowest_prices_query').as(
     db
       .select({
         productId: productItems.id,
         lowestPrice: sql<number>`min(${productItems.price})`.as('lowest_price'),
       })
       .from(productItems)
-      .groupBy(productItems.productId, productItems.id),
+      .groupBy(productItems.id),
   );
 
-  const productsResult = await db
-    .with(productLowestPrices)
+  const query = db
+    .with(productsQuery, thumbnailQuery, productLowestPricesQuery)
     .select({
-      ...getTableColumns(products),
-      imagePath: productImages.imagePath,
-      placeholder: productImages.placeholder,
-      rank: sql<number>`ts_rank(${matchQuery}, websearch_to_tsquery('english', ${keyword}))`,
-      rankCd: sql<number>`ts_rank_cd(${matchQuery}, websearch_to_tsquery('english', ${keyword}))`,
-      lowestPrice: productLowestPrices.lowestPrice,
-      totalCount,
+      id: productsQuery.id,
+      name: productsQuery.name,
+      description: productsQuery.description,
+      currency: productsQuery.currency,
+      imagePath: thumbnailQuery.imagePath,
+      placeholder: thumbnailQuery.placeholder,
+      lowestPrice: productLowestPricesQuery.lowestPrice,
+      totalCount: productsQuery.totalCount,
+      rank: productsQuery.rank,
     })
-    .from(products)
-    .innerJoin(
-      productLowestPrices,
-      eq(products.id, productLowestPrices.productId),
-    )
+    .from(productsQuery)
     .leftJoin(
-      productImages,
-      and(
-        eq(productImages.productId, products.id),
-        eq(productImages.isThumbnail, true),
-      ),
+      productLowestPricesQuery,
+      eq(productsQuery.id, productLowestPricesQuery.productId),
     )
-    .leftJoin(productTags, eq(products.id, productTags.productId))
-    .leftJoin(tags, eq(productTags.tagId, tags.id))
-    .groupBy(
-      products.id,
-      productImages.imagePath,
-      productImages.placeholder,
-      productLowestPrices.lowestPrice,
-    )
-    .having(
-      sql`(
-        ${matchQuery} @@ websearch_to_tsquery('english', ${keyword})
-      )`,
-    )
-    .orderBy((t) => desc(t.rank))
-    .offset(offset)
-    .limit(pageSize);
+    .leftJoin(thumbnailQuery, eq(productsQuery.id, thumbnailQuery.productId))
+    .orderBy((t) => desc(t.rank));
+
+  const result = await query;
 
   const { products: productsArray, totalProducts } =
-    formatPaginatedResult(productsResult);
+    formatPaginatedResult(result);
 
   return {
     products: productsArray,
