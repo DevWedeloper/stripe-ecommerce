@@ -17,6 +17,7 @@ import {
 } from '@spartan-ng/ui-popover-brain';
 import { HlmPopoverContentDirective } from '@spartan-ng/ui-popover-helm';
 import { HlmScrollAreaComponent } from '@spartan-ng/ui-scrollarea-helm';
+import { EmptyCartComponent } from '../../fallback-ui/empty-cart.component';
 import { ShoppingCartService } from '../../shopping-cart.service';
 import { CartItemComponent } from './cart-item.component';
 
@@ -34,6 +35,7 @@ import { CartItemComponent } from './cart-item.component';
     BrnPopoverContentDirective,
     HlmPopoverContentDirective,
     CartItemComponent,
+    EmptyCartComponent,
   ],
   providers: [provideIcons({ lucideShoppingCart })],
   template: `
@@ -60,12 +62,12 @@ import { CartItemComponent } from './cart-item.component';
             <app-cart-item
               [item]="item"
               [isEditable]="isEditable()"
-              (removeFromCartChange)="
-                removeFromCart(item.productId, item.sku)
-              "
+              (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
             />
           } @empty {
-            <div>Empty cart...</div>
+            <div class="flex h-96 items-center justify-center">
+              <app-empty-cart />
+            </div>
           }
         </hlm-scroll-area>
         <div class="flex flex-col gap-2">
