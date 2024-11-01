@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
+import { EmptyProductDetailsComponent } from 'src/app/shared/fallback-ui/empty-product-details.component';
 import { GoBackButtonComponent } from 'src/app/shared/go-back-button.component';
 import { QuantitySelectorComponent } from 'src/app/shared/quantity-selector.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
@@ -28,6 +29,7 @@ import { ProductImageGalleryComponent } from './product-image-gallery.component'
     ProductDetailSkeletonComponent,
     GoBackButtonComponent,
     ProductImageGalleryComponent,
+    EmptyProductDetailsComponent,
   ],
   providers: [ProductDetailService],
   template: `
@@ -102,7 +104,9 @@ import { ProductImageGalleryComponent } from './product-image-gallery.component'
           </div>
         </div>
       } @else {
-        <div>Product not found...</div>
+        <div class="flex items-center justify-center">
+          <app-empty-product-details />
+        </div>
       }
     } @else {
       <app-product-detail-skeleton />
