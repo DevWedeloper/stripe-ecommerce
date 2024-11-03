@@ -2,6 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { EmptyCartComponent } from 'src/app/shared/fallback-ui/empty-cart.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { CartPageItemsMobileComponent } from './cart-page-items-mobile.component';
 import { CartPageItemsComponent } from './cart-page-items.component';
@@ -14,29 +15,34 @@ import { CartPageItemsComponent } from './cart-page-items.component';
     HlmButtonDirective,
     CartPageItemsComponent,
     CartPageItemsMobileComponent,
+    EmptyCartComponent,
   ],
   template: `
-    <div class="flex flex-col gap-2">
-      @for (item of cart(); track $index) {
-        <app-cart-page-items
-          class="hidden md:block"
-          [item]="item"
-          [isEditable]="isEditable()"
-          (quantityChange)="updateQuantity(item.productId, item.sku, $event)"
-          (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
-        />
+    @if (cart().length > 0) {
+      <div class="flex flex-col gap-2">
+        @for (item of cart(); track $index) {
+          <app-cart-page-items
+            class="hidden md:block"
+            [item]="item"
+            [isEditable]="isEditable()"
+            (quantityChange)="updateQuantity(item.productId, item.sku, $event)"
+            (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
+          />
 
-        <app-cart-page-items-mobile
-          class="block md:hidden"
-          [item]="item"
-          [isEditable]="isEditable()"
-          (quantityChange)="updateQuantity(item.productId, item.sku, $event)"
-          (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
-        />
-      } @empty {
-        <div>Empty cart...</div>
-      }
-    </div>
+          <app-cart-page-items-mobile
+            class="block md:hidden"
+            [item]="item"
+            [isEditable]="isEditable()"
+            (quantityChange)="updateQuantity(item.productId, item.sku, $event)"
+            (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
+          />
+        }
+      </div>
+    } @else {
+      <div class="flex items-center justify-center">
+        <app-empty-cart />
+      </div>
+    }
 
     <div class="flex border-t border-border p-4 md:justify-end">
       <div class="flex w-full flex-col gap-2 md:w-fit md:items-center">
