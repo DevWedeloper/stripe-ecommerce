@@ -2,7 +2,6 @@ import {
   ComponentRef,
   DestroyRef,
   Directive,
-  ElementRef,
   inject,
   input,
   OnInit,
@@ -12,11 +11,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   ControlContainer,
   FormGroupDirective,
+  FormResetEvent,
+  FormSubmittedEvent,
   NgControl,
   NgForm,
   NgModel,
+  StatusChangeEvent,
+  TouchedChangeEvent,
 } from '@angular/forms';
-import { EMPTY, fromEvent, iif, merge, skip, startWith } from 'rxjs';
+import { EMPTY, filter, iif, skip, startWith } from 'rxjs';
 import {
   ERROR_COMPONENT,
   ErrorComponent,
@@ -38,7 +41,6 @@ export class DynamicValidatorMessageDirective implements OnInit {
   private ngControl =
     inject(NgControl, { self: true, optional: true }) ||
     inject(ControlContainer, { self: true });
-  private elementRef = inject(ElementRef);
   private parentContainer = inject(ControlContainer, { optional: true });
   private destroyRef = inject(DestroyRef);
 
@@ -60,10 +62,18 @@ export class DynamicValidatorMessageDirective implements OnInit {
   ngOnInit(): void {
     if (!this.ngControl.control)
       throw Error(`No control model for ${this.ngControl.name} control...`);
-    merge(
-      this.ngControl.control.statusChanges,
-      fromEvent(this.elementRef.nativeElement, 'blur'),
-      iif(() => !!this.form, this.form!.ngSubmit, EMPTY),
+    iif(
+      () => !!this.form,
+      this.form!.control.events.pipe(
+        filter(
+          (event) =>
+            event instanceof StatusChangeEvent ||
+            event instanceof TouchedChangeEvent ||
+            event instanceof FormSubmittedEvent ||
+            event instanceof FormResetEvent,
+        ),
+      ),
+      EMPTY,
     )
       .pipe(
         startWith(this.ngControl.control.status),
