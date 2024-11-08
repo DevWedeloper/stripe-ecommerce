@@ -27,6 +27,15 @@ export const showError = (message: string): void => {
   });
 };
 
+export const showSuccess = (message: string): void => {
+  toast.success(message, {
+    action: {
+      label: 'Dismiss',
+      onClick: () => {},
+    },
+  });
+};
+
 const decodeBlurHashToImage = (blurHash: string): string => {
   const width = 32;
   const height = 32;
