@@ -1,4 +1,3 @@
-import { CurrencyPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,7 +24,6 @@ import { CartItemComponent } from './cart-item.component';
   selector: 'app-shopping-cart',
   standalone: true,
   imports: [
-    CurrencyPipe,
     RouterLink,
     HlmButtonDirective,
     HlmIconComponent,
