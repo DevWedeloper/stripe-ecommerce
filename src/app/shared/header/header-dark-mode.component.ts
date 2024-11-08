@@ -22,7 +22,6 @@ import { DarkMode, ThemeService } from '../theme.service';
     HlmMenuItemCheckboxDirective,
     HlmButtonDirective,
     HlmIconComponent,
-    HlmMenuComponent,
   ],
   providers: [provideIcons({ lucideMoon })],
   template: `
