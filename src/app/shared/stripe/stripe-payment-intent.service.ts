@@ -1,18 +1,9 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import {
-  dematerialize,
-  filter,
-  map,
-  materialize,
-  merge,
-  share,
-  startWith,
-  Subject,
-  switchMap,
-} from 'rxjs';
+import { map, merge, share, startWith, Subject } from 'rxjs';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { TrpcClient } from 'src/trpc-client';
+import { errorStream, materializeAndShare, successStream } from '../utils/rxjs';
 import { showError } from '../utils/toast';
 
 @Injectable({
@@ -28,25 +19,21 @@ export class StripePaymentIntentService {
   private cart = this.shoppingCartService.getCart;
 
   private paymentIntent$ = this.createPaymentIntent$.pipe(
-    switchMap(() =>
+    materializeAndShare(() =>
       this._trpc.stripe.createPaymentIntent.mutate({
         totalAmountInCents: convertToCents(this.total()),
         cart: this.cart(),
       }),
     ),
-    materialize(),
-    share(),
   );
 
   private paymentIntentSuccess$ = this.paymentIntent$.pipe(
-    filter((notification) => notification.kind === 'N'),
-    dematerialize(),
+    successStream(),
     share(),
   );
 
   private paymentIntentError$ = this.paymentIntent$.pipe(
-    filter((notification) => notification.kind === 'E'),
-    map((notification) => new Error(notification.error)),
+    errorStream(),
     share(),
   );
 
