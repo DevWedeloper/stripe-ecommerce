@@ -3,8 +3,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { StripePaymentElementComponent, StripeService } from 'ngx-stripe';
 import {
-  dematerialize,
-  filter,
   map,
   materialize,
   merge,
@@ -14,6 +12,7 @@ import {
   switchMap,
   withLatestFrom,
 } from 'rxjs';
+import { errorStream, successStream } from '../utils/rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -49,14 +48,12 @@ export class StripeConfirmationTokenService {
   );
 
   private confirmationTokenSuccess$ = this.confirmationToken$.pipe(
-    filter((notification) => notification.kind === 'N'),
-    dematerialize(),
+    successStream(),
     share(),
   );
 
   private confirmationTokenError$ = this.confirmationToken$.pipe(
-    filter((notification) => notification.kind === 'E'),
-    map((notification) => new Error(notification.error)),
+    errorStream(),
     share(),
   );
 
