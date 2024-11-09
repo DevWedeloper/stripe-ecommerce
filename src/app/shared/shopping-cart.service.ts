@@ -3,7 +3,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { ProductItems } from 'src/db/schema';
 import { ProductItemObject, ProductWithImageAndPricing } from 'src/db/types';
-import { showError } from './utils';
+import { showError } from './utils/toast';
 
 export type CartItem = Omit<
   ProductWithImageAndPricing & ProductItemObject,
