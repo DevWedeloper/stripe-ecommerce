@@ -1,20 +1,14 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import {
-  combineLatest,
-  dematerialize,
-  filter,
-  map,
-  materialize,
-  merge,
-  share,
-  shareReplay,
-  startWith,
-  switchMap,
-} from 'rxjs';
+import { combineLatest, map, merge, share, shareReplay, startWith } from 'rxjs';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { transformProductImageObjects } from 'src/app/shared/utils/image-object';
+import {
+  errorStream,
+  materializeAndShare,
+  successStream,
+} from 'src/app/shared/utils/rxjs';
 import { showError } from 'src/app/shared/utils/toast';
 import { convertToURLFormat } from 'src/app/shared/utils/url';
 import { TrpcClient } from 'src/trpc-client';
@@ -46,25 +40,18 @@ export class ProductDetailService {
   );
 
   private product$ = this.productId$.pipe(
-    switchMap((id) => this._trpc.products.getById.query(id)),
-    materialize(),
-    share(),
+    materializeAndShare((id) => this._trpc.products.getById.query(id)),
   );
 
   private productSuccess$ = this.product$.pipe(
-    filter((notification) => notification.kind === 'N'),
-    dematerialize(),
+    successStream(),
     map((product) =>
       product === null ? null : transformProductImageObjects(product),
     ),
     share(),
   );
 
-  private productError$ = this.product$.pipe(
-    filter((notification) => notification.kind === 'E'),
-    map((notification) => new Error(notification.error)),
-    share(),
-  );
+  private productError$ = this.product$.pipe(errorStream(), share());
 
   private status$ = merge(
     this.productId$.pipe(map(() => 'loading' as const)),
