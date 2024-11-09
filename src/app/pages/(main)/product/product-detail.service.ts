@@ -14,10 +14,8 @@ import {
   switchMap,
 } from 'rxjs';
 import { NavigationService } from 'src/app/shared/navigation.service';
-import {
-  convertToURLFormat,
-  transformProductImageObjects,
-} from 'src/app/shared/utils';
+import { convertToURLFormat } from 'src/app/shared/utils';
+import { transformProductImageObjects } from 'src/app/shared/utils/image-object';
 import { showError } from 'src/app/shared/utils/toast';
 import { TrpcClient } from 'src/trpc-client';
 

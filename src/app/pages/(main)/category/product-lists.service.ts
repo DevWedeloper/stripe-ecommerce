@@ -14,10 +14,8 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import {
-  parseToPositiveInt,
-  transformProductImagePathsAndPlaceholders,
-} from 'src/app/shared/utils';
+import { parseToPositiveInt } from 'src/app/shared/utils';
+import { transformProductImagePathsAndPlaceholders } from 'src/app/shared/utils/image-object';
 import { showError } from 'src/app/shared/utils/toast';
 import { TrpcClient } from 'src/trpc-client';
 
