@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { StripeService } from 'ngx-stripe';
 import {
   Subject,
-  dematerialize,
-  filter,
   map,
   materialize,
   merge,
@@ -14,6 +12,7 @@ import {
   switchMap,
 } from 'rxjs';
 import { ShoppingCartService } from '../shopping-cart.service';
+import { errorStream, successStream } from '../utils/rxjs';
 import { StripeConfirmationTokenService } from './stripe-confirmation-token.service';
 import { StripePaymentIntentService } from './stripe-payment-intent.service';
 
@@ -65,14 +64,10 @@ export class StripeConfirmPaymentService {
     share(),
   );
 
-  private confirmPaymentSuccess$ = this.confirmPayment$.pipe(
-    filter((notification) => notification.kind === 'N'),
-    dematerialize(),
-  );
+  private confirmPaymentSuccess$ = this.confirmPayment$.pipe(successStream());
 
   private confirmPaymentError$ = this.confirmPayment$.pipe(
-    filter((notification) => notification.kind === 'E'),
-    map((notification) => new Error(notification.error)),
+    errorStream(),
     share(),
   );
 
