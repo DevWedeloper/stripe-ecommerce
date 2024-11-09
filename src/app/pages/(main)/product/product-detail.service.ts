@@ -14,9 +14,9 @@ import {
   switchMap,
 } from 'rxjs';
 import { NavigationService } from 'src/app/shared/navigation.service';
-import { convertToURLFormat } from 'src/app/shared/utils';
 import { transformProductImageObjects } from 'src/app/shared/utils/image-object';
 import { showError } from 'src/app/shared/utils/toast';
+import { convertToURLFormat } from 'src/app/shared/utils/url';
 import { TrpcClient } from 'src/trpc-client';
 
 @Injectable({
