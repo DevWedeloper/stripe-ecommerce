@@ -16,9 +16,9 @@ import {
 import { NavigationService } from 'src/app/shared/navigation.service';
 import {
   convertToURLFormat,
-  showError,
   transformProductImageObjects,
 } from 'src/app/shared/utils';
+import { showError } from 'src/app/shared/utils/toast';
 import { TrpcClient } from 'src/trpc-client';
 
 @Injectable({

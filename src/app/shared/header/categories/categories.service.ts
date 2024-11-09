@@ -11,7 +11,7 @@ import {
   take,
 } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
-import { showError } from '../../utils';
+import { showError } from '../../utils/toast';
 
 @Injectable({
   providedIn: 'root',

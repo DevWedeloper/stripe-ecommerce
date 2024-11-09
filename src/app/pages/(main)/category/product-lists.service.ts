@@ -16,9 +16,9 @@ import {
 } from 'rxjs';
 import {
   parseToPositiveInt,
-  showError,
   transformProductImagePathsAndPlaceholders,
 } from 'src/app/shared/utils';
+import { showError } from 'src/app/shared/utils/toast';
 import { TrpcClient } from 'src/trpc-client';
 
 @Injectable({

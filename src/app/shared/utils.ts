@@ -1,5 +1,4 @@
 import { decode } from 'blurhash';
-import { toast } from 'ngx-sonner';
 import { ProductDetails, ProductWithImageAndPricing } from 'src/db/types';
 import { environment } from 'src/environments/environment';
 import { positiveIntSchema } from 'src/schemas/zod-schemas';
@@ -17,24 +16,6 @@ export const parseToPositiveInt = (value: any, fallback: number): number => {
 
 export const convertToURLFormat = (name: string) =>
   name.replace(/\s+/g, '-').toLowerCase();
-
-export const showError = (message: string): void => {
-  toast.error(message, {
-    action: {
-      label: 'Dismiss',
-      onClick: () => {},
-    },
-  });
-};
-
-export const showSuccess = (message: string): void => {
-  toast.success(message, {
-    action: {
-      label: 'Dismiss',
-      onClick: () => {},
-    },
-  });
-};
 
 const decodeBlurHashToImage = (blurHash: string): string => {
   const width = 32;

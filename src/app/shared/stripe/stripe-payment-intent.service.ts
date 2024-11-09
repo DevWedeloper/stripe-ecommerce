@@ -13,7 +13,7 @@ import {
 } from 'rxjs';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { TrpcClient } from 'src/trpc-client';
-import { showError } from '../utils';
+import { showError } from '../utils/toast';
 
 @Injectable({
   providedIn: 'root',
