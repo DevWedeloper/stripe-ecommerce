@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { AccountComponent } from './account/account.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { HeaderDarkModeComponent } from './header-dark-mode.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
@@ -12,6 +13,7 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
     SearchBarComponent,
     ShoppingCartComponent,
     HeaderDarkModeComponent,
+    AccountComponent,
   ],
   host: {
     class:
@@ -25,6 +27,7 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
         <div class="flex gap-2">
           <app-shopping-cart />
           <app-dark-mode />
+          <app-account />
         </div>
       </div>
 
@@ -34,6 +37,7 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
           <div class="flex gap-2">
             <app-shopping-cart />
             <app-dark-mode />
+            <app-account />
           </div>
         </div>
         <app-search-bar />
