@@ -1,4 +1,4 @@
-import { CurrencyPipe, KeyValuePipe, NgOptimizedImage } from '@angular/common';
+import { CurrencyPipe, KeyValuePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,7 +22,6 @@ import { ProductImageGalleryComponent } from './product-image-gallery.component'
   imports: [
     CurrencyPipe,
     KeyValuePipe,
-    NgOptimizedImage,
     HlmButtonDirective,
     HlmCardDirective,
     QuantitySelectorComponent,
