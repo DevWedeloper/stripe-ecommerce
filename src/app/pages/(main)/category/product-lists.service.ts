@@ -3,18 +3,19 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import {
   combineLatest,
-  dematerialize,
   distinctUntilChanged,
-  filter,
   map,
-  materialize,
   merge,
   share,
   startWith,
-  switchMap,
   take,
 } from 'rxjs';
 import { transformProductImagePathsAndPlaceholders } from 'src/app/shared/utils/image-object';
+import {
+  errorStream,
+  materializeAndShare,
+  successStream,
+} from 'src/app/shared/utils/rxjs';
 import { parseToPositiveInt } from 'src/app/shared/utils/schema';
 import { showError } from 'src/app/shared/utils/toast';
 import { TrpcClient } from 'src/trpc-client';
@@ -47,25 +48,18 @@ export class ProductListsService {
   );
 
   private products$ = this.filter$.pipe(
-    switchMap((categoryFilter) =>
+    materializeAndShare((categoryFilter) =>
       this._trpc.products.getByCategoryName.query(categoryFilter),
     ),
-    materialize(),
-    share(),
   );
 
   private productsSuccess$ = this.products$.pipe(
-    filter((notification) => notification.kind === 'N'),
-    dematerialize(),
+    successStream(),
     map(transformProductImagePathsAndPlaceholders),
     share(),
   );
 
-  private productsError$ = this.products$.pipe(
-    filter((notification) => notification.kind === 'E'),
-    map((notification) => new Error(notification.error)),
-    share(),
-  );
+  private productsError$ = this.products$.pipe(errorStream(), share());
 
   private successAndErrorStatus$ = merge(
     this.productsSuccess$.pipe(map(() => 'success' as const)),
