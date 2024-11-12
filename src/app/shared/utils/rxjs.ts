@@ -59,7 +59,7 @@ export const finalizedStatusStream = <TSuccess, TError>({
   merge(
     success.pipe(map(() => 'success' as const)),
     error.pipe(map(() => 'error' as const)),
-  ).pipe(startWith('initial' as const));
+  );
 
 export const initialLoading = () =>
   pipe(
