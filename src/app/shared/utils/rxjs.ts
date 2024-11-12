@@ -3,14 +3,23 @@ import {
   filter,
   map,
   materialize,
+  merge,
+  Observable,
   ObservableInput,
   ObservableNotification,
   pipe,
   share,
+  startWith,
   switchMap,
 } from 'rxjs';
 
 type DataProducer<T, K> = (input: K) => ObservableInput<T>;
+
+type StatusStreams<TLoading, TSuccess, TError> = {
+  loading: Observable<TLoading>;
+  success: Observable<TSuccess>;
+  error: Observable<TError>;
+};
 
 export const materializeAndShare = <T, K>(dataProducer: DataProducer<T, K>) =>
   pipe(switchMap(dataProducer), materialize(), share());
@@ -30,3 +39,14 @@ export const errorStream = <T>() =>
     ),
     map((notification) => new Error(notification.error)),
   );
+
+export const statusStream = <TLoading, TSuccess, TError>({
+  loading,
+  success,
+  error,
+}: StatusStreams<TLoading, TSuccess, TError>) =>
+  merge(
+    loading.pipe(map(() => 'loading' as const)),
+    success.pipe(map(() => 'success' as const)),
+    error.pipe(map(() => 'error' as const)),
+  ).pipe(startWith('initial' as const));
