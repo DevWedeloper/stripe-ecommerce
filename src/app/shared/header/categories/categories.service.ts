@@ -1,6 +1,6 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { map, materialize, merge, share, startWith } from 'rxjs';
+import { map, materialize, merge, share } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
 import { errorStream, initialLoading, successStream } from '../../utils/rxjs';
 import { showError } from '../../utils/toast';
@@ -22,11 +22,9 @@ export class CategoriesService {
   private status$ = merge(
     this.categoriesSuccess$.pipe(map(() => 'success' as const)),
     this.categoriesError$.pipe(map(() => 'error' as const)),
-  ).pipe(startWith('initial' as const), share());
+  ).pipe(share());
 
   private initialLoading$ = this.status$.pipe(initialLoading());
-
-  private status = toSignal(this.status$, { initialValue: 'initial' as const });
 
   categories = toSignal(this.categoriesSuccess$, {
     initialValue: [],
@@ -36,7 +34,9 @@ export class CategoriesService {
     initialValue: true,
   });
 
-  hasError = computed(() => this.status() === 'error');
+  hasError = toSignal(this.categoriesError$.pipe(map(() => true)), {
+    initialValue: false,
+  });
 
   constructor() {
     this.categoriesError$
