@@ -57,7 +57,7 @@ export class ProductListsService {
   private successAndErrorStatus$ = merge(
     this.productsSuccess$.pipe(map(() => 'success' as const)),
     this.productsError$.pipe(map(() => 'error' as const)),
-  ).pipe(share());
+  );
 
   private initialLoading$ = this.successAndErrorStatus$.pipe(initialLoading());
 
