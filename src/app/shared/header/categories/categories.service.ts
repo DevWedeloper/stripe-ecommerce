@@ -1,16 +1,8 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import {
-  dematerialize,
-  filter,
-  map,
-  materialize,
-  merge,
-  share,
-  startWith,
-} from 'rxjs';
+import { map, materialize, merge, share, startWith } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
-import { initialLoading } from '../../utils/rxjs';
+import { errorStream, initialLoading, successStream } from '../../utils/rxjs';
 import { showError } from '../../utils/toast';
 
 @Injectable({
@@ -23,16 +15,9 @@ export class CategoriesService {
     .query()
     .pipe(materialize(), share());
 
-  private categoriesSuccess$ = this.categories$.pipe(
-    filter((notification) => notification.kind === 'N'),
-    dematerialize(),
-    share(),
-  );
+  private categoriesSuccess$ = this.categories$.pipe(successStream(), share());
 
-  private categoriesError$ = this.categories$.pipe(
-    filter((notification) => notification.kind === 'E'),
-    map((notification) => new Error(notification.error)),
-  );
+  private categoriesError$ = this.categories$.pipe(errorStream());
 
   private status$ = merge(
     this.categoriesSuccess$.pipe(map(() => 'success' as const)),
