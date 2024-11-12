@@ -8,9 +8,9 @@ import {
   merge,
   share,
   startWith,
-  take,
 } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
+import { initialLoading } from '../../utils/rxjs';
 import { showError } from '../../utils/toast';
 
 @Injectable({
@@ -39,11 +39,7 @@ export class CategoriesService {
     this.categoriesError$.pipe(map(() => 'error' as const)),
   ).pipe(startWith('initial' as const), share());
 
-  private initialLoading$ = this.status$.pipe(
-    map(() => false),
-    take(1),
-    startWith(true),
-  );
+  private initialLoading$ = this.status$.pipe(initialLoading());
 
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
 
