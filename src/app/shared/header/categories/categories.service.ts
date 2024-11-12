@@ -22,7 +22,7 @@ export class CategoriesService {
   private status$ = merge(
     this.categoriesSuccess$.pipe(map(() => 'success' as const)),
     this.categoriesError$.pipe(map(() => 'error' as const)),
-  ).pipe(share());
+  );
 
   private initialLoading$ = this.status$.pipe(initialLoading());
 
