@@ -1,12 +1,13 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, map, merge, share, shareReplay, startWith } from 'rxjs';
+import { combineLatest, map, share, shareReplay } from 'rxjs';
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { transformProductImageObjects } from 'src/app/shared/utils/image-object';
 import {
   errorStream,
   materializeAndShare,
+  statusStream,
   successStream,
 } from 'src/app/shared/utils/rxjs';
 import { showError } from 'src/app/shared/utils/toast';
@@ -53,11 +54,11 @@ export class ProductDetailService {
 
   private productError$ = this.product$.pipe(errorStream(), share());
 
-  private status$ = merge(
-    this.productId$.pipe(map(() => 'loading' as const)),
-    this.productSuccess$.pipe(map(() => 'success' as const)),
-    this.productError$.pipe(map(() => 'error' as const)),
-  ).pipe(startWith('initial' as const));
+  private status$ = statusStream({
+    loading: this.product$,
+    success: this.productSuccess$,
+    error: this.productError$,
+  });
 
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
 
