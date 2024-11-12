@@ -2,17 +2,9 @@ import { Injectable, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { StripeService } from 'ngx-stripe';
-import {
-  Subject,
-  map,
-  materialize,
-  merge,
-  share,
-  startWith,
-  switchMap,
-} from 'rxjs';
+import { Subject, map, materialize, share, switchMap } from 'rxjs';
 import { ShoppingCartService } from '../shopping-cart.service';
-import { errorStream, successStream } from '../utils/rxjs';
+import { errorStream, statusStream, successStream } from '../utils/rxjs';
 import { StripeConfirmationTokenService } from './stripe-confirmation-token.service';
 import { StripePaymentIntentService } from './stripe-payment-intent.service';
 
@@ -71,11 +63,11 @@ export class StripeConfirmPaymentService {
     share(),
   );
 
-  private status$ = merge(
-    this.confirmPaymentTrigger$.pipe(map(() => 'loading' as const)),
-    this.confirmPaymentError$.pipe(map(() => 'error' as const)),
-    this.confirmPaymentSuccess$.pipe(map(() => 'success' as const)),
-  ).pipe(startWith('initial' as const));
+  private status$ = statusStream({
+    loading: this.confirmPaymentTrigger$,
+    success: this.confirmPaymentSuccess$,
+    error: this.confirmPaymentError$,
+  });
 
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
 
