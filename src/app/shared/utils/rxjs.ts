@@ -41,25 +41,29 @@ export const errorStream = <T>() =>
     map((notification) => new Error(notification.error)),
   );
 
+const mapToState = (state: 'loading' | 'success' | 'error') =>
+  pipe(map(() => state));
+
+const mapToLoading = () => mapToState('loading');
+const mapToSuccess = () => mapToState('success');
+const mapToError = () => mapToState('error');
+
 export const statusStream = <TLoading, TSuccess, TError>({
   loading,
   success,
   error,
 }: StatusStreams<TLoading, TSuccess, TError>) =>
   merge(
-    loading.pipe(map(() => 'loading' as const)),
-    success.pipe(map(() => 'success' as const)),
-    error.pipe(map(() => 'error' as const)),
+    loading.pipe(mapToLoading()),
+    success.pipe(mapToSuccess()),
+    error.pipe(mapToError()),
   ).pipe(startWith('initial' as const));
 
 export const finalizedStatusStream = <TSuccess, TError>({
   success,
   error,
 }: Omit<StatusStreams<never, TSuccess, TError>, 'loading'>) =>
-  merge(
-    success.pipe(map(() => 'success' as const)),
-    error.pipe(map(() => 'error' as const)),
-  );
+  merge(success.pipe(mapToSuccess()), error.pipe(mapToError()));
 
 export const initialLoading = () =>
   pipe(
