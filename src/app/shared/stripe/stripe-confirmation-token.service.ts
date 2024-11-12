@@ -5,14 +5,12 @@ import { StripePaymentElementComponent, StripeService } from 'ngx-stripe';
 import {
   map,
   materialize,
-  merge,
   share,
-  startWith,
   Subject,
   switchMap,
   withLatestFrom,
 } from 'rxjs';
-import { errorStream, successStream } from '../utils/rxjs';
+import { errorStream, statusStream, successStream } from '../utils/rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -69,11 +67,11 @@ export class StripeConfirmationTokenService {
     }),
   );
 
-  private status$ = merge(
-    this.createConfirmationToken$.pipe(map(() => 'loading' as const)),
-    this.confirmationTokenSuccess$.pipe(map(() => 'success' as const)),
-    this.confirmationTokenError$.pipe(map(() => 'error' as const)),
-  ).pipe(startWith('initial' as const));
+  private status$ = statusStream({
+    loading: this.createConfirmationToken$,
+    success: this.confirmationTokenSuccess$,
+    error: this.confirmationTokenError$,
+  });
 
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
 
