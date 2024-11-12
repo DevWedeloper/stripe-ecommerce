@@ -1,18 +1,11 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import {
-  distinctUntilChanged,
-  map,
-  merge,
-  share,
-  shareReplay,
-  startWith,
-  take,
-} from 'rxjs';
+import { distinctUntilChanged, map, merge, share, shareReplay } from 'rxjs';
 import { transformProductImagePathsAndPlaceholders } from 'src/app/shared/utils/image-object';
 import {
   errorStream,
+  initialLoading,
   materializeAndShare,
   successStream,
 } from 'src/app/shared/utils/rxjs';
@@ -68,11 +61,7 @@ export class SearchService {
     this.productsError$.pipe(map(() => 'error' as const)),
   ).pipe(share());
 
-  private initialLoading$ = this.successAndErrorStatus$.pipe(
-    map(() => false),
-    take(1),
-    startWith(true),
-  );
+  private initialLoading$ = this.successAndErrorStatus$.pipe(initialLoading());
 
   private productData = toSignal(this.productsSuccess$, {
     initialValue: {
