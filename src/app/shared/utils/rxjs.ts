@@ -11,6 +11,7 @@ import {
   share,
   startWith,
   switchMap,
+  take,
 } from 'rxjs';
 
 type DataProducer<T, K> = (input: K) => ObservableInput<T>;
@@ -50,3 +51,10 @@ export const statusStream = <TLoading, TSuccess, TError>({
     success.pipe(map(() => 'success' as const)),
     error.pipe(map(() => 'error' as const)),
   ).pipe(startWith('initial' as const));
+
+export const initialLoading = () =>
+  pipe(
+    map(() => false),
+    take(1),
+    startWith(true),
+  );
