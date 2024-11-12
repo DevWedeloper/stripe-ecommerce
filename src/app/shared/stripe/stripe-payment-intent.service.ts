@@ -1,9 +1,14 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { map, merge, share, startWith, Subject } from 'rxjs';
+import { map, merge, share, Subject } from 'rxjs';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { TrpcClient } from 'src/trpc-client';
-import { errorStream, materializeAndShare, successStream } from '../utils/rxjs';
+import {
+  errorStream,
+  materializeAndShare,
+  statusStream,
+  successStream,
+} from '../utils/rxjs';
 import { showError } from '../utils/toast';
 
 @Injectable({
@@ -42,11 +47,11 @@ export class StripePaymentIntentService {
     this.paymentIntentSuccess$.pipe(map((pi) => pi.client_secret)),
   );
 
-  private status$ = merge(
-    this.createPaymentIntent$.pipe(map(() => 'loading' as const)),
-    this.paymentIntentSuccess$.pipe(map(() => 'success' as const)),
-    this.paymentIntentError$.pipe(map(() => 'error' as const)),
-  ).pipe(startWith('initial' as const));
+  private status$ = statusStream({
+    loading: this.createPaymentIntent$,
+    success: this.paymentIntentSuccess$,
+    error: this.paymentIntentError$,
+  });
 
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
 
