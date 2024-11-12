@@ -17,7 +17,7 @@ export class CategoriesService {
 
   private categoriesSuccess$ = this.categories$.pipe(successStream(), share());
 
-  private categoriesError$ = this.categories$.pipe(errorStream());
+  private categoriesError$ = this.categories$.pipe(errorStream(), share());
 
   private status$ = merge(
     this.categoriesSuccess$.pipe(map(() => 'success' as const)),
