@@ -22,6 +22,11 @@ type StatusStreams<TLoading, TSuccess, TError> = {
   error: Observable<TError>;
 };
 
+type DisableTemporarily<TEnable, TDisable> = {
+  enable: Observable<TEnable>;
+  disable: Observable<TDisable>;
+};
+
 export const materializeAndShare = <T, K>(dataProducer: DataProducer<T, K>) =>
   pipe(switchMap(dataProducer), materialize(), share());
 
@@ -71,3 +76,9 @@ export const initialLoading = () =>
     take(1),
     startWith(true),
   );
+
+export const disableTemporarilyStream = <TEnable, TDisable>({
+  enable,
+  disable,
+}: DisableTemporarily<TEnable, TDisable>) =>
+  merge(enable.pipe(map(() => false)), disable.pipe(map(() => true)));
