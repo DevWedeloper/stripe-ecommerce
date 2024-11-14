@@ -12,6 +12,7 @@ export const ERROR_MESSAGES: { [key: string]: (args?: any) => string } = {
   hasLowerCase: () => `Should contain at least one lowercase letter`,
   hasDigit: () => `Should contain at least one digit`,
   hasSpecialChar: () => `Should contain at least one special character`,
+  zodEmail: () => `It should be a valid email`,
 };
 
 export const VALIDATION_ERROR_MESSAGES = new InjectionToken(
