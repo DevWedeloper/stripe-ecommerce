@@ -10,10 +10,10 @@ type ConfirmPasswordField = {
   confirmPassword: string;
 };
 
-export type LoginData = EmailField & PasswordField;
+export type UserCredentials = EmailField & PasswordField;
 
-export type SignUpData = EmailField & PasswordField & ConfirmPasswordField;
+export type UserRegistration = EmailField & PasswordField & ConfirmPasswordField;
 
-export type ForgotPasswordData = EmailField;
+export type EmailUpdate = EmailField;
 
-export type ResetPasswordData = PasswordField & ConfirmPasswordField;
+export type PasswordUpdate  = PasswordField & ConfirmPasswordField;
