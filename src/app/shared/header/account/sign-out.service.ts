@@ -44,6 +44,6 @@ export class SignOutService {
   }
 
   signOut(): void {
-    this.authService.signOutTrigger$.next();
+    this.authService.signOut();
   }
 }
