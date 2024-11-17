@@ -55,7 +55,7 @@ export class ProductDetailService {
   private productError$ = this.product$.pipe(errorStream(), share());
 
   private status$ = statusStream({
-    loading: this.product$,
+    loading: this.productId$,
     success: this.productSuccess$,
     error: this.productError$,
   });
