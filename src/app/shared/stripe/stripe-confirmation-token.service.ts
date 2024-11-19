@@ -3,8 +3,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { StripePaymentElementComponent, StripeService } from 'ngx-stripe';
 import {
+  filter,
   map,
   materialize,
+  merge,
   share,
   Subject,
   switchMap,
@@ -35,12 +37,6 @@ export class StripeConfirmationTokenService {
         elements: paymentElement.elements,
       }),
     ),
-    map((data) => {
-      if (data.error) {
-        throw new Error(data.error.message);
-      }
-      return data.confirmationToken;
-    }),
     materialize(),
     share(),
   );
@@ -50,27 +46,45 @@ export class StripeConfirmationTokenService {
     share(),
   );
 
+  private confirmationTokenSuccessWithData$ =
+    this.confirmationTokenSuccess$.pipe(
+      filter((data) => data.error === undefined),
+      map((data) => data.confirmationToken),
+    );
+
+  private confirmationTokenSuccessWithError$ =
+    this.confirmationTokenSuccess$.pipe(
+      filter((data) => data.error !== undefined),
+      map((data) => data.error),
+    );
+
   private confirmationTokenError$ = this.confirmationToken$.pipe(
     errorStream(),
     share(),
   );
 
-  private confirmationTokenId$ = this.confirmationTokenSuccess$.pipe(
+  private confirmationTokenId$ = this.confirmationTokenSuccessWithData$.pipe(
     map((data) => data.id),
   );
 
-  private emailAndShippingAddress$ = this.confirmationTokenSuccess$.pipe(
-    map(({ payment_method_preview, shipping }) => {
-      const email = payment_method_preview.billing_details.email;
-      const shippingAddress = shipping;
-      return { email, shippingAddress };
-    }),
+  private emailAndShippingAddress$ =
+    this.confirmationTokenSuccessWithData$.pipe(
+      map(({ payment_method_preview, shipping }) => {
+        const email = payment_method_preview.billing_details.email;
+        const shippingAddress = shipping;
+        return { email, shippingAddress };
+      }),
+    );
+
+  private error$ = merge(
+    this.confirmationTokenSuccessWithError$,
+    this.confirmationTokenError$,
   );
 
   private status$ = statusStream({
     loading: this.createConfirmationToken$,
-    success: this.confirmationTokenSuccess$,
-    error: this.confirmationTokenError$,
+    success: this.confirmationTokenSuccessWithData$,
+    error: this.error$,
   });
 
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
