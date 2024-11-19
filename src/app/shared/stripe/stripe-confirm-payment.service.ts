@@ -2,7 +2,15 @@ import { Injectable, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { StripeService } from 'ngx-stripe';
-import { Subject, map, materialize, share, switchMap } from 'rxjs';
+import {
+  Subject,
+  filter,
+  map,
+  materialize,
+  merge,
+  share,
+  switchMap,
+} from 'rxjs';
 import { ShoppingCartService } from '../shopping-cart.service';
 import { errorStream, statusStream, successStream } from '../utils/rxjs';
 import { StripeConfirmationTokenService } from './stripe-confirmation-token.service';
@@ -46,27 +54,39 @@ export class StripeConfirmPaymentService {
         redirect: 'if_required',
       }),
     ),
-    map((data) => {
-      if (data.error) {
-        throw new Error(data.error.message);
-      }
-      return data.paymentIntent;
-    }),
     materialize(),
     share(),
   );
 
-  private confirmPaymentSuccess$ = this.confirmPayment$.pipe(successStream());
+  private confirmPaymentSuccess$ = this.confirmPayment$.pipe(
+    successStream(),
+    share(),
+  );
+
+  private confirmPaymentSuccessWithData$ = this.confirmPaymentSuccess$.pipe(
+    filter((data) => data.error === undefined),
+    map((data) => data.paymentIntent),
+  );
+
+  private confirmPaymentSuccessWithError$ = this.confirmPaymentSuccess$.pipe(
+    filter((data) => data.error !== undefined),
+    map((data) => data.error),
+  );
 
   private confirmPaymentError$ = this.confirmPayment$.pipe(
     errorStream(),
     share(),
   );
 
+  private error$ = merge(
+    this.confirmPaymentSuccessWithError$,
+    this.confirmPaymentError$,
+  );
+
   private status$ = statusStream({
     loading: this.confirmPaymentTrigger$,
-    success: this.confirmPaymentSuccess$,
-    error: this.confirmPaymentError$,
+    success: this.confirmPaymentSuccessWithData$,
+    error: this.error$,
   });
 
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
