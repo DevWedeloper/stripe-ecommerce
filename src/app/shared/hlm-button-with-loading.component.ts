@@ -5,7 +5,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 
 @Component({
-  selector: 'hlmBtnWithLoading',
+  selector: 'button[hlmBtnWithLoading]',
   standalone: true,
   providers: [provideIcons({ lucideLoaderCircle })],
   imports: [HlmIconComponent],
