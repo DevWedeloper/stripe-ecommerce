@@ -5,8 +5,8 @@ import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { createProvider } from 'src/app/shared/create-provider';
 import { DynamicValidatorMessageDirective } from 'src/app/shared/dynamic-form-errors/dynamic-validator-message.directive';
 import { ERROR_COMPONENT } from 'src/app/shared/dynamic-form-errors/input-error/error-component.token';
+import { HlmButtonWithLoadingComponent } from 'src/app/shared/hlm-button-with-loading.component';
 import { AuthInputErrorComponent } from '../auth-input-error.component';
-import { HlmButtonWithLoadingComponent } from '../hlm-button-with-loading.component';
 import {
   hasDigit,
   hasLowerCase,
