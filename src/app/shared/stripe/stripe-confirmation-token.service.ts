@@ -21,7 +21,7 @@ export class StripeConfirmationTokenService {
   private router = inject(Router);
   private stripeService = inject(StripeService);
 
-  createConfirmationToken$ = new Subject<void>();
+  private createConfirmationToken$ = new Subject<void>();
   paymentElement$ = new Subject<StripePaymentElementComponent | undefined>();
 
   private confirmationToken$ = this.createConfirmationToken$.pipe(
@@ -115,5 +115,9 @@ export class StripeConfirmationTokenService {
       if (this.isSuccessful())
         this.router.navigate(['/order-confirmation'], { replaceUrl: true });
     });
+  }
+
+  createConfirmationToken(): void {
+    this.createConfirmationToken$.next();
   }
 }

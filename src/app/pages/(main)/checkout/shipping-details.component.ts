@@ -162,7 +162,7 @@ export class ShippingDetailsComponent implements OnInit {
 
   protected completePurchase(): void {
     this.elements()?.submit();
-    this.stripeConfirmationTokenService.createConfirmationToken$.next();
+    this.stripeConfirmationTokenService.createConfirmationToken();
   }
 
   protected emailChange(
