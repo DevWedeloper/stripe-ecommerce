@@ -46,6 +46,6 @@ export class ConfirmNavigationComponent {
 
   protected forward(): void {
     this._dialogRef.close(true);
-    this.shoppingCartService.editable$.next(true);
+    this.shoppingCartService.setEditable(true);
   }
 }

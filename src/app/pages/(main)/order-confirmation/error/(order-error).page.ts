@@ -53,10 +53,10 @@ export const routeMeta: RouteMeta = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OrderErrorPageComponent implements OnInit {
-  private editable$ = inject(ShoppingCartService).editable$;
+  private shoppingCartService = inject(ShoppingCartService);
   protected errorMessage = inject(StripeConfirmPaymentService).errorMessage;
 
   ngOnInit(): void {
-    this.editable$.next(true);
+    this.shoppingCartService.setEditable(true);
   }
 }

@@ -35,9 +35,9 @@ export const routeMeta: RouteMeta = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CheckoutPageComponent implements OnInit {
-  private editable$ = inject(ShoppingCartService).editable$;
+  private shoppingCartService = inject(ShoppingCartService);
 
   ngOnInit(): void {
-    this.editable$.next(false);
+    this.shoppingCartService.setEditable(false);
   }
 }

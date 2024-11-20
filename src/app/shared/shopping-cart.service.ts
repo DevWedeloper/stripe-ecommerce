@@ -24,7 +24,7 @@ type UniqueItemIdentifier = {
 export class ShoppingCartService {
   private cart = signal<CartItem[]>([]);
 
-  editable$ = new Subject<boolean>();
+  private editable$ = new Subject<boolean>();
 
   total = computed(() => {
     const items = this.cart();
@@ -108,6 +108,10 @@ export class ShoppingCartService {
         isSameItem(product, identifier) ? { ...product, quantity } : product,
       ),
     );
+  }
+
+  setEditable(editable: boolean): void {
+    this.editable$.next(editable);
   }
 
   clearCart(): void {
