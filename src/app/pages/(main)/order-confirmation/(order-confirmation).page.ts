@@ -1,13 +1,10 @@
 import { RouteMeta } from '@analogjs/router';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { provideIcons } from '@ng-icons/core';
-import { lucideLoaderCircle } from '@ng-icons/lucide';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmDialogService } from '@spartan-ng/ui-dialog-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { hlmH1, hlmH3 } from '@spartan-ng/ui-typography-helm';
 import { of } from 'rxjs';
 import { GoBackButtonComponent } from 'src/app/shared/go-back-button.component';
+import { HlmButtonWithLoadingComponent } from 'src/app/shared/hlm-button-with-loading.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { StripeConfirmPaymentService } from 'src/app/shared/stripe/stripe-confirm-payment.service';
 import { StripeConfirmationTokenService } from 'src/app/shared/stripe/stripe-confirmation-token.service';
@@ -44,13 +41,11 @@ export const routeMeta: RouteMeta = {
   selector: 'app-order-confirmation',
   standalone: true,
   imports: [
-    HlmButtonDirective,
-    HlmIconComponent,
     GoBackButtonComponent,
     ViewCartComponent,
     ViewShippingDetailsComponent,
+    HlmButtonWithLoadingComponent,
   ],
-  providers: [provideIcons({ lucideLoaderCircle })],
   template: `
     <app-go-back-button path="/checkout" text="Go back to Checkout" />
 
@@ -68,18 +63,12 @@ export const routeMeta: RouteMeta = {
       <app-view-shipping-details />
 
       <button
-        hlmBtn
+        hlmBtnWithLoading
         class="mx-auto mt-2 block w-fit"
         (click)="pay()"
         [disabled]="isLoading()"
+        [isLoading]="isLoading()"
       >
-        @if (isLoading()) {
-          <hlm-icon
-            size="sm"
-            class="mr-2 animate-spin"
-            name="lucideLoaderCircle"
-          />
-        }
         Confirm
       </button>
     </div>
