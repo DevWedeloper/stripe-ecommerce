@@ -1,6 +1,5 @@
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { HlmFormFieldComponent } from '@spartan-ng/ui-formfield-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { createProvider } from 'src/app/shared/create-provider';
@@ -22,7 +21,6 @@ export const sharedFormDeps = [
   HlmInputDirective,
   HlmFormFieldComponent,
   HlmButtonWithLoadingComponent,
-  HlmIconComponent,
   DynamicValidatorMessageDirective,
 ];
 
