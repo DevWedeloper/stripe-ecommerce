@@ -1,5 +1,4 @@
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmFormFieldComponent } from '@spartan-ng/ui-formfield-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
@@ -8,6 +7,7 @@ import { createProvider } from 'src/app/shared/create-provider';
 import { DynamicValidatorMessageDirective } from 'src/app/shared/dynamic-form-errors/dynamic-validator-message.directive';
 import { ERROR_COMPONENT } from 'src/app/shared/dynamic-form-errors/input-error/error-component.token';
 import { AuthInputErrorComponent } from '../auth-input-error.component';
+import { HlmButtonWithLoadingComponent } from '../hlm-button-with-loading.component';
 import {
   hasDigit,
   hasLowerCase,
@@ -21,7 +21,7 @@ export const sharedFormDeps = [
   HlmLabelDirective,
   HlmInputDirective,
   HlmFormFieldComponent,
-  HlmButtonDirective,
+  HlmButtonWithLoadingComponent,
   HlmIconComponent,
   DynamicValidatorMessageDirective,
 ];
