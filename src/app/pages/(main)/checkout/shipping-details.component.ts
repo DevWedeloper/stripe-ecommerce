@@ -10,10 +10,6 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
-import { provideIcons } from '@ng-icons/core';
-import { lucideLoaderCircle } from '@ng-icons/lucide';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import {
   StripeAddressElementChangeEvent,
@@ -30,6 +26,7 @@ import {
   StripePaymentElementComponent,
   StripeService,
 } from 'ngx-stripe';
+import { HlmButtonWithLoadingComponent } from 'src/app/shared/hlm-button-with-loading.component';
 import { StripeConfirmationTokenService } from 'src/app/shared/stripe/stripe-confirmation-token.service';
 import { StripePaymentIntentService } from 'src/app/shared/stripe/stripe-payment-intent.service';
 import { ThemeService } from 'src/app/shared/theme.service';
@@ -39,15 +36,13 @@ import { ThemeService } from 'src/app/shared/theme.service';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    HlmIconComponent,
     HlmSpinnerComponent,
     StripeElementsDirective,
     StripePaymentElementComponent,
     StripeLinkAuthenticationComponent,
     StripeAddressComponent,
-    HlmButtonDirective,
+    HlmButtonWithLoadingComponent,
   ],
-  providers: [provideIcons({ lucideLoaderCircle })],
   template: `
     @if (!isPaymentIntentLoading()) {
       @if (elementsOptions().clientSecret) {
@@ -65,18 +60,12 @@ import { ThemeService } from 'src/app/shared/theme.service';
             (change)="paymentChange($event)"
           />
           <button
-            hlmBtn
+            hlmBtnWithLoading
             class="mt-2 w-full"
             (click)="completePurchase()"
             [disabled]="!validFields() || isConfirmationTokenLoading()"
+            [isLoading]="isConfirmationTokenLoading()"
           >
-            @if (isConfirmationTokenLoading()) {
-              <hlm-icon
-                size="sm"
-                class="mr-2 animate-spin"
-                name="lucideLoaderCircle"
-              />
-            }
             PAY
           </button>
         </ngx-stripe-elements>
