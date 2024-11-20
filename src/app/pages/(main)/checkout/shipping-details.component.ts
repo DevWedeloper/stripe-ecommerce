@@ -157,7 +157,7 @@ export class ShippingDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.stripePaymentIntentService.createPaymentIntent$.next();
+    this.stripePaymentIntentService.createPaymentIntent();
   }
 
   protected completePurchase(): void {

@@ -18,7 +18,7 @@ export class StripePaymentIntentService {
   private _trpc = inject(TrpcClient);
   private shoppingCartService = inject(ShoppingCartService);
 
-  createPaymentIntent$ = new Subject<void>();
+  private createPaymentIntent$ = new Subject<void>();
 
   private total = this.shoppingCartService.total;
   private cart = this.shoppingCartService.getCart;
@@ -65,6 +65,10 @@ export class StripePaymentIntentService {
     this.paymentIntentError$
       .pipe(takeUntilDestroyed())
       .subscribe((error) => showError(error.message));
+  }
+
+  createPaymentIntent(): void {
+    this.createPaymentIntent$.next();
   }
 }
 
