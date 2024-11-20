@@ -150,7 +150,7 @@ export class ShippingDetailsComponent implements OnInit {
   constructor() {
     effect(() => {
       if (this.paymentElement)
-        this.stripeConfirmationTokenService.paymentElement$.next(
+        this.stripeConfirmationTokenService.setPaymentElement(
           this.paymentElement(),
         );
     });

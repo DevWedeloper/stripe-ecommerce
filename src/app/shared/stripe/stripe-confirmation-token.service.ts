@@ -22,7 +22,9 @@ export class StripeConfirmationTokenService {
   private stripeService = inject(StripeService);
 
   private createConfirmationToken$ = new Subject<void>();
-  paymentElement$ = new Subject<StripePaymentElementComponent | undefined>();
+  private paymentElement$ = new Subject<
+    StripePaymentElementComponent | undefined
+  >();
 
   private confirmationToken$ = this.createConfirmationToken$.pipe(
     withLatestFrom(this.paymentElement$),
@@ -119,5 +121,11 @@ export class StripeConfirmationTokenService {
 
   createConfirmationToken(): void {
     this.createConfirmationToken$.next();
+  }
+
+  setPaymentElement(
+    paymentElement: StripePaymentElementComponent | undefined,
+  ): void {
+    this.paymentElement$.next(paymentElement);
   }
 }
