@@ -96,6 +96,6 @@ export default class OrderConfirmationPageComponent {
   protected total = this.shoppingCartService.total;
 
   protected pay(): void {
-    this.stripeConfirmPaymentService.confirmPaymentTrigger$.next();
+    this.stripeConfirmPaymentService.confirmPayment();
   }
 }

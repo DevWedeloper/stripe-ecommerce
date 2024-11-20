@@ -24,7 +24,7 @@ export class StripeConfirmPaymentService {
   private stripeService = inject(StripeService);
   private shoppingCartService = inject(ShoppingCartService);
 
-  confirmPaymentTrigger$ = new Subject<void>();
+  private confirmPaymentTrigger$ = new Subject<void>();
 
   private clientSecret = inject(StripePaymentIntentService).clientSecret;
   private confirmationTokenId = inject(StripeConfirmationTokenService)
@@ -113,5 +113,9 @@ export class StripeConfirmPaymentService {
     effect(() => {
       if (this.hasError()) this.router.navigate(['/order-confirmation/error']);
     });
+  }
+
+  confirmPayment(): void {
+    this.confirmPaymentTrigger$.next();
   }
 }
