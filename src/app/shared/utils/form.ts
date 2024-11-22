@@ -2,7 +2,7 @@ import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { HlmFormFieldComponent } from '@spartan-ng/ui-formfield-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-import { createProvider } from 'src/app/shared/create-provider';
+import { createProvider } from 'src/app/shared/utils/create-provider';
 import { DynamicValidatorMessageDirective } from 'src/app/shared/dynamic-form-errors/dynamic-validator-message.directive';
 import { ERROR_COMPONENT } from 'src/app/shared/dynamic-form-errors/input-error/error-component.token';
 import { HlmButtonWithLoadingComponent } from 'src/app/shared/hlm-button-with-loading.component';
