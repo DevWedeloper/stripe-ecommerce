@@ -6,14 +6,14 @@ import {
   signal,
 } from '@angular/core';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
+import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
 import { EmptyProductDetailsComponent } from 'src/app/shared/ui/fallback/empty-product-details.component';
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
-import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
-import { ProductDetailSkeletonComponent } from './product-detail-skeleton.component';
 import { ProductDetailService } from './product-detail.service';
-import { ProductImageGalleryComponent } from './product-image-gallery.component';
-import { ProductPricingDetailsComponent } from './product-pricing-details.component';
-import { ProductVariationsComponent } from './product-variations.component';
+import { ProductDetailSkeletonComponent } from './ui/product-detail-skeleton.component';
+import { ProductImageGalleryComponent } from './ui/product-image-gallery.component';
+import { ProductPricingDetailsComponent } from './ui/product-pricing-details.component';
+import { ProductVariationsComponent } from './ui/product-variations.component';
 
 @Component({
   selector: 'app-product-detail',
