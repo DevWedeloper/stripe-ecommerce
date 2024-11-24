@@ -9,7 +9,7 @@ import { provideIcons } from '@ng-icons/core';
 import { lucideTrash2 } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { CartItem } from '../../data-access/shopping-cart.service';
+import { CartItem } from '../../types/cart';
 import { ItemVariationComponent } from '../../ui/item-variation.component';
 
 @Component({

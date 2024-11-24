@@ -6,7 +6,7 @@ import {
   output,
 } from '@angular/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { CartItem } from 'src/app/shared/data-access/shopping-cart.service';
+import { CartItem } from 'src/app/shared/types/cart';
 
 @Component({
   selector: 'app-cart-summary',

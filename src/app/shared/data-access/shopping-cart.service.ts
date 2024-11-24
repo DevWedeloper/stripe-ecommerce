@@ -2,16 +2,8 @@ import { computed, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { ProductItems } from 'src/db/schema';
-import { ProductItemObject, ProductWithImageAndPricing } from 'src/db/types';
+import { CartItem } from '../types/cart';
 import { showError } from '../utils/toast';
-
-export type CartItem = Omit<
-  ProductWithImageAndPricing & ProductItemObject,
-  'id' | 'lowestPrice'
-> & {
-  productId: number;
-  quantity: number;
-};
 
 type UniqueItemIdentifier = {
   productId: ProductItems['productId'];
