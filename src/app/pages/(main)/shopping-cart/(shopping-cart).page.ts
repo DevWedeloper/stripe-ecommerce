@@ -1,21 +1,19 @@
-import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { EmptyCartComponent } from 'src/app/shared/fallback-ui/empty-cart.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { CartPageItemsMobileComponent } from './cart-page-items-mobile.component';
 import { CartPageItemsComponent } from './cart-page-items.component';
+import { CartSummaryComponent } from './cart-summary.component';
 
 @Component({
   selector: 'app-shopping-cart',
   standalone: true,
   imports: [
-    CurrencyPipe,
-    HlmButtonDirective,
     CartPageItemsComponent,
     CartPageItemsMobileComponent,
     EmptyCartComponent,
+    CartSummaryComponent,
   ],
   template: `
     @if (cart().length > 0) {
@@ -44,22 +42,11 @@ import { CartPageItemsComponent } from './cart-page-items.component';
       </div>
     }
 
-    <div class="flex border-t border-border p-4 md:justify-end">
-      <div class="flex w-full flex-col gap-2 md:w-fit md:items-center">
-        <div class="flex justify-between gap-2">
-          <span>Total:</span>
-          <span>{{ total() | currency: 'USD' }}</span>
-        </div>
-        <button
-          hlmBtn
-          class="w-full md:w-fit"
-          (click)="proceedToCheckout()"
-          [disabled]="!cart().length"
-        >
-          Checkout
-        </button>
-      </div>
-    </div>
+    <app-cart-summary
+      [total]="total()"
+      [cart]="cart()"
+      (checkout)="proceedToCheckout()"
+    />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
