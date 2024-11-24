@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { hlmMuted } from '@spartan-ng/ui-typography-helm';
-import { StripeConfirmationTokenService } from 'src/app/shared/stripe/stripe-confirmation-token.service';
+import { StripeConfirmationTokenService } from 'src/app/shared/data-access/stripe/stripe-confirmation-token.service';
 
 const formGroupStyle = 'rounded-md border border-border p-4';
 

@@ -26,9 +26,9 @@ import {
   StripePaymentElementComponent,
   StripeService,
 } from 'ngx-stripe';
+import { StripeConfirmationTokenService } from 'src/app/shared/data-access/stripe/stripe-confirmation-token.service';
+import { StripePaymentIntentService } from 'src/app/shared/data-access/stripe/stripe-payment-intent.service';
 import { HlmButtonWithLoadingComponent } from 'src/app/shared/ui/hlm-button-with-loading.component';
-import { StripeConfirmationTokenService } from 'src/app/shared/stripe/stripe-confirmation-token.service';
-import { StripePaymentIntentService } from 'src/app/shared/stripe/stripe-payment-intent.service';
 import { ThemeService } from 'src/app/shared/ui/theme.service';
 
 @Component({

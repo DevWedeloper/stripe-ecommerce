@@ -16,8 +16,8 @@ import {
 } from '@spartan-ng/ui-alert-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { StripeConfirmPaymentService } from 'src/app/shared/data-access/stripe/stripe-confirm-payment.service';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
-import { StripeConfirmPaymentService } from 'src/app/shared/stripe/stripe-confirm-payment.service';
 
 export const routeMeta: RouteMeta = {
   canActivate: [() => inject(StripeConfirmPaymentService).hasError()],
