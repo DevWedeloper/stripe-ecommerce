@@ -3,8 +3,8 @@ import { HlmNumberedPaginationComponent } from '@spartan-ng/ui-pagination-helm';
 import { hlmH1 } from '@spartan-ng/ui-typography-helm';
 import { EmptyProductListsComponent } from 'src/app/shared/ui/fallback/empty-product-lists.component';
 import { NavigationService } from 'src/app/shared/navigation.service';
-import { ProductCardComponent } from 'src/app/shared/product-card/product-card.component';
-import { ProductCardListSkeletonComponent } from 'src/app/shared/product-card/skeleton/product-card-list-skeleton.component';
+import { ProductCardComponent } from 'src/app/shared/ui/product-card/product-card.component';
+import { ProductCardListSkeletonComponent } from 'src/app/shared/ui/product-card/skeleton/product-card-list-skeleton.component';
 import { SearchService } from './search.service';
 
 @Component({
