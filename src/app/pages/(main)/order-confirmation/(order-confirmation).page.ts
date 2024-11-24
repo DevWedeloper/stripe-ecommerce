@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HlmDialogService } from '@spartan-ng/ui-dialog-helm';
 import { hlmH1, hlmH3 } from '@spartan-ng/ui-typography-helm';
 import { of } from 'rxjs';
-import { GoBackButtonComponent } from 'src/app/shared/go-back-button.component';
+import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
 import { HlmButtonWithLoadingComponent } from 'src/app/shared/hlm-button-with-loading.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { StripeConfirmPaymentService } from 'src/app/shared/stripe/stripe-confirm-payment.service';

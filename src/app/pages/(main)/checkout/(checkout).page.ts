@@ -5,7 +5,7 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { GoBackButtonComponent } from 'src/app/shared/go-back-button.component';
+import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { CartDetailsComponent } from './cart-details.component';
 import { ShippingDetailsComponent } from './shipping-details.component';

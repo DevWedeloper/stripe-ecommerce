@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { EmptyProductDetailsComponent } from 'src/app/shared/fallback-ui/empty-product-details.component';
-import { GoBackButtonComponent } from 'src/app/shared/go-back-button.component';
+import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { ProductDetailSkeletonComponent } from './product-detail-skeleton.component';
 import { ProductDetailService } from './product-detail.service';
