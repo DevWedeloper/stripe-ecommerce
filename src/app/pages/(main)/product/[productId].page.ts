@@ -1,4 +1,3 @@
-import { CurrencyPipe, KeyValuePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,29 +5,27 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { EmptyProductDetailsComponent } from 'src/app/shared/fallback-ui/empty-product-details.component';
 import { GoBackButtonComponent } from 'src/app/shared/go-back-button.component';
-import { QuantitySelectorComponent } from 'src/app/shared/quantity-selector.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { ProductDetailSkeletonComponent } from './product-detail-skeleton.component';
 import { ProductDetailService } from './product-detail.service';
 import { ProductImageGalleryComponent } from './product-image-gallery.component';
+import { ProductPricingDetailsComponent } from './product-pricing-details.component';
+import { ProductVariationsComponent } from './product-variations.component';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
   imports: [
-    CurrencyPipe,
-    KeyValuePipe,
-    HlmButtonDirective,
     HlmCardDirective,
-    QuantitySelectorComponent,
     ProductDetailSkeletonComponent,
     GoBackButtonComponent,
     ProductImageGalleryComponent,
     EmptyProductDetailsComponent,
+    ProductVariationsComponent,
+    ProductPricingDetailsComponent,
   ],
   providers: [ProductDetailService],
   template: `
@@ -51,54 +48,18 @@ import { ProductImageGalleryComponent } from './product-image-gallery.component'
               {{ product()!.name }}
             </h1>
             <p class="mb-4">{{ product()!.description }}</p>
-            <div>
-              @for (
-                variation of product()!.variations | keyvalue;
-                track $index
-              ) {
-                <p class="mb-2 font-bold">{{ variation.key }}</p>
-                <div class="mb-2 flex gap-2">
-                  @for (value of variation.value; track $index) {
-                    <button
-                      hlmBtn
-                      size="sm"
-                      (click)="changeVariation(variation.key, value)"
-                    >
-                      {{ value }}
-                    </button>
-                  }
-                </div>
-              }
-            </div>
+            <app-product-variations
+              [variations]="product()!.variations"
+              (variationChange)="changeVariation($event.key, $event.value)"
+            />
             @if (currentItem()) {
-              <div class="mb-4 text-xl font-semibold">
-                Price:
-                {{ currentItem()!.price | currency: product()!.currency }}
-              </div>
-              <div class="mb-4">
-                Stock:
-                {{
-                  currentItem()!.stock > 0
-                    ? currentItem()!.stock
-                    : 'Out of stock'
-                }}
-              </div>
-
-              <app-quantity-selector
-                [(quantity)]="itemState().quantity"
+              <app-product-pricing-details
                 [stock]="currentItem()!.stock"
-                class="mb-4"
+                [price]="currentItem()!.price"
+                [currency]="product()!.currency"
+                [(quantity)]="itemState().quantity"
+                (addToCart)="addToCart()"
               />
-
-              <button
-                hlmBtn
-                [disabled]="
-                  currentItem()!.stock <= 0 || itemState().quantity() <= 0
-                "
-                (click)="addToCart()"
-              >
-                Add to Cart
-              </button>
             }
           </div>
         </div>
