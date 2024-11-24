@@ -16,7 +16,7 @@ import {
 } from '@spartan-ng/ui-popover-brain';
 import { HlmPopoverContentDirective } from '@spartan-ng/ui-popover-helm';
 import { HlmScrollAreaComponent } from '@spartan-ng/ui-scrollarea-helm';
-import { EmptyCartComponent } from '../../fallback-ui/empty-cart.component';
+import { EmptyCartComponent } from '../../ui/fallback/empty-cart.component';
 import { ShoppingCartService } from '../../shopping-cart.service';
 import { CartItemComponent } from './cart-item.component';
 
