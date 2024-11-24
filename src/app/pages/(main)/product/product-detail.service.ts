@@ -2,7 +2,7 @@ import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, share, shareReplay } from 'rxjs';
-import { NavigationService } from 'src/app/shared/navigation.service';
+import { NavigationService } from 'src/app/shared/data-access/navigation.service';
 import { transformProductImageObjects } from 'src/app/shared/utils/image-object';
 import {
   errorStream,
