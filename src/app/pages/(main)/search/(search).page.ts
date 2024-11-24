@@ -5,7 +5,7 @@ import { EmptyProductListsComponent } from 'src/app/shared/ui/fallback/empty-pro
 import { NavigationService } from 'src/app/shared/data-access/navigation.service';
 import { ProductCardComponent } from 'src/app/shared/ui/product-card/product-card.component';
 import { ProductCardListSkeletonComponent } from 'src/app/shared/ui/product-card/skeleton/product-card-list-skeleton.component';
-import { SearchService } from './search.service';
+import { SearchService } from './data-access/search.service';
 
 @Component({
   selector: 'app-search',
