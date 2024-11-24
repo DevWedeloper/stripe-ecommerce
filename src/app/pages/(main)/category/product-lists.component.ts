@@ -10,7 +10,7 @@ import { EmptyProductListsComponent } from 'src/app/shared/fallback-ui/empty-pro
 import { NavigationService } from 'src/app/shared/navigation.service';
 import { ProductCardComponent } from 'src/app/shared/product-card/product-card.component';
 import { ProductCardListSkeletonComponent } from 'src/app/shared/product-card/skeleton/product-card-list-skeleton.component';
-import { ProductListsService } from './product-lists.service';
+import { ProductListsService } from './data-access/product-lists.service';
 
 @Component({
   selector: 'app-product-lists',
