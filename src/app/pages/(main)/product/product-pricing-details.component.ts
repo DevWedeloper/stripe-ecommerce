@@ -7,7 +7,7 @@ import {
   output,
 } from '@angular/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { QuantitySelectorComponent } from 'src/app/shared/quantity-selector.component';
+import { QuantitySelectorComponent } from 'src/app/shared/ui/quantity-selector.component';
 
 @Component({
   selector: 'app-product-pricing-details',
