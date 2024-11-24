@@ -5,8 +5,8 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
+import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
-import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { CartDetailsComponent } from './cart-details.component';
 import { ShippingDetailsComponent } from './shipping-details.component';
 import { TestCardsComponent } from './test-cards/test-cards.component';

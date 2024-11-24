@@ -7,7 +7,7 @@ import {
   HlmDialogHeaderComponent,
   HlmDialogTitleDirective,
 } from '@spartan-ng/ui-dialog-helm';
-import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
+import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
 
 @Component({
   selector: 'app-confirm-navigation',
