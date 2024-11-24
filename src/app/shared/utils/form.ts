@@ -6,7 +6,7 @@ import { createProvider } from 'src/app/shared/utils/create-provider';
 import { DynamicValidatorMessageDirective } from 'src/app/shared/dynamic-form-errors/dynamic-validator-message.directive';
 import { ERROR_COMPONENT } from 'src/app/shared/dynamic-form-errors/input-error/error-component.token';
 import { HlmButtonWithLoadingComponent } from 'src/app/shared/hlm-button-with-loading.component';
-import { AuthInputErrorComponent } from '../auth-input-error.component';
+import { AuthInputErrorComponent } from '../ui/auth-input-error.component';
 import {
   hasDigit,
   hasLowerCase,
