@@ -9,7 +9,7 @@ import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
 import { EmptyProductDetailsComponent } from 'src/app/shared/ui/fallback/empty-product-details.component';
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
-import { ProductDetailService } from './product-detail.service';
+import { ProductDetailService } from './data-access/product-detail.service';
 import { ProductDetailSkeletonComponent } from './ui/product-detail-skeleton.component';
 import { ProductImageGalleryComponent } from './ui/product-image-gallery.component';
 import { ProductPricingDetailsComponent } from './ui/product-pricing-details.component';
