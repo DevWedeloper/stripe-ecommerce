@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { EmptyCartComponent } from 'src/app/shared/ui/fallback-ui/empty-cart.component';
+import { EmptyCartComponent } from 'src/app/shared/ui/fallback/empty-cart.component';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { CartPageItemsMobileComponent } from './cart-page-items-mobile.component';
 import { CartPageItemsComponent } from './cart-page-items.component';
