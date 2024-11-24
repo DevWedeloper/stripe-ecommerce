@@ -29,7 +29,7 @@ import {
 import { HlmButtonWithLoadingComponent } from 'src/app/shared/hlm-button-with-loading.component';
 import { StripeConfirmationTokenService } from 'src/app/shared/stripe/stripe-confirmation-token.service';
 import { StripePaymentIntentService } from 'src/app/shared/stripe/stripe-payment-intent.service';
-import { ThemeService } from 'src/app/shared/theme.service';
+import { ThemeService } from 'src/app/shared/ui/theme.service';
 
 @Component({
   selector: 'app-shipping-details',
