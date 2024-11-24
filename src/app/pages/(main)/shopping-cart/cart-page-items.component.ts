@@ -10,7 +10,7 @@ import { lucideTrash2 } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { ItemVariationComponent } from 'src/app/shared/item-variation.component';
+import { ItemVariationComponent } from 'src/app/shared/ui/item-variation.component';
 import { QuantitySelectorComponent } from 'src/app/shared/ui/quantity-selector.component';
 import { CartItem } from 'src/app/shared/shopping-cart.service';
 
