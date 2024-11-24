@@ -8,7 +8,7 @@ import { HlmButtonWithLoadingComponent } from 'src/app/shared/hlm-button-with-lo
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { StripeConfirmPaymentService } from 'src/app/shared/stripe/stripe-confirm-payment.service';
 import { StripeConfirmationTokenService } from 'src/app/shared/stripe/stripe-confirmation-token.service';
-import { ViewCartComponent } from 'src/app/shared/view-cart.component';
+import { ViewCartComponent } from 'src/app/shared/ui/view-cart.component';
 import { ConfirmNavigationComponent } from './confirm-navigation.component';
 import { ViewShippingDetailsComponent } from './view-shipping-details.component';
 

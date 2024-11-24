@@ -13,7 +13,7 @@ import {
   HlmSheetContentComponent,
 } from '@spartan-ng/ui-sheet-helm';
 import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
-import { ViewCartComponent } from 'src/app/shared/view-cart.component';
+import { ViewCartComponent } from 'src/app/shared/ui/view-cart.component';
 
 @Component({
   selector: 'app-cart-details',

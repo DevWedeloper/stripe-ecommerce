@@ -2,7 +2,7 @@ import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { hlmMuted } from '@spartan-ng/ui-typography-helm';
 import { CartItem } from 'src/app/shared/shopping-cart.service';
-import { ItemVariationComponent } from './item-variation.component';
+import { ItemVariationComponent } from '../item-variation.component';
 
 @Component({
   selector: 'app-view-cart',
