@@ -1,15 +1,15 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { map, merge, share, Subject } from 'rxjs';
-import { ShoppingCartService } from 'src/app/shared/shopping-cart.service';
 import { TrpcClient } from 'src/trpc-client';
 import {
   errorStream,
   materializeAndShare,
   statusStream,
   successStream,
-} from '../utils/rxjs';
-import { showError } from '../utils/toast';
+} from '../../utils/rxjs';
+import { showError } from '../../utils/toast';
+import { ShoppingCartService } from '../shopping-cart.service';
 
 @Injectable({
   providedIn: 'root',
