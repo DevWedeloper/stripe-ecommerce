@@ -9,7 +9,7 @@ import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.se
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
 import { CartDetailsComponent } from './cart-details.component';
 import { ShippingDetailsComponent } from './features/shipping-details.component';
-import { TestCardsComponent } from './test-cards/test-cards.component';
+import { TestCardsComponent } from './ui/test-cards/test-cards.component';
 
 export const routeMeta: RouteMeta = {
   canActivate: [() => inject(ShoppingCartService).getCart().length > 0],
