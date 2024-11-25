@@ -20,16 +20,14 @@ import {
   StripePaymentElementOptions,
 } from '@stripe/stripe-js';
 import {
-  StripeAddressComponent,
   StripeElementsDirective,
-  StripeLinkAuthenticationComponent,
   StripePaymentElementComponent,
   StripeService,
 } from 'ngx-stripe';
 import { StripeConfirmationTokenService } from 'src/app/shared/data-access/stripe/stripe-confirmation-token.service';
 import { StripePaymentIntentService } from 'src/app/shared/data-access/stripe/stripe-payment-intent.service';
-import { HlmButtonWithLoadingComponent } from 'src/app/shared/ui/hlm-button-with-loading.component';
 import { ThemeService } from 'src/app/shared/ui/theme.service';
+import { ShippingDetailsFormComponent } from '../ui/shipping-details-form.component';
 
 @Component({
   selector: 'app-shipping-details',
@@ -37,38 +35,23 @@ import { ThemeService } from 'src/app/shared/ui/theme.service';
   imports: [
     ReactiveFormsModule,
     HlmSpinnerComponent,
-    StripeElementsDirective,
-    StripePaymentElementComponent,
-    StripeLinkAuthenticationComponent,
-    StripeAddressComponent,
-    HlmButtonWithLoadingComponent,
+    ShippingDetailsFormComponent,
   ],
   template: `
     @if (!isPaymentIntentLoading()) {
       @if (elementsOptions().clientSecret) {
-        <ngx-stripe-elements
+        <app-shipping-details-form
           [stripe]="stripe"
           [elementsOptions]="elementsOptions()"
-        >
-          <ngx-stripe-link-authentication (change)="emailChange($event)" />
-          <ngx-stripe-address
-            [options]="shippingAddressOptions"
-            (change)="shippingAddressChange($event)"
-          />
-          <ngx-stripe-payment
-            [options]="paymentElementOptions"
-            (change)="paymentChange($event)"
-          />
-          <button
-            hlmBtnWithLoading
-            class="mt-2 w-full"
-            (click)="completePurchase()"
-            [disabled]="!validFields() || isConfirmationTokenLoading()"
-            [isLoading]="isConfirmationTokenLoading()"
-          >
-            PAY
-          </button>
-        </ngx-stripe-elements>
+          [shippingAddressOptions]="shippingAddressOptions"
+          [paymentElementOptions]="paymentElementOptions"
+          [isLoading]="isConfirmationTokenLoading()"
+          [disabled]="!validFields() || isConfirmationTokenLoading()"
+          (emailChange)="emailChange($event)"
+          (shippingAddressChange)="shippingAddressChange($event)"
+          (paymentChange)="paymentChange($event)"
+          (completePurchase)="completePurchase()"
+        />
       }
     } @else {
       <div class="flex items-center justify-center">
