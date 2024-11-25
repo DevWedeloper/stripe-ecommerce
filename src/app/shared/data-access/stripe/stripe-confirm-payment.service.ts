@@ -11,8 +11,8 @@ import {
   share,
   switchMap,
 } from 'rxjs';
+import { errorStream, statusStream, successStream } from '../../utils/rxjs';
 import { ShoppingCartService } from '../shopping-cart.service';
-import { errorStream, statusStream, successStream } from '../utils/rxjs';
 import { StripeConfirmationTokenService } from './stripe-confirmation-token.service';
 import { StripePaymentIntentService } from './stripe-payment-intent.service';
 
