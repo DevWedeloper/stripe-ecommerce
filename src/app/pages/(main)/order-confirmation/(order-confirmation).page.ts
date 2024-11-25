@@ -9,8 +9,8 @@ import { StripeConfirmationTokenService } from 'src/app/shared/data-access/strip
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
 import { HlmButtonWithLoadingComponent } from 'src/app/shared/ui/hlm-button-with-loading.component';
 import { ViewCartComponent } from 'src/app/shared/ui/view-cart.component';
-import { ConfirmNavigationComponent } from './confirm-navigation.component';
-import { ViewShippingDetailsComponent } from './view-shipping-details.component';
+import { ConfirmNavigationComponent } from './features/confirm-navigation.component';
+import { ViewShippingDetailsComponent } from './features/view-shipping-details.component';
 
 export const routeMeta: RouteMeta = {
   canActivate: [() => inject(StripeConfirmationTokenService).isSuccessful()],
