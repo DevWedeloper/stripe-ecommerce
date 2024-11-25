@@ -12,7 +12,7 @@ import {
   switchMap,
   withLatestFrom,
 } from 'rxjs';
-import { errorStream, statusStream, successStream } from '../utils/rxjs';
+import { errorStream, statusStream, successStream } from '../../utils/rxjs';
 
 @Injectable({
   providedIn: 'root',
