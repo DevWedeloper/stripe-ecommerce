@@ -20,15 +20,15 @@ export const products = pgTable(
     description: text('description').notNull(),
     currency: text('currency').notNull(),
   },
-  (t) => ({
-    searchIndex: index('search_index').using(
+  (t) => [
+    index('search_index').using(
       'gin',
       sql`(
         setweight(to_tsvector('english', ${t.name}), 'A') ||
         setweight(to_tsvector('english', ${t.description}), 'B')
       )`,
     ),
-  }),
+  ],
 );
 
 export const productItems = pgTable(
@@ -42,10 +42,10 @@ export const productItems = pgTable(
     stock: integer('stock').notNull(),
     price: integer('price').notNull(),
   },
-  (t) => ({
-    uniqueConstraint: unique().on(t.productId, t.sku),
-    productIdIdx: index('product_items_product_id_idx').on(t.productId),
-  }),
+  (t) => [
+    unique('unique_constraint').on(t.productId, t.sku),
+    index('product_items_product_id_idx').on(t.productId),
+  ],
 );
 
 export const productImages = pgTable(
@@ -59,12 +59,12 @@ export const productImages = pgTable(
     placeholder: text('placeholder').notNull(),
     isThumbnail: boolean('is_thumbnail').default(false),
   },
-  (t) => ({
-    uniqueThumbnail: uniqueIndex('unique_thumbnail_per_product')
+  (t) => [
+    uniqueIndex('unique_thumbnail_per_product')
       .on(t.productId, t.isThumbnail)
       .where(sql`(${t.isThumbnail} = true)`),
-    productIdIdx: index('product_images_product_id_idx').on(t.productId),
-  }),
+    index('product_images_product_id_idx').on(t.productId),
+  ],
 );
 
 export const categories = pgTable(
@@ -76,12 +76,10 @@ export const categories = pgTable(
       (): AnyPgColumn => categories.id,
     ),
   },
-  (t) => ({
-    nameIdx: uniqueIndex('categories_name_idx').on(t.name),
-    parentCategoryIdIdx: index('categories_parent_category_id_idx').on(
-      t.parentCategoryId,
-    ),
-  }),
+  (t) => [
+    uniqueIndex('categories_name_idx').on(t.name),
+    index('categories_parent_category_id_idx').on(t.parentCategoryId),
+  ],
 );
 
 export const productCategories = pgTable(
@@ -94,9 +92,7 @@ export const productCategories = pgTable(
       .notNull()
       .references(() => categories.id),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.productId, t.categoryId] }),
-  }),
+  (t) => [primaryKey({ columns: [t.productId, t.categoryId] })],
 );
 
 export const variations = pgTable('variations', {
@@ -117,9 +113,7 @@ export const variationOptions = pgTable(
     value: text('value').notNull(),
     order: smallint('order'),
   },
-  (t) => ({
-    variationIdIdx: index('variation_id_idx').on(t.variationId),
-  }),
+  (t) => [index('variation_id_idx').on(t.variationId)],
 );
 
 export const productConfiguration = pgTable(
@@ -135,10 +129,10 @@ export const productConfiguration = pgTable(
       .notNull()
       .references(() => variations.id),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.productItemId, t.variationOptionId] }),
-    uniqueVariationConstraint: unique().on(t.productItemId, t.variationId),
-  }),
+  (t) => [
+    primaryKey({ columns: [t.productItemId, t.variationOptionId] }),
+    unique().on(t.productItemId, t.variationId),
+  ],
 );
 
 export const tags = pgTable(
@@ -147,12 +141,12 @@ export const tags = pgTable(
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     name: text('name').notNull().unique(),
   },
-  (t) => ({
-    searchIndex: index('tags_search_index').using(
+  (t) => [
+    index('tags_search_index').using(
       'gin',
       sql`to_tsvector('english', ${t.name})`,
     ),
-  }),
+  ],
 );
 
 export const productTags = pgTable(
@@ -165,9 +159,7 @@ export const productTags = pgTable(
       .notNull()
       .references(() => tags.id),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.productId, t.tagId] }),
-  }),
+  (t) => [primaryKey({ columns: [t.productId, t.tagId] })],
 );
 
 export type Products = InferSelectModel<typeof products>;
