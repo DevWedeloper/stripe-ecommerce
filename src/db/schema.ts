@@ -2,6 +2,7 @@ import { InferSelectModel, sql } from 'drizzle-orm';
 import {
   AnyPgColumn,
   boolean,
+  char,
   index,
   integer,
   pgTable,
@@ -18,7 +19,7 @@ export const products = pgTable(
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     name: text('name').notNull(),
     description: text('description').notNull(),
-    currency: text('currency').notNull(),
+    currency: char('currency', { length: 3 }).notNull(),
   },
   (t) => [
     index('search_index').using(
