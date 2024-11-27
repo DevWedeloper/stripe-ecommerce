@@ -57,7 +57,7 @@ export const productItems = pgTable(
   {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     productId: integer('product_id')
-      .references(() => products.id)
+      .references(() => products.id, { onDelete: 'cascade' })
       .notNull(),
     sku: text('sku').notNull(),
     stock: integer('stock').notNull(),
@@ -74,7 +74,7 @@ export const productImages = pgTable(
   {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     productId: integer('product_id')
-      .references(() => products.id)
+      .references(() => products.id, { onDelete: 'cascade' })
       .notNull(),
     imagePath: text('image_path').notNull(),
     placeholder: text('placeholder').notNull(),
@@ -95,6 +95,7 @@ export const categories = pgTable(
     name: text('name').notNull(),
     parentCategoryId: integer('parent_category_id').references(
       (): AnyPgColumn => categories.id,
+      { onDelete: 'set null' },
     ),
   },
   (t) => [
@@ -108,10 +109,10 @@ export const productCategories = pgTable(
   {
     productId: integer('product_id')
       .notNull()
-      .references(() => products.id),
+      .references(() => products.id, { onDelete: 'cascade' }),
     categoryId: integer('category_id')
       .notNull()
-      .references(() => categories.id),
+      .references(() => categories.id, { onDelete: 'cascade' }),
   },
   (t) => [primaryKey({ columns: [t.productId, t.categoryId] })],
 );
@@ -120,7 +121,7 @@ export const variations = pgTable('variations', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   categoryId: integer('category_id')
     .notNull()
-    .references(() => categories.id),
+    .references(() => categories.id, { onDelete: 'set null' }),
   name: text('name').notNull(),
 });
 
@@ -130,7 +131,7 @@ export const variationOptions = pgTable(
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     variationId: integer('variation_id')
       .notNull()
-      .references(() => variations.id),
+      .references(() => variations.id, { onDelete: 'cascade' }),
     value: text('value').notNull(),
     order: smallint('order'),
   },
@@ -142,13 +143,14 @@ export const productConfiguration = pgTable(
   {
     productItemId: integer('product_item_id')
       .notNull()
-      .references(() => productItems.id),
+      .references(() => productItems.id, { onDelete: 'cascade' }),
     variationOptionId: integer('variation_option_id').references(
       () => variationOptions.id,
+      { onDelete: 'cascade' },
     ),
     variationId: integer('variation_id')
       .notNull()
-      .references(() => variations.id),
+      .references(() => variations.id, { onDelete: 'cascade' }),
   },
   (t) => [
     primaryKey({ columns: [t.productItemId, t.variationOptionId] }),
@@ -175,10 +177,10 @@ export const productTags = pgTable(
   {
     productId: integer('product_id')
       .notNull()
-      .references(() => products.id),
+      .references(() => products.id, { onDelete: 'cascade' }),
     tagId: integer('tag_id')
       .notNull()
-      .references(() => tags.id),
+      .references(() => tags.id, { onDelete: 'cascade' }),
   },
   (t) => [primaryKey({ columns: [t.productId, t.tagId] })],
 );
