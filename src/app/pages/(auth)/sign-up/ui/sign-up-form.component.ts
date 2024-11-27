@@ -3,8 +3,9 @@ import {
   Component,
   input,
   output,
+  viewChild,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { HlmHintDirective } from '@spartan-ng/ui-formfield-helm';
 import {
   authInputErrorProvider,
@@ -80,6 +81,8 @@ export class SignUpFormComponent {
   isLoading = input.required<boolean>();
   disableTemporarily = input.required<boolean>();
   submitChange = output<void>();
+
+  formDir = viewChild.required(FormGroupDirective);
 
   protected onSubmit(): void {
     this.submitChange.emit();
