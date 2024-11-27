@@ -5,18 +5,38 @@ import {
   char,
   index,
   integer,
+  pgSchema,
   pgTable,
   primaryKey,
   smallint,
   text,
   unique,
   uniqueIndex,
+  uuid,
+  varchar,
 } from 'drizzle-orm/pg-core';
+
+const authSchema = pgSchema('auth');
+
+const authUsers = authSchema.table('users', {
+  id: uuid('id').primaryKey(),
+});
+
+export const users = pgTable('users', {
+  id: uuid('id')
+    .primaryKey()
+    .references(() => authUsers.id, { onDelete: 'cascade' })
+    .notNull(),
+  email: varchar('email', { length: 256 }).notNull(),
+});
 
 export const products = pgTable(
   'products',
   {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    userId: uuid('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
     name: text('name').notNull(),
     description: text('description').notNull(),
     currency: char('currency', { length: 3 }).notNull(),
