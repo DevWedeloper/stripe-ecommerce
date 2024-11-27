@@ -1,4 +1,4 @@
-TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images, product_items, variations, variation_options, product_configuration RESTART IDENTITY CASCADE;
+TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images, product_items, variations, variation_options, product_configuration, public.users, auth.users RESTART IDENTITY CASCADE;
 
 WITH inserted_categories AS (
     INSERT INTO categories (name)
@@ -18,13 +18,62 @@ FROM (VALUES
 ) AS v(name, parent)
 JOIN inserted_categories c ON c.name = v.parent;
 
-WITH inserted_products AS (
-    INSERT INTO products (name, description, currency)
-    VALUES
-        ('Smartphone A', 'High-quality smartphone with latest features', 'USD'),
-        ('Laptop B', 'Powerful laptop for gaming and productivity', 'USD'),
-        ('Refrigerator C', 'Energy-efficient refrigerator with large capacity', 'USD'),
-        ('Washing Machine D', 'Automatic washing machine with multiple modes', 'USD')
+WITH inserted_users AS (
+    INSERT INTO auth.users (
+        instance_id,
+        id,
+        aud,
+        role,
+        email,
+        encrypted_password,
+        email_confirmed_at,
+        recovery_sent_at,
+        last_sign_in_at,
+        raw_app_meta_data,
+        raw_user_meta_data,
+        created_at,
+        updated_at,
+        confirmation_token,
+        email_change,
+        email_change_token_new,
+        recovery_token
+    )
+    SELECT
+        '00000000-0000-0000-0000-000000000000',
+        uuid_generate_v4(),
+        'authenticated',
+        'authenticated',
+        'user@example.com',
+        crypt('password123', gen_salt('bf')),
+        current_timestamp,
+        current_timestamp,
+        current_timestamp,
+        '{"provider":"email","providers":["email"]}',
+        '{}',
+        current_timestamp,
+        current_timestamp,
+        '',
+        '',
+        '',
+        ''
+    RETURNING id
+),
+inserted_products AS (
+    INSERT INTO products (user_id, name, description, currency)
+    SELECT
+        u.id,
+        p.name,
+        p.description,
+        p.currency
+    FROM
+        inserted_users u
+    CROSS JOIN (
+        VALUES
+            ('Smartphone A', 'High-quality smartphone with latest features', 'USD'),
+            ('Laptop B', 'Powerful laptop for gaming and productivity', 'USD'),
+            ('Refrigerator C', 'Energy-efficient refrigerator with large capacity', 'USD'),
+            ('Washing Machine D', 'Automatic washing machine with multiple modes', 'USD')
+    ) AS p(name, description, currency)
     RETURNING id, name
 ),
 inserted_items AS (
