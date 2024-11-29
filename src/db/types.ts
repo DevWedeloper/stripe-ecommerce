@@ -19,14 +19,14 @@ export type ImageObject = {
   placeholder: ProductImages['placeholder'];
 };
 
-export type ProductDetails = Products &
+export type ProductDetails = Omit<Products, 'userId'> &
   NullishImageObject & {
     items: ProductItemObject[];
     imageObjects: ImageObject[];
     variations: Record<string, string[]>;
   };
 
-export type ProductWithImageAndPricing = Products &
+export type ProductWithImageAndPricing = Omit<Products, 'userId'> &
   NullishImageObject & { lowestPrice: number };
 
 export type ProductItemObject = {
