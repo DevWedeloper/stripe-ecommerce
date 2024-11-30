@@ -30,6 +30,55 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 256 }).notNull(),
 });
 
+export const countries = pgTable('countries', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  code: char('code', { length: 2 }).notNull().unique(),
+});
+
+export const addresses = pgTable(
+  'addresses',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    addressLine1: varchar('address_line1', { length: 256 }).notNull(),
+    addressLine2: varchar('address_line2', { length: 256 }),
+    city: varchar('city', { length: 256 }).notNull(),
+    state: varchar('state', { length: 256 }).notNull(),
+    postalCode: varchar('postal_code', { length: 256 }).notNull(),
+    countryId: integer('country_id')
+      .notNull()
+      .references(() => countries.id),
+  },
+  (t) => [
+    unique('unique_address').on(
+      t.addressLine1,
+      t.addressLine2,
+      t.city,
+      t.state,
+      t.postalCode,
+      t.countryId,
+    ),
+  ],
+);
+
+export const userAddresses = pgTable(
+  'user_addresses',
+  {
+    userId: uuid('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    addressId: integer('address_id')
+      .references(() => addresses.id, { onDelete: 'cascade' })
+      .notNull(),
+    isDefault: boolean('is_default').default(false).notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.userId, t.addressId] }),
+    uniqueIndex('user_address_default_unique')
+      .on(t.userId, t.addressId, t.isDefault)
+      .where(sql`(${t.isDefault} = true)`),
+  ],
+);
+
 export const products = pgTable(
   'products',
   {
