@@ -6,7 +6,7 @@ import { CartItem } from '../types/cart';
 import { showError } from '../utils/toast';
 
 type UniqueItemIdentifier = {
-  productId: ProductItems['productId'];
+  productItemId: ProductItems['id'];
   sku: ProductItems['sku'];
 };
 
@@ -73,18 +73,20 @@ export class ShoppingCartService {
     );
   }
 
-  removeFromCart(productId: number, sku: string): void {
+  removeFromCart(productItemId: number, sku: string): void {
     if (!this.isEditable()) return;
 
     this.cart.update((cart) =>
-      cart.filter((item) => item.productId !== productId && item.sku !== sku),
+      cart.filter(
+        (item) => item.productItemId !== productItemId && item.sku !== sku,
+      ),
     );
   }
 
-  updateQuantity(productId: number, sku: string, quantity: number): void {
+  updateQuantity(productItemId: number, sku: string, quantity: number): void {
     if (!this.isEditable()) return;
 
-    const identifier: UniqueItemIdentifier = { productId, sku };
+    const identifier: UniqueItemIdentifier = { productItemId, sku };
     const cartItem = this.cart().find((item) => isSameItem(item, identifier));
 
     if (!cartItem) return;
@@ -115,5 +117,5 @@ const isSameItem = (
   currentItem: UniqueItemIdentifier,
   newItem: UniqueItemIdentifier,
 ): boolean =>
-  currentItem.productId === newItem.productId &&
+  currentItem.productItemId === newItem.productItemId &&
   currentItem.sku === newItem.sku;

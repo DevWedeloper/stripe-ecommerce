@@ -60,7 +60,7 @@ import { CartItemComponent } from './cart-item.component';
             <app-cart-item
               [item]="item"
               [isEditable]="isEditable()"
-              (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
+              (removeFromCartChange)="removeFromCart(item.productItemId, item.sku)"
             />
           } @empty {
             <div class="flex h-96 items-center justify-center">

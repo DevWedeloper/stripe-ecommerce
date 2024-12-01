@@ -2,8 +2,8 @@ import { ProductItemObject, ProductWithImageAndPricing } from 'src/db/types';
 
 export type CartItem = Omit<
   ProductWithImageAndPricing & ProductItemObject,
-  'id' | 'lowestPrice'
+  'id' | 'lowestPrice' | 'productId'
 > & {
-  productId: number;
+  productItemId: number;
   quantity: number;
 };

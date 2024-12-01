@@ -102,7 +102,7 @@ export default class ProductDetailPageComponent {
       stock: currentItem.stock,
       price: currentItem.price,
       variations: currentItem.variations,
-      productId: product.id,
+      productItemId: product.id,
       quantity: quantity,
     });
   }
