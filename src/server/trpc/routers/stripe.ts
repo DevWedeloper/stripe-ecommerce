@@ -7,6 +7,7 @@ const cartItemSchema = z.object({
   productId: z.number(),
   sku: z.string(),
   quantity: z.number(),
+  price: z.number(),
 });
 
 const cartSchema = z.array(cartItemSchema);
@@ -16,11 +17,28 @@ export const stripeRouter = router({
     .input(
       z.object({
         totalAmountInCents: positiveIntSchema,
+        userId: z.string().or(z.null()),
+        orderDate: z.date(),
+        shippingAddressId: positiveIntSchema,
         cart: cartSchema,
       }),
     )
     .mutation(
-      async ({ input: { totalAmountInCents, cart } }) =>
-        await createPaymentIntent({ totalAmountInCents, cart }),
+      async ({
+        input: {
+          totalAmountInCents,
+          userId,
+          orderDate,
+          shippingAddressId,
+          cart,
+        },
+      }) =>
+        await createPaymentIntent({
+          totalAmountInCents,
+          userId,
+          orderDate,
+          shippingAddressId,
+          cart,
+        }),
     ),
 });
