@@ -5,11 +5,13 @@ import {
   char,
   index,
   integer,
+  pgEnum,
   pgSchema,
   pgTable,
   primaryKey,
   smallint,
   text,
+  timestamp,
   unique,
   uniqueIndex,
   uuid,
@@ -78,6 +80,37 @@ export const userAddresses = pgTable(
       .where(sql`(${t.isDefault} = true)`),
   ],
 );
+
+export const orderStatusEnum = pgEnum('order_status', [
+  'Pending',
+  'Processed',
+  'Shipped',
+  'Delivered',
+  'Cancelled',
+]);
+
+export const orders = pgTable('orders', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  userId: uuid('user_id').references(() => users.id),
+  orderDate: timestamp('order_date').notNull(),
+  shippingAddressId: integer('shipping_address_id')
+    .references(() => addresses.id)
+    .notNull(),
+  total: integer('total').notNull(),
+  status: orderStatusEnum('status').notNull().default('Pending'),
+});
+
+export const orderItems = pgTable('order_items', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  productItemId: integer('product_item_id')
+    .references(() => productItems.id)
+    .notNull(),
+  orderId: integer('order_id')
+    .references(() => orders.id)
+    .notNull(),
+  quantity: integer('quantity').notNull(),
+  price: integer('price').notNull(),
+});
 
 export const products = pgTable(
   'products',
