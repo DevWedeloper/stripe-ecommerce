@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
 
 const cartItemSchema = z.object({
-  productId: z.number(),
+  productItemId: z.number(),
   sku: z.string(),
   quantity: z.number(),
   price: z.number(),

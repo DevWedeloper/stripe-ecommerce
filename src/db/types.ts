@@ -44,7 +44,7 @@ export type VariationObject = {
 };
 
 export type CartItemReference = {
-  productId: ProductItems['productId'];
+  productItemId: ProductItems['productId'];
   sku: ProductItems['sku'];
   quantity: number;
   price: number;

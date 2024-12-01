@@ -17,8 +17,8 @@ export const createPaymentIntent = async ({
   cart,
 }: PaymentIntentParams) => {
   const productItems = JSON.stringify(
-    cart.map(({ productId, sku, quantity, price }) => ({
-      productId,
+    cart.map(({ productItemId, sku, quantity, price }) => ({
+      productItemId,
       sku,
       quantity,
       price,
