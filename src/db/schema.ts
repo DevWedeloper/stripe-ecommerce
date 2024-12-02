@@ -1,4 +1,4 @@
-import { InferSelectModel, sql } from 'drizzle-orm';
+import { InferInsertModel, InferSelectModel, sql } from 'drizzle-orm';
 import {
   AnyPgColumn,
   boolean,
@@ -269,6 +269,7 @@ export const productTags = pgTable(
   (t) => [primaryKey({ columns: [t.productId, t.tagId] })],
 );
 
+export type AddressInsert = InferInsertModel<typeof addresses>;
 export type Products = InferSelectModel<typeof products>;
 export type ProductItems = InferSelectModel<typeof productItems>;
 export type Categories = InferSelectModel<typeof categories>;
