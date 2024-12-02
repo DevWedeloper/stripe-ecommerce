@@ -3,6 +3,7 @@ import {
   AnyPgColumn,
   boolean,
   char,
+  check,
   index,
   integer,
   pgEnum,
@@ -148,6 +149,7 @@ export const productItems = pgTable(
   (t) => [
     unique('unique_constraint').on(t.productId, t.sku),
     index('product_items_product_id_idx').on(t.productId),
+    check('stock_check', sql`${t.stock} >= 0`),
   ],
 );
 
