@@ -1,4 +1,4 @@
-TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images, product_items, variations, variation_options, product_configuration, public.users, auth.users RESTART IDENTITY CASCADE;
+TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images, product_items, variations, variation_options, product_configuration, public.users, auth.users, addresses, countries, user_addresses, orders, order_items RESTART IDENTITY CASCADE;
 
 WITH inserted_categories AS (
     INSERT INTO categories (name)
@@ -17,6 +17,8 @@ FROM (VALUES
     ('Washing Machines', 'Home Appliances')
 ) AS v(name, parent)
 JOIN inserted_categories c ON c.name = v.parent;
+
+INSERT INTO countries (code) VALUES ('US');
 
 WITH inserted_users AS (
     INSERT INTO auth.users (
@@ -57,6 +59,39 @@ WITH inserted_users AS (
         '',
         ''
     RETURNING id
+),
+inserted_addresses AS (
+    INSERT INTO addresses (
+        address_line1,
+        address_line2,
+        city,
+        state,
+        postal_code,
+        country_id
+    )
+    VALUES (
+        '123 Main Street',
+        'Apt 4B',
+        'New York',
+        'NY',
+        '10001',
+        1 
+    )
+    RETURNING id
+),
+inserted_user_addresses AS (
+    INSERT INTO user_addresses (
+        user_id,
+        address_id,
+        is_default
+    )
+    SELECT
+        u.id,
+        a.id,
+        true
+    FROM
+        inserted_users u,
+        inserted_addresses a
 ),
 inserted_products AS (
     INSERT INTO products (user_id, name, description, currency)
