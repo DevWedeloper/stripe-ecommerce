@@ -6,6 +6,8 @@ export const ERROR_MESSAGES: { [key: string]: (args?: any) => string } = {
   email: () => `It should be a valid email`,
   minlength: ({ requiredLength }) =>
     `The length should be at least ${requiredLength} characters`,
+  maxlength: ({ requiredLength }) =>
+    `The length should be at most ${requiredLength} characters`,
   pattern: () => `Wrong format`,
   passwordShouldMatch: () => `Password should match`,
   hasUpperCase: () => `Should contain at least one uppercase letter`,
