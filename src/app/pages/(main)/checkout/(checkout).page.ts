@@ -7,9 +7,9 @@ import {
 } from '@angular/core';
 import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
-import { CartDetailsComponent } from './features/cart-details.component';
-import { ShippingDetailsComponent } from './features/shipping-details.component';
-import { TestCardsComponent } from './features/test-cards/test-cards.component';
+import { CartDetailsComponent } from './feature/cart-details.component';
+import { ShippingDetailsComponent } from './feature/shipping-details.component';
+import { TestCardsComponent } from './feature/test-cards/test-cards.component';
 
 export const routeMeta: RouteMeta = {
   canActivate: [() => inject(ShoppingCartService).getCart().length > 0],
