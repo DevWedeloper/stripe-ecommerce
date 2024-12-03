@@ -65,5 +65,5 @@ export const charLength =
       return null;
     }
 
-    return { charLength: true };
+    return { charLength: { requiredLength } };
   };
