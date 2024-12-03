@@ -56,7 +56,7 @@ export const matchPhrase =
     return value === expectedPhrase ? null : { matchPhrase: true };
   };
 
-export const charLengthValidator =
+export const charLength =
   (requiredLength: number) =>
   (control: AbstractControl): ValidationErrors | null => {
     const value = control.value || '';
