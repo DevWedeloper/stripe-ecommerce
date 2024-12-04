@@ -7,15 +7,20 @@ import { publicProcedure, router } from '../trpc';
 export const addressRouter = router({
   createAddress: publicProcedure
     .input(
-      createInsertSchema(addresses)
-        .omit({ countryId: true })
-        .merge(
-          z.object({
-            countryCode: z.string().refine((val) => val.length === length, {
-              message: `String must be exactly ${length} characters long`,
+      z.object({
+        userId: z.string(),
+        data: createInsertSchema(addresses)
+          .omit({ countryId: true })
+          .merge(
+            z.object({
+              countryCode: z.string().refine((val) => val.length === length, {
+                message: `String must be exactly ${length} characters long`,
+              }),
             }),
-          }),
-        ),
+          ),
+      }),
     )
-    .mutation(async ({ input }) => await createAddress(input)),
+    .mutation(
+      async ({ input: { userId, data } }) => await createAddress(userId, data),
+    ),
 });
