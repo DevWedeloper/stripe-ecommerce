@@ -1,8 +1,7 @@
-import { createAddress as insertAddress } from 'src/db/data-access/address/create-address';
+import { findOrCreateAddress } from 'src/db/data-access/address/find-or-create-address';
 import { AddressInsertWithCountryCode } from 'src/db/types';
 
 export const createAddress = async (
+  userId: string,
   data: AddressInsertWithCountryCode,
-): Promise<{
-  id: number;
-}> => insertAddress(data);
+): Promise<void> => findOrCreateAddress(userId, data);
