@@ -1,8 +1,8 @@
 import { createAddress as insertAddress } from 'src/db/data-access/address/create-address';
-import { AddressInsert } from 'src/db/schema';
+import { AddressInsertWithCountryCode } from 'src/db/types';
 
 export const createAddress = async (
-  data: AddressInsert,
+  data: AddressInsertWithCountryCode,
 ): Promise<{
   id: number;
 }> => insertAddress(data);
