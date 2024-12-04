@@ -1,4 +1,5 @@
 import {
+  AddressInsert,
   ProductImages,
   ProductItems,
   Products,
@@ -48,4 +49,8 @@ export type CartItemReference = {
   sku: ProductItems['sku'];
   quantity: number;
   price: number;
+};
+
+export type AddressInsertWithCountryCode = Omit<AddressInsert, 'countryId'> & {
+  countryCode: string;
 };
