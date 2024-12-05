@@ -14,10 +14,10 @@ export const findOrCreateAddress = async (
     ),
 
     created_address as (
-      insert into addresses (addressLine1, addressLine2, city, state, postalCode, countryId)
-      select (${data.addressLine1}, ${data.addressLine2}, ${data.city}, ${data.state}, ${data.postalCode}, c.id)
+      insert into addresses (address_line1, address_line2, city, state, postal_code, country_id)
+      select ${data.addressLine1}, ${data.addressLine2}, ${data.city}, ${data.state}, ${data.postalCode}, c.id
       from country_id c
-      on conflict (addressLine1, addressLine2, city, state, postalCode, countryId) do nothing
+      on conflict (address_line1, address_line2, city, state, postal_code, country_id) do nothing
       returning id
     ),
 
@@ -27,16 +27,16 @@ export const findOrCreateAddress = async (
       union
 
       select a.id
-      from address a
-      join country_id c on a.countryId = c.id 
-      where addressLine1 = ${data.addressLine1}
-        and addressLine2 = ${data.addressLine2}
+      from addresses a
+      join country_id c on a.country_id = c.id 
+      where address_line1 = ${data.addressLine1}
+        and address_line2 = ${data.addressLine2}
         and city = ${data.city}
         and state = ${data.state}
-        and postalCode = ${data.postalCode}
+        and postal_code = ${data.postalCode}
     )
 
-    insert into user_addresses (userId, addressId)
+    insert into user_addresses (user_id, address_id)
     select ${userId}, id
     from address_id
   `;
