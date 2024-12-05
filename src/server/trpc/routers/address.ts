@@ -13,8 +13,8 @@ export const addressRouter = router({
           .omit({ countryId: true })
           .merge(
             z.object({
-              countryCode: z.string().refine((val) => val.length === length, {
-                message: `String must be exactly ${length} characters long`,
+              countryCode: z.string().refine((val) => val.length === 2, {
+                message: `String must be exactly 2 characters long`,
               }),
             }),
           ),
