@@ -20,6 +20,7 @@ export const stripeRouter = router({
         userId: z.string().or(z.null()),
         orderDate: z.coerce.date(),
         shippingAddressId: positiveIntSchema,
+        receiverId: positiveIntSchema,
         cart: cartSchema,
       }),
     )
@@ -30,6 +31,7 @@ export const stripeRouter = router({
           userId,
           orderDate,
           shippingAddressId,
+          receiverId,
           cart,
         },
       }) =>
@@ -38,6 +40,7 @@ export const stripeRouter = router({
           userId,
           orderDate,
           shippingAddressId,
+          receiverId,
           cart,
         }),
     ),
