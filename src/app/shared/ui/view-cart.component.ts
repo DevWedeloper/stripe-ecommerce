@@ -10,7 +10,7 @@ import { ItemVariationComponent } from './item-variation.component';
   imports: [CurrencyPipe, NgOptimizedImage, ItemVariationComponent],
   template: `
     <div class="flex flex-col gap-2 p-4">
-      @for (product of cart(); track product.id) {
+      @for (product of cart(); track product.productItemId) {
         <div hlmCard class="grid grid-cols-3">
           <div class="relative flex h-16 w-16 justify-center rounded">
             <img
