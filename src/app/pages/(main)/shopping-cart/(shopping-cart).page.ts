@@ -23,16 +23,16 @@ import { CartSummaryComponent } from './ui/cart-summary.component';
             class="hidden md:block"
             [item]="item"
             [isEditable]="isEditable()"
-            (quantityChange)="updateQuantity(item.productId, item.sku, $event)"
-            (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
+            (quantityChange)="updateQuantity(item.productItemId, item.sku, $event)"
+            (removeFromCartChange)="removeFromCart(item.productItemId, item.sku)"
           />
 
           <app-cart-page-items-mobile
             class="block md:hidden"
             [item]="item"
             [isEditable]="isEditable()"
-            (quantityChange)="updateQuantity(item.productId, item.sku, $event)"
-            (removeFromCartChange)="removeFromCart(item.productId, item.sku)"
+            (quantityChange)="updateQuantity(item.productItemId, item.sku, $event)"
+            (removeFromCartChange)="removeFromCart(item.productItemId, item.sku)"
           />
         }
       </div>
