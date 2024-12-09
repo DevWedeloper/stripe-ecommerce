@@ -63,6 +63,11 @@ export const addresses = pgTable(
   ],
 );
 
+export const receivers = pgTable('receivers', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  fullName: varchar('full_name', { length: 256 }).notNull(),
+});
+
 export const userAddresses = pgTable(
   'user_addresses',
   {
@@ -71,6 +76,9 @@ export const userAddresses = pgTable(
       .notNull(),
     addressId: integer('address_id')
       .references(() => addresses.id, { onDelete: 'cascade' })
+      .notNull(),
+    receiverId: integer('receiver_id')
+      .references(() => receivers.id, { onDelete: 'cascade' })
       .notNull(),
     isDefault: boolean('is_default').default(false).notNull(),
   },
@@ -96,6 +104,9 @@ export const orders = pgTable('orders', {
   orderDate: timestamp('order_date').notNull(),
   shippingAddressId: integer('shipping_address_id')
     .references(() => addresses.id)
+    .notNull(),
+  receiverId: integer('receiver_id')
+    .references(() => receivers.id)
     .notNull(),
   total: integer('total').notNull(),
   status: orderStatusEnum('status').notNull().default('Pending'),
