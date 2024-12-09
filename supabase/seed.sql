@@ -1,4 +1,4 @@
-TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images, product_items, variations, variation_options, product_configuration, public.users, auth.users, addresses, countries, user_addresses, orders, order_items RESTART IDENTITY CASCADE;
+TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images, product_items, variations, variation_options, product_configuration, public.users, auth.users, addresses, countries, user_addresses, orders, order_items, receivers RESTART IDENTITY CASCADE;
 
 WITH inserted_categories AS (
     INSERT INTO categories (name)
@@ -79,19 +79,28 @@ inserted_addresses AS (
     )
     RETURNING id
 ),
+inserted_receivers AS (
+    INSERT INTO receivers (full_name)
+    VALUES
+        ('John Doe')
+    RETURNING id
+),
 inserted_user_addresses AS (
     INSERT INTO user_addresses (
         user_id,
         address_id,
+        receiver_id,
         is_default
     )
     SELECT
         u.id,
         a.id,
+        r.id,
         true
     FROM
         inserted_users u,
-        inserted_addresses a
+        inserted_addresses a,
+        inserted_receivers r
 ),
 inserted_products AS (
     INSERT INTO products (user_id, name, description, currency)
