@@ -6,6 +6,7 @@ interface PaymentIntentParams {
   userId: string | null;
   orderDate: Date;
   shippingAddressId: number;
+  receiverId: number;
   cart: CartItemReference[];
 }
 
@@ -14,6 +15,7 @@ export const createPaymentIntent = async ({
   userId,
   orderDate,
   shippingAddressId,
+  receiverId,
   cart,
 }: PaymentIntentParams) => {
   const productItems = JSON.stringify(
@@ -32,6 +34,7 @@ export const createPaymentIntent = async ({
       userId,
       orderDate: orderDate.toISOString(),
       shippingAddressId,
+      receiverId,
       productItems,
     },
   });
