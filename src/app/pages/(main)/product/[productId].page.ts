@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   inject,
-  signal,
+  linkedSignal,
 } from '@angular/core';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
@@ -57,7 +56,7 @@ import { ProductVariationsComponent } from './ui/product-variations.component';
                 [stock]="currentItem()!.stock"
                 [price]="currentItem()!.price"
                 [currency]="product()!.currency"
-                [(quantity)]="itemState().quantity"
+                [(quantity)]="quantity"
                 (addToCart)="addToCart()"
               />
             }
@@ -82,15 +81,15 @@ export default class ProductDetailPageComponent {
   protected currentItem = this.productDetailService.currentItem;
   protected isLoading = this.productDetailService.isLoading;
 
-  protected itemState = computed(() => ({
-    currentItem: this.currentItem(),
-    quantity: signal(0),
-  }));
+  protected quantity = linkedSignal({
+    source: this.currentItem,
+    computation: () => 0,
+  });
 
   protected addToCart(): void {
     const product = this.product()!;
     const currentItem = this.currentItem()!;
-    const quantity = this.itemState().quantity();
+    const quantity = this.quantity();
 
     this.shoppingCartService.addToCart({
       name: product.name,
