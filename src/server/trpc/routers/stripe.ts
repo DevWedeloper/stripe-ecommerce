@@ -18,7 +18,7 @@ export const stripeRouter = router({
       z.object({
         totalAmountInCents: positiveIntSchema,
         userId: z.string().or(z.null()),
-        orderDate: z.date(),
+        orderDate: z.coerce.date(),
         shippingAddressId: positiveIntSchema,
         cart: cartSchema,
       }),
