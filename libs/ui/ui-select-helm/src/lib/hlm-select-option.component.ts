@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   computed,
   inject,
   input,
@@ -16,7 +15,9 @@ import type { ClassValue } from 'clsx';
   selector: 'hlm-option',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  hostDirectives: [BrnSelectOptionDirective],
+  hostDirectives: [
+    { directive: BrnSelectOptionDirective, inputs: ['disabled', 'value'] },
+  ],
   providers: [provideIcons({ lucideCheck })],
   host: {
     '[class]': '_computedClass()',
@@ -46,12 +47,4 @@ export class HlmSelectOptionComponent {
       this.userClass(),
     ),
   );
-
-  @Input()
-  set value(value: unknown | null) {
-    this._brnSelectOption.value = value;
-  }
-
-  @Input()
-  public disabled = false;
 }
