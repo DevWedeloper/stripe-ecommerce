@@ -1,5 +1,5 @@
-import { Injectable, computed, effect, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Injectable, computed, inject } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { StripeService } from 'ngx-stripe';
 import {
@@ -94,24 +94,19 @@ export class StripeConfirmPaymentService {
   private error = toSignal(this.confirmPaymentError$, { initialValue: null });
 
   isLoading = computed(() => this.status() === 'loading');
-  isSuccessful = computed(() => this.status() === 'success');
-  hasError = computed(() => this.status() === 'error');
 
   errorMessage = computed(() => this.error()?.message);
 
   constructor() {
-    effect(
-      () => {
-        if (this.isSuccessful()) {
-          this.shoppingCartService.clearCart();
-          this.router.navigate(['/order-confirmation/success']);
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    this.confirmPaymentSuccessWithData$
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        this.shoppingCartService.clearCart();
+        this.router.navigate(['/order-confirmation/success']);
+      });
 
-    effect(() => {
-      if (this.hasError()) this.router.navigate(['/order-confirmation/error']);
+    this.error$.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.router.navigate(['/order-confirmation/error']);
     });
   }
 
