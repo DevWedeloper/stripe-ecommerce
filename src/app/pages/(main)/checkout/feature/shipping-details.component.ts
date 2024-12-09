@@ -111,9 +111,6 @@ export class ShippingDetailsComponent implements OnInit {
 
   protected shippingAddressOptions: StripeAddressElementOptions = {
     mode: 'shipping',
-    display: {
-      name: 'split',
-    },
     fields: {
       phone: 'always',
     },
