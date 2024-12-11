@@ -83,7 +83,8 @@ export default class ProductDetailPageComponent {
 
   protected quantity = linkedSignal({
     source: this.currentItem,
-    computation: () => 0,
+    computation: (currentItem) =>
+      currentItem && currentItem.stock > 0 ? 1 : 0,
   });
 
   protected addToCart(): void {
