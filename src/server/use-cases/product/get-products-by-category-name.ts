@@ -1,11 +1,6 @@
 import { getPaginatedProductsByCategoryName } from 'src/db/data-access/product/get-paginated-products-by-category-name';
+import { toTitleCase } from 'src/utils/string-format';
 import { PaginatedProducts } from '../types/paginated-products.type';
-
-const convertToQueryFormat = (name: string) =>
-  name
-    .toLowerCase()
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, (char) => char.toUpperCase());
 
 export const getProductsByCategoryName = async (
   categoryName: string,
@@ -15,7 +10,7 @@ export const getProductsByCategoryName = async (
   const offset = (page - 1) * pageSize;
 
   const { products, totalProducts } = await getPaginatedProductsByCategoryName(
-    convertToQueryFormat(categoryName),
+    toTitleCase(categoryName),
     offset,
     pageSize,
   );
