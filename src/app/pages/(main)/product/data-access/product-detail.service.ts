@@ -49,7 +49,7 @@ export class ProductDetailService {
     map((product) =>
       product === null ? null : transformProductImageObjects(product),
     ),
-    share(),
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
 
   private productError$ = this.product$.pipe(errorStream(), share());
