@@ -52,7 +52,7 @@ export class SearchService {
   private productsSuccess$ = this.products$.pipe(
     successStream(),
     map(transformProductImagePathsAndPlaceholders),
-    share(),
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
 
   private productsError$ = this.products$.pipe(errorStream(), share());
