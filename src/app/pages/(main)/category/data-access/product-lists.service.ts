@@ -25,6 +25,7 @@ import {
 import { parseToPositiveInt } from 'src/app/shared/utils/schema';
 import { showError } from 'src/app/shared/utils/toast';
 import { TrpcClient } from 'src/trpc-client';
+import { toTitleCase } from 'src/utils/string-format';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,34 @@ export class ProductListsService {
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
   private PLATFORM_ID = inject(PLATFORM_ID);
+
+  private breadcrumbPaths$ = this.route.params.pipe(
+    map((params) => {
+      const { path } = params;
+      const pathArray = path.split('/') as string[];
+
+      const generatePaths = (arr: string[]): string[] =>
+        arr.reduce((paths, current, index) => {
+          const path =
+            index === 0
+              ? `/category/${current}`
+              : `${paths[index - 1]}/${current}`;
+          paths.push(path);
+          return paths;
+        }, [] as string[]);
+
+      const generatedPaths = generatePaths(pathArray);
+
+      const formattedTitles = pathArray.map(toTitleCase);
+
+      const result = generatedPaths.map((generatedPath, index) => ({
+        title: formattedTitles[index],
+        path: generatedPath,
+      }));
+
+      return result;
+    }),
+  );
 
   private filter$ = combineLatest([
     this.route.params,
@@ -90,6 +119,8 @@ export class ProductListsService {
   pageSize = computed(() => this.productData().pageSize);
   totalProducts = computed(() => this.productData().totalProducts);
   products = computed(() => this.productData().products);
+
+  breadcrumbPaths = toSignal(this.breadcrumbPaths$, { initialValue: [] });
 
   isInitialLoading = toSignal(this.initialLoading$, { initialValue: true });
 
