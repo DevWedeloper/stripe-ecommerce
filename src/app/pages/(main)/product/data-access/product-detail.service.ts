@@ -1,11 +1,12 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { computed, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import {
   pendingUntilEvent,
   takeUntilDestroyed,
   toSignal,
 } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, map, share, shareReplay } from 'rxjs';
+import { combineLatest, filter, map, share, shareReplay } from 'rxjs';
 import { NavigationService } from 'src/app/shared/data-access/navigation.service';
 import { transformProductImageObjects } from 'src/app/shared/utils/image-object';
 import {
@@ -24,6 +25,7 @@ import { TrpcClient } from 'src/trpc-client';
 export class ProductDetailService {
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
+  private PLATFORM_ID = inject(PLATFORM_ID);
   private navigationService = inject(NavigationService);
 
   private productId$ = this.route.params.pipe(
@@ -122,7 +124,10 @@ export class ProductDetailService {
 
   constructor() {
     this.productError$
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        filter(() => isPlatformBrowser(this.PLATFORM_ID)),
+        takeUntilDestroyed(),
+      )
       .subscribe((error) => showError(error.message));
   }
 
