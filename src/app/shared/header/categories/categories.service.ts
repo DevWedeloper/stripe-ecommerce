@@ -1,6 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { map, materialize, merge, share, shareReplay } from 'rxjs';
+import { filter, map, materialize, merge, share, shareReplay } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
 import { errorStream, initialLoading, successStream } from '../../utils/rxjs';
 import { showError } from '../../utils/toast';
@@ -10,6 +11,7 @@ import { showError } from '../../utils/toast';
 })
 export class CategoriesService {
   private _trpc = inject(TrpcClient);
+  private PLATFORM_ID = inject(PLATFORM_ID);
 
   private categories$ = this._trpc.categories.getTree
     .query()
@@ -43,7 +45,10 @@ export class CategoriesService {
 
   constructor() {
     this.categoriesError$
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        filter(() => isPlatformBrowser(this.PLATFORM_ID)),
+        takeUntilDestroyed(),
+      )
       .subscribe((error) => showError(error.message));
   }
 }
