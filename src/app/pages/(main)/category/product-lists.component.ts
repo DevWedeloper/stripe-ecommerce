@@ -4,10 +4,17 @@ import {
   inject,
   input,
 } from '@angular/core';
+import {
+  HlmBreadcrumbDirective,
+  HlmBreadcrumbLinkDirective,
+  HlmBreadcrumbListDirective,
+  HlmBreadcrumbPageDirective,
+  HlmBreadcrumbSeparatorComponent,
+} from '@spartan-ng/ui-breadcrumb-helm';
 import { HlmNumberedPaginationComponent } from '@spartan-ng/ui-pagination-helm';
 import { hlmH1 } from '@spartan-ng/ui-typography-helm';
-import { EmptyProductListsComponent } from 'src/app/shared/ui/fallback/empty-product-lists.component';
 import { NavigationService } from 'src/app/shared/data-access/navigation.service';
+import { EmptyProductListsComponent } from 'src/app/shared/ui/fallback/empty-product-lists.component';
 import { ProductCardComponent } from 'src/app/shared/ui/product-card/product-card.component';
 import { ProductCardListSkeletonComponent } from 'src/app/shared/ui/product-card/skeleton/product-card-list-skeleton.component';
 import { ProductListsService } from './data-access/product-lists.service';
@@ -16,6 +23,11 @@ import { ProductListsService } from './data-access/product-lists.service';
   selector: 'app-product-lists',
   standalone: true,
   imports: [
+    HlmBreadcrumbDirective,
+    HlmBreadcrumbListDirective,
+    HlmBreadcrumbLinkDirective,
+    HlmBreadcrumbPageDirective,
+    HlmBreadcrumbSeparatorComponent,
     HlmNumberedPaginationComponent,
     ProductCardComponent,
     ProductCardListSkeletonComponent,
@@ -26,6 +38,24 @@ import { ProductListsService } from './data-access/product-lists.service';
     <h1 class="${hlmH1} mb-4 text-center">
       Products from "{{ categoryName() }}"
     </h1>
+    <nav hlmBreadcrumb class="mb-4">
+      <ol hlmBreadcrumbList>
+        @for (item of breadcrumbPaths(); track $index) {
+          @if (!$last) {
+            <li hlmBreadcrumbItem>
+              <a hlmBreadcrumbLink [link]="item.path">{{ item.title }}</a>
+            </li>
+          } @else {
+            <li hlmBreadcrumbItem>
+              <a hlmBreadcrumbPage>{{ item.title }}</a>
+            </li>
+          }
+          @if ($index < breadcrumbPaths().length - 1) {
+            <li hlmBreadcrumbSeparator></li>
+          }
+        }
+      </ol>
+    </nav>
     @if (!isInitialLoading()) {
       @if (products().length > 0) {
         <div
@@ -63,6 +93,7 @@ export class ProductListsComponent {
   protected pageSize = this.productListsService.pageSize;
   protected totalProducts = this.productListsService.totalProducts;
   protected products = this.productListsService.products;
+  protected breadcrumbPaths = this.productListsService.breadcrumbPaths;
   protected isInitialLoading = this.productListsService.isInitialLoading;
 
   protected setPage(page: number): void {
