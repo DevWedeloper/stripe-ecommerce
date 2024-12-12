@@ -1,5 +1,9 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import {
+  pendingUntilEvent,
+  takeUntilDestroyed,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, share, shareReplay } from 'rxjs';
 import { NavigationService } from 'src/app/shared/data-access/navigation.service';
@@ -41,6 +45,7 @@ export class ProductDetailService {
   );
 
   private product$ = this.productId$.pipe(
+    pendingUntilEvent(),
     materializeAndShare((id) => this._trpc.products.getById.query(id)),
   );
 
