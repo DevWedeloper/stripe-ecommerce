@@ -1,11 +1,12 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { computed, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import {
   pendingUntilEvent,
   takeUntilDestroyed,
   toSignal,
 } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { distinctUntilChanged, map, share, shareReplay } from 'rxjs';
+import { distinctUntilChanged, filter, map, share, shareReplay } from 'rxjs';
 import { transformProductImagePathsAndPlaceholders } from 'src/app/shared/utils/image-object';
 import {
   errorStream,
@@ -24,6 +25,7 @@ import { TrpcClient } from 'src/trpc-client';
 export class SearchService {
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
+  private PLATFORM_ID = inject(PLATFORM_ID);
 
   private filter$ = this.route.queryParams.pipe(
     map((queryParams) => {
@@ -90,7 +92,10 @@ export class SearchService {
 
   constructor() {
     this.productsError$
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        filter(() => isPlatformBrowser(this.PLATFORM_ID)),
+        takeUntilDestroyed(),
+      )
       .subscribe((error) => showError(error.message));
   }
 }
