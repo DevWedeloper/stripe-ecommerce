@@ -1,4 +1,5 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { computed, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import {
   pendingUntilEvent,
   takeUntilDestroyed,
@@ -8,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import {
   combineLatest,
   distinctUntilChanged,
+  filter,
   map,
   share,
   shareReplay,
@@ -30,6 +32,7 @@ import { TrpcClient } from 'src/trpc-client';
 export class ProductListsService {
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
+  private PLATFORM_ID = inject(PLATFORM_ID);
 
   private filter$ = combineLatest([
     this.route.params,
@@ -92,7 +95,10 @@ export class ProductListsService {
 
   constructor() {
     this.productsError$
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        filter(() => isPlatformBrowser(this.PLATFORM_ID)),
+        takeUntilDestroyed(),
+      )
       .subscribe((error) => showError(error.message));
   }
 }
