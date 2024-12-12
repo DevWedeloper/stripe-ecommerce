@@ -1,7 +1,13 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, distinctUntilChanged, map, share } from 'rxjs';
+import {
+  combineLatest,
+  distinctUntilChanged,
+  map,
+  share,
+  shareReplay,
+} from 'rxjs';
 import { transformProductImagePathsAndPlaceholders } from 'src/app/shared/utils/image-object';
 import {
   errorStream,
@@ -50,7 +56,7 @@ export class ProductListsService {
   private productsSuccess$ = this.products$.pipe(
     successStream(),
     map(transformProductImagePathsAndPlaceholders),
-    share(),
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
 
   private productsError$ = this.products$.pipe(errorStream(), share());
