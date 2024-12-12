@@ -1,5 +1,9 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import {
+  pendingUntilEvent,
+  takeUntilDestroyed,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { distinctUntilChanged, map, share, shareReplay } from 'rxjs';
 import { transformProductImagePathsAndPlaceholders } from 'src/app/shared/utils/image-object';
@@ -44,6 +48,7 @@ export class SearchService {
   private keyword$ = this.filter$.pipe(map((filter) => filter.keyword));
 
   private products$ = this.filter$.pipe(
+    pendingUntilEvent(),
     materializeAndShare((keywordFilter) =>
       this._trpc.products.searchByKeyword.query(keywordFilter),
     ),
