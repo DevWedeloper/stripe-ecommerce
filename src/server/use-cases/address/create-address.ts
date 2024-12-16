@@ -1,10 +1,10 @@
 import postgres from 'postgres';
 import { findOrCreateAddress } from 'src/db/data-access/address/find-or-create-address';
-import { AddressInsertWithCountryCode } from 'src/db/types';
+import { FindOrCreateAddressData } from 'src/db/types';
 
 export const createAddress = async (
   userId: string,
-  data: AddressInsertWithCountryCode,
+  data: FindOrCreateAddressData,
 ): Promise<{ error: { message: string } | null }> => {
   try {
     await findOrCreateAddress(userId, data);

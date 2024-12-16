@@ -51,6 +51,6 @@ export type CartItemReference = {
   price: number;
 };
 
-export type AddressInsertWithCountryCode = Omit<AddressInsert, 'countryId'> & {
+export type FindOrCreateAddressData = Omit<AddressInsert, 'countryId'> & {
   countryCode: string;
 };
