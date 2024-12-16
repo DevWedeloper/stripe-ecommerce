@@ -10,29 +10,11 @@ export type ProductWithTotalCount = ProductWithImageAndPricing & {
   totalCount: number;
 };
 
-export const formatPaginatedResult = (
-  productArray: ProductWithTotalCount[],
-): { products: ProductWithImageAndPricing[]; totalProducts: number } => {
-  const products = productArray.map(
-    ({
-      id,
-      name,
-      description,
-      lowestPrice,
-      currency,
-      imagePath,
-      placeholder,
-    }) => ({
-      id,
-      name,
-      description,
-      lowestPrice,
-      currency,
-      imagePath,
-      placeholder,
-    }),
-  );
-  const totalProducts = productArray[0]?.totalCount || 0;
+export const formatPaginatedResult = <T extends { totalCount: number }>(
+  dataArray: T[],
+): { data: Omit<T, 'totalCount'>[]; totalCount: number } => {
+  const data = dataArray.map(({ totalCount, ...rest }) => rest);
+  const totalCount = dataArray[0]?.totalCount || 0;
 
-  return { products, totalProducts };
+  return { data, totalCount };
 };

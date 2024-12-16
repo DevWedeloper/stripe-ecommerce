@@ -95,11 +95,10 @@ export const getPaginatedProductsByKeyword = async (
 
   const result = await query;
 
-  const { products: productsArray, totalProducts } =
-    formatPaginatedResult(result);
+  const { data, totalCount: totalProducts } = formatPaginatedResult(result);
 
   return {
-    products: productsArray,
+    products: data,
     totalProducts,
   };
 };

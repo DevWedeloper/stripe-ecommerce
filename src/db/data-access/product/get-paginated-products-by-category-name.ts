@@ -60,11 +60,11 @@ export const getPaginatedProductsByCategoryName = async (
 
   const productsResult = (await db.execute(query)) as ProductWithTotalCount[];
 
-  const { products: productsArray, totalProducts } =
+  const { data, totalCount: totalProducts } =
     formatPaginatedResult(productsResult);
 
   return {
-    products: productsArray,
+    products: data,
     totalProducts,
   };
 };
