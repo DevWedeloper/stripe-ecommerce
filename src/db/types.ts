@@ -3,6 +3,7 @@ import {
   ProductImages,
   ProductItems,
   Products,
+  ReceiverInsert,
   VariationOptions,
   Variations,
 } from './schema';
@@ -51,6 +52,7 @@ export type CartItemReference = {
   price: number;
 };
 
-export type FindOrCreateAddressData = Omit<AddressInsert, 'countryId'> & {
-  countryCode: string;
-};
+export type FindOrCreateAddressData = Omit<AddressInsert, 'countryId'> &
+  ReceiverInsert & {
+    countryCode: string;
+  };
