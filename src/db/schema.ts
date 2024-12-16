@@ -281,6 +281,7 @@ export const productTags = pgTable(
   (t) => [primaryKey({ columns: [t.productId, t.tagId] })],
 );
 
+export type CountrySelect = InferSelectModel<typeof countries>;
 export type AddressSelect = InferSelectModel<typeof addresses>;
 export type AddressInsert = InferInsertModel<typeof addresses>;
 export type ReceiverSelect = InferSelectModel<typeof receivers>;
