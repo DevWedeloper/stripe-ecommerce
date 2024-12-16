@@ -83,10 +83,11 @@ export const userAddresses = pgTable(
     isDefault: boolean('is_default').default(false).notNull(),
   },
   (t) => [
-    primaryKey({ columns: [t.userId, t.addressId] }),
+    primaryKey({ columns: [t.userId, t.addressId, t.receiverId] }),
     uniqueIndex('user_address_default_unique')
       .on(t.userId, t.addressId, t.isDefault)
       .where(sql`(${t.isDefault} = true)`),
+    unique('unique_receiver_id').on(t.receiverId),
   ],
 );
 
