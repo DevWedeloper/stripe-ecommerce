@@ -1,5 +1,5 @@
 import { getPaginatedProductsByKeyword } from 'src/db/data-access/product/get-paginated-products-by-keyword';
-import { PaginatedProducts } from '../types/paginated-products.type';
+import { PaginatedProducts } from '../types/paginated';
 
 export const searchProductsByKeyword = async (
   keyword: string,

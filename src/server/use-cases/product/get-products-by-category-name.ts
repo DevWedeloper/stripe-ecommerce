@@ -1,6 +1,6 @@
 import { getPaginatedProductsByCategoryName } from 'src/db/data-access/product/get-paginated-products-by-category-name';
 import { toTitleCase } from 'src/utils/string-format';
-import { PaginatedProducts } from '../types/paginated-products.type';
+import { PaginatedProducts } from '../types/paginated';
 
 export const getProductsByCategoryName = async (
   categoryName: string,
