@@ -282,6 +282,7 @@ export const productTags = pgTable(
 );
 
 export type AddressInsert = InferInsertModel<typeof addresses>;
+export type ReceiverInsert = InferInsertModel<typeof receivers>;
 export type Products = InferSelectModel<typeof products>;
 export type ProductItems = InferSelectModel<typeof productItems>;
 export type Categories = InferSelectModel<typeof categories>;
