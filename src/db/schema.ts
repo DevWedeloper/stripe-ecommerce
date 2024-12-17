@@ -286,6 +286,7 @@ export type AddressSelect = InferSelectModel<typeof addresses>;
 export type AddressInsert = InferInsertModel<typeof addresses>;
 export type ReceiverSelect = InferSelectModel<typeof receivers>;
 export type ReceiverInsert = InferInsertModel<typeof receivers>;
+export type UserAddressesSelect = InferSelectModel<typeof userAddresses>;
 export type Products = InferSelectModel<typeof products>;
 export type ProductItems = InferSelectModel<typeof productItems>;
 export type Categories = InferSelectModel<typeof categories>;
