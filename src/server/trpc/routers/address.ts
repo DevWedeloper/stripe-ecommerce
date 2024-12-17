@@ -1,6 +1,8 @@
 import { createInsertSchema } from 'drizzle-zod';
 import { addresses, receivers } from 'src/db/schema';
+import { positiveIntSchema } from 'src/schemas/zod-schemas';
 import { createAddress } from 'src/server/use-cases/address/create-address';
+import { getAddressesByUserId } from 'src/server/use-cases/address/get-addresses-by-user-id';
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
 
@@ -24,4 +26,14 @@ export const addressRouter = router({
     .mutation(
       async ({ input: { userId, data } }) => await createAddress(userId, data),
     ),
+
+  getByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        page: positiveIntSchema,
+        pageSize: positiveIntSchema,
+      }),
+    )
+    .query(async ({ input: { userId } }) => await getAddressesByUserId(userId)),
 });
