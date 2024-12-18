@@ -2,6 +2,7 @@ import { createInsertSchema } from 'drizzle-zod';
 import { addresses, receivers } from 'src/db/schema';
 import { positiveIntSchema } from 'src/schemas/zod-schemas';
 import { createAddress } from 'src/server/use-cases/address/create-address';
+import { deleteAddress } from 'src/server/use-cases/address/delete-address';
 import { getAddressesByUserId } from 'src/server/use-cases/address/get-addresses-by-user-id';
 import { setAsDefaultAddress } from 'src/server/use-cases/address/set-as-default-address';
 import { z } from 'zod';
@@ -49,5 +50,18 @@ export const addressRouter = router({
     .mutation(
       async ({ input: { userId, addressId, receiverId } }) =>
         await setAsDefaultAddress(userId, addressId, receiverId),
+    ),
+
+  deleteAddress: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        addressId: positiveIntSchema,
+        receiverId: positiveIntSchema,
+      }),
+    )
+    .mutation(
+      async ({ input: { userId, addressId, receiverId } }) =>
+        await deleteAddress(userId, addressId, receiverId),
     ),
 });
