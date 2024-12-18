@@ -34,11 +34,17 @@ export const findOrCreateAddress = async (
         and city = ${data.city}
         and state = ${data.state}
         and postal_code = ${data.postalCode}
+    ),
+
+    receiver_id as (
+      insert into receivers (full_name)
+      values (${data.fullName})
+      returning id
     )
 
-    insert into user_addresses (user_id, address_id)
-    select ${userId}, id
-    from address_id
+    insert into user_addresses (user_id, address_id, receiver_id)
+    select ${userId}, a.id, r.id
+    from address_id a, receiver_id r
   `;
 
   await db.execute(query);
