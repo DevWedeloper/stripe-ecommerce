@@ -3,6 +3,7 @@ import { addresses, receivers } from 'src/db/schema';
 import { positiveIntSchema } from 'src/schemas/zod-schemas';
 import { createAddress } from 'src/server/use-cases/address/create-address';
 import { getAddressesByUserId } from 'src/server/use-cases/address/get-addresses-by-user-id';
+import { setAsDefaultAddress } from 'src/server/use-cases/address/set-as-default-address';
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
 
@@ -36,4 +37,17 @@ export const addressRouter = router({
       }),
     )
     .query(async ({ input: { userId } }) => await getAddressesByUserId(userId)),
+
+  setAsDefault: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        addressId: positiveIntSchema,
+        receiverId: positiveIntSchema,
+      }),
+    )
+    .mutation(
+      async ({ input: { userId, addressId, receiverId } }) =>
+        await setAsDefaultAddress(userId, addressId, receiverId),
+    ),
 });
