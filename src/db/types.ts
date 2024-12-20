@@ -73,3 +73,13 @@ export type AddressAndReceiverData = {
   receiverId: ReceiverSelect['id'];
   fullName: ReceiverSelect['fullName'];
 };
+
+export type UpdateAddressData = {
+  userId: string;
+  addressId: number;
+  receiverId: number;
+  currentAddressData: AddressInsert;
+  currentReceiverData: ReceiverInsert;
+  newAddressData: AddressInsert;
+  newReceiverData: ReceiverInsert;
+};
