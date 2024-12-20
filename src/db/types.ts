@@ -1,9 +1,13 @@
 import {
   AddressInsert,
+  AddressSelect,
+  CountrySelect,
   ProductImages,
   ProductItems,
   Products,
   ReceiverInsert,
+  ReceiverSelect,
+  UserAddressesSelect,
   VariationOptions,
   Variations,
 } from './schema';
@@ -56,3 +60,16 @@ export type FindOrCreateAddressData = Omit<AddressInsert, 'countryId'> &
   ReceiverInsert & {
     countryCode: string;
   };
+
+export type AddressAndReceiverData = {
+  isDefault: UserAddressesSelect['isDefault'];
+  addressId: AddressSelect['id'];
+  addressLine1: AddressSelect['addressLine1'];
+  addressLine2: AddressSelect['addressLine2'];
+  city: AddressSelect['city'];
+  state: AddressSelect['state'];
+  postalCode: AddressSelect['postalCode'];
+  countryCode: CountrySelect['code'];
+  receiverId: ReceiverSelect['id'];
+  fullName: ReceiverSelect['fullName'];
+};
