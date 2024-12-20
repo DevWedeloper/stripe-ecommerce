@@ -56,10 +56,7 @@ export type CartItemReference = {
   price: number;
 };
 
-export type FindOrCreateAddressData = Omit<AddressInsert, 'countryId'> &
-  ReceiverInsert & {
-    countryCode: string;
-  };
+export type FindOrCreateAddressData = AddressInsert & ReceiverInsert;
 
 export type AddressAndReceiverData = {
   isDefault: UserAddressesSelect['isDefault'];
