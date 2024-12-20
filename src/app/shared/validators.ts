@@ -55,15 +55,3 @@ export const matchPhrase =
     const value = control.value || '';
     return value === expectedPhrase ? null : { matchPhrase: true };
   };
-
-export const charLength =
-  (requiredLength: number) =>
-  (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value || '';
-
-    if (value.length === requiredLength) {
-      return null;
-    }
-
-    return { charLength: { requiredLength } };
-  };
