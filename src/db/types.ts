@@ -67,6 +67,7 @@ export type AddressAndReceiverData = {
   state: AddressSelect['state'];
   postalCode: AddressSelect['postalCode'];
   countryId: CountrySelect['id'];
+  countryCode: CountrySelect['code'];
   receiverId: ReceiverSelect['id'];
   fullName: ReceiverSelect['fullName'];
 };
