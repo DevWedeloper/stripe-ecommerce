@@ -22,6 +22,7 @@ export const getPaginatedAddressesByUserId = async (
       state: addresses.state,
       postalCode: addresses.postalCode,
       countryCode: countries.code,
+      countryId: countries.id,
       receiverId: receivers.id,
       fullName: receivers.fullName,
       totalCount: totalCount,
