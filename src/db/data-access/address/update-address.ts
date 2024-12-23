@@ -2,6 +2,32 @@ import { sql } from 'drizzle-orm';
 import { db } from 'src/db';
 import { addresses, AddressInsert, orders, userAddresses } from 'src/db/schema';
 
+/*
+Overview of Logic:
+--------------------
+1. **Address Update Conditions**:
+    - An address can only be updated if:
+      - The address is associated with only **one** user (`address_user_count = 1`).
+      - The address is not linked to any **orders** (`address_order_count = 0`).
+    - If either of these conditions is violated (i.e., the address is associated with multiple users or orders), a **new address** is created.
+
+2. **Address Already Exists**:
+    - If the address being updated **already exists** (matching the new data), it will be linked to the current user.
+    - The **old address** will be deleted if:
+      - It is still associated with **only one user**.
+      - It is **not associated with any orders**.
+
+3. **Final Address Logic**:
+    - The final address used for the user update will be determined from the following priority:
+      1. If a new address was created, use that.
+      2. If the address was updated, use the updated address.
+      3. If an existing address matches the new data, link to that.
+
+4. **Address Cleanup**:
+    - The original address is only deleted if:
+      - It is no longer associated with any orders.
+      - It is associated with only one user, and that user has moved to another address.
+*/
 export const updateAddress = async (
   userId: string,
   addressId: number,
