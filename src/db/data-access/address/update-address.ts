@@ -23,6 +23,19 @@ export const updateAddress = async (
           as address_order_count
       ),
 
+      existing_address as (
+        select id as existing_address_id
+        from ${addresses}
+        where
+          address_line1 = ${addressData.addressLine1} and
+          address_line2 = ${addressData.addressLine2} and
+          city = ${addressData.city} and
+          state = ${addressData.state} and
+          postal_code = ${addressData.postalCode} and
+          country_id = ${addressData.countryId}
+        limit 1
+      ),
+
       updated_address as (
         update ${addresses}
         set
@@ -34,7 +47,10 @@ export const updateAddress = async (
           country_id = ${addressData.countryId}
         from checks
         where address_user_count = 1 and address_order_count = 0
-        and ${addresses}.id = ${addressId}
+          and ${addresses}.id = ${addressId}
+          and not exists (
+            select 1 from existing_address
+          )
         returning id as updated_address_id
       ),
 
@@ -42,17 +58,41 @@ export const updateAddress = async (
         insert into ${addresses} (address_line1, address_line2, city, state, postal_code, country_id)
         select ${addressData.addressLine1}, ${addressData.addressLine2}, ${addressData.city}, ${addressData.state}, ${addressData.postalCode}, ${addressData.countryId}
         from checks
-        where address_user_count >= 2 or address_order_count > 0
+        where address_user_count > 1 or address_order_count > 0
         returning id as new_address_id
+      ),
+
+      final_address as (
+        select
+          coalesce(
+            (select new_address_id from new_address),
+            (select updated_address_id from updated_address),
+            (select existing_address_id from existing_address)
+          ) as final_address_id
+      ),
+
+      user_address_update as (
+        update ${userAddresses}
+        set
+          address_id = (select final_address_id from final_address)
+        where
+          user_id = ${userId}
+          and address_id = ${addressId}
+          and receiver_id = ${receiverId}
+        returning address_id as updated_address_id
+      ),
+
+      delete_unused_address as (
+        delete from ${addresses}
+        using checks
+        where
+          ${addresses}.id = ${addressId}
+          and checks.address_user_count = 1
+          and checks.address_order_count = 0
+          and (select final_address_id from final_address) != ${addressId}
       )
 
-      update ${userAddresses}
-      set
-        address_id = coalesce((select new_address_id from new_address), ${addressId})
-      where
-        user_id = ${userId} and
-        address_id = ${addressId} and
-        receiver_id = ${receiverId};
+      select * from user_address_update;
       `,
   );
 };
