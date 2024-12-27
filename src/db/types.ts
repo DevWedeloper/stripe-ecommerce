@@ -58,6 +58,11 @@ export type CartItemReference = {
 
 export type AddressAndReceiverInsert = AddressInsert & ReceiverInsert;
 
+export type AddressReceiverLink = {
+  addressId: AddressSelect['id'];
+  receiverId: ReceiverSelect['id'];
+} & AddressAndReceiverInsert;
+
 export type AddressAndReceiverData = {
   isDefault: UserAddressesSelect['isDefault'];
   addressId: AddressSelect['id'];
