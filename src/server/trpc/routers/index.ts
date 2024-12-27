@@ -1,5 +1,5 @@
 import { router } from '../trpc';
-import { addressRouter } from './address';
+import { addressRouter } from './addresses';
 import { authRouter } from './auth';
 import { categoriesRouter } from './categories';
 import { countriesRouter } from './countries';
