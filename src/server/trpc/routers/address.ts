@@ -14,16 +14,9 @@ export const addressRouter = router({
     .input(
       z.object({
         userId: z.string(),
-        data: createInsertSchema(addresses)
-          .omit({ countryId: true })
-          .merge(
-            z.object({
-              countryCode: z.string().refine((val) => val.length === 2, {
-                message: `String must be exactly 2 characters long`,
-              }),
-            }),
-          )
-          .merge(createInsertSchema(receivers)),
+        data: createInsertSchema(addresses).merge(
+          createInsertSchema(receivers),
+        ),
       }),
     )
     .mutation(
