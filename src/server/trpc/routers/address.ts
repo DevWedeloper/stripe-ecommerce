@@ -31,7 +31,10 @@ export const addressRouter = router({
         pageSize: positiveIntSchema,
       }),
     )
-    .query(async ({ input: { userId } }) => await getAddressesByUserId(userId)),
+    .query(
+      async ({ input: { userId, page, pageSize } }) =>
+        await getAddressesByUserId(userId, page, pageSize),
+    ),
 
   setAsDefault: publicProcedure
     .input(
