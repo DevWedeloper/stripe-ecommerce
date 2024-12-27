@@ -7,6 +7,14 @@ import {
   userAddresses,
 } from 'src/db/schema';
 
+/*
+Overview of Logic:
+--------------------
+1. **Receiver Update Conditions**:
+   - A receiver can only be updated if:
+     - The receiver is **not yet linked to any orders** (`receiver_order_count = 0`).
+   - If this condition is violated (i.e., the receiver is already linked to orders), a **new receiver field** is created.
+*/
 export const updateReceiver = async (
   userId: string,
   addressId: number,
