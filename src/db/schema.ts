@@ -88,6 +88,8 @@ export const userAddresses = pgTable(
       .on(t.userId, t.addressId, t.isDefault)
       .where(sql`(${t.isDefault} = true)`),
     unique('unique_receiver_id').on(t.receiverId),
+    index('user_addresses_user_id_idx').on(t.userId),
+    index('user_addresses_address_id_idx').on(t.addressId),
   ],
 );
 
@@ -99,31 +101,42 @@ export const orderStatusEnum = pgEnum('order_status', [
   'Cancelled',
 ]);
 
-export const orders = pgTable('orders', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  userId: uuid('user_id').references(() => users.id),
-  orderDate: timestamp('order_date').notNull(),
-  shippingAddressId: integer('shipping_address_id')
-    .references(() => addresses.id)
-    .notNull(),
-  receiverId: integer('receiver_id')
-    .references(() => receivers.id)
-    .notNull(),
-  total: integer('total').notNull(),
-  status: orderStatusEnum('status').notNull().default('Pending'),
-});
+export const orders = pgTable(
+  'orders',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    userId: uuid('user_id').references(() => users.id),
+    orderDate: timestamp('order_date').notNull(),
+    shippingAddressId: integer('shipping_address_id')
+      .references(() => addresses.id)
+      .notNull(),
+    receiverId: integer('receiver_id')
+      .references(() => receivers.id)
+      .notNull(),
+    total: integer('total').notNull(),
+    status: orderStatusEnum('status').notNull().default('Pending'),
+  },
+  (t) => [index('orders_user_id_idx').on(t.userId)],
+);
 
-export const orderItems = pgTable('order_items', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  productItemId: integer('product_item_id')
-    .references(() => productItems.id)
-    .notNull(),
-  orderId: integer('order_id')
-    .references(() => orders.id)
-    .notNull(),
-  quantity: integer('quantity').notNull(),
-  price: integer('price').notNull(),
-});
+export const orderItems = pgTable(
+  'order_items',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    productItemId: integer('product_item_id')
+      .references(() => productItems.id)
+      .notNull(),
+    orderId: integer('order_id')
+      .references(() => orders.id)
+      .notNull(),
+    quantity: integer('quantity').notNull(),
+    price: integer('price').notNull(),
+  },
+  (t) => [
+    index('order_items_order_id_idx').on(t.orderId),
+    index('order_items_product_item_id_idx').on(t.productItemId),
+  ],
+);
 
 export const products = pgTable(
   'products',
