@@ -56,7 +56,7 @@ export type CartItemReference = {
   price: number;
 };
 
-export type FindOrCreateAddressData = AddressInsert & ReceiverInsert;
+export type AddressAndReceiverInsert = AddressInsert & ReceiverInsert;
 
 export type AddressAndReceiverData = {
   isDefault: UserAddressesSelect['isDefault'];
