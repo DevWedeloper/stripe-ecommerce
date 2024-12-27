@@ -8,7 +8,7 @@ import { stripeRouter } from './stripe';
 
 export const appRouter = router({
   countries: countriesRouter,
-  address: addressRouter,
+  addresses: addressRouter,
   products: productsRouter,
   categories: categoriesRouter,
   stripe: stripeRouter,
