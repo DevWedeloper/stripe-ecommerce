@@ -38,6 +38,7 @@
     "@spartan-ng/ui-label-brain": "0.0.1-alpha.357",
     "@spartan-ng/ui-menu-brain": "0.0.1-alpha.357",
     "@spartan-ng/ui-popover-brain": "0.0.1-alpha.357",
+    "@spartan-ng/ui-radiogroup-brain": "0.0.1-alpha.357",
     "@spartan-ng/ui-select-brain": "0.0.1-alpha.357",
     "@spartan-ng/ui-sheet-brain": "0.0.1-alpha.357",
     "@stripe/stripe-js": "^5.2.0",

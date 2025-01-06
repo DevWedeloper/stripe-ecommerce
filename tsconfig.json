@@ -87,6 +87,9 @@
       ],
       "@spartan-ng/ui-breadcrumb-helm": [
         "./libs/ui/ui-breadcrumb-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-radiogroup-helm": [
+        "./libs/ui/ui-radiogroup-helm/src/index.ts"
       ]
     }
   },
