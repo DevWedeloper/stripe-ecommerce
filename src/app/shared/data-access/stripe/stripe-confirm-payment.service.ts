@@ -94,6 +94,8 @@ export class StripeConfirmPaymentService {
   private error = toSignal(this.confirmPaymentError$, { initialValue: null });
 
   isLoading = computed(() => this.status() === 'loading');
+  isSuccessful = computed(() => this.status() === 'success');
+  hasError = computed(() => this.status() === 'error');
 
   errorMessage = computed(() => this.error()?.message);
 
