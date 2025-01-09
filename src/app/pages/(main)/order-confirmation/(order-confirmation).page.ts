@@ -64,7 +64,7 @@ export const routeMeta: RouteMeta = {
 
       <button
         hlmBtnWithLoading
-        class="mx-auto mt-2 block w-fit"
+        class="mx-auto mt-2"
         (click)="pay()"
         [disabled]="isLoading()"
         [isLoading]="isLoading()"
