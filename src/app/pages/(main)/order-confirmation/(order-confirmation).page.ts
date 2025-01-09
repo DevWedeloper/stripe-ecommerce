@@ -49,7 +49,7 @@ export const routeMeta: RouteMeta = {
   template: `
     <app-go-back-button path="/checkout" text="Go back to Checkout" />
 
-    <div class="border-t border-border p-4">
+    <div class="flex flex-col border-t border-border p-4">
       <h1 class="${hlmH1} mb-4 text-center">Confirm your order</h1>
 
       <h3 class="${hlmH3} mb-2 font-bold">Cart</h3>
