@@ -182,7 +182,7 @@ export class ShoppingCartService {
       return;
     }
 
-    const { data, error } = cartSchema.safeParse(parsedCart);
+    const { error } = cartSchema.safeParse(parsedCart);
 
     if (error) {
       this.clearCartStorage();
