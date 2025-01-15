@@ -7,7 +7,6 @@ import {
   HlmDialogHeaderComponent,
   HlmDialogTitleDirective,
 } from '@spartan-ng/ui-dialog-helm';
-import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
 
 @Component({
   selector: 'app-confirm-navigation',
@@ -38,7 +37,6 @@ import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.se
 })
 export class ConfirmNavigationComponent {
   private _dialogRef = inject(BrnDialogRef);
-  private shoppingCartService = inject(ShoppingCartService);
 
   protected cancel(): void {
     this._dialogRef.close(false);
@@ -46,6 +44,5 @@ export class ConfirmNavigationComponent {
 
   protected forward(): void {
     this._dialogRef.close(true);
-    this.shoppingCartService.setEditable(true);
   }
 }

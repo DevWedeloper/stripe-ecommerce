@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
@@ -34,10 +35,14 @@ export const routeMeta: RouteMeta = {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class CheckoutPageComponent implements OnInit {
+export default class CheckoutPageComponent implements OnInit, OnDestroy {
   private shoppingCartService = inject(ShoppingCartService);
 
   ngOnInit(): void {
     this.shoppingCartService.setEditable(false);
+  }
+
+  ngOnDestroy(): void {
+    this.shoppingCartService.setEditable(true);
   }
 }

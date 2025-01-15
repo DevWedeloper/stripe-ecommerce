@@ -1,5 +1,11 @@
 import { RouteMeta } from '@analogjs/router';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { HlmDialogService } from '@spartan-ng/ui-dialog-helm';
 import { hlmH1, hlmH3 } from '@spartan-ng/ui-typography-helm';
 import { of } from 'rxjs';
@@ -75,7 +81,9 @@ export const routeMeta: RouteMeta = {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class OrderConfirmationPageComponent {
+export default class OrderConfirmationPageComponent
+  implements OnInit, OnDestroy
+{
   private shoppingCartService = inject(ShoppingCartService);
   private stripeConfirmPaymentService = inject(StripeConfirmPaymentService);
 
@@ -83,6 +91,14 @@ export default class OrderConfirmationPageComponent {
 
   protected cart = this.shoppingCartService.getCart;
   protected total = this.shoppingCartService.total;
+
+  ngOnInit(): void {
+    this.shoppingCartService.setEditable(false);
+  }
+
+  ngOnDestroy(): void {
+    this.shoppingCartService.setEditable(true);
+  }
 
   protected pay(): void {
     this.stripeConfirmPaymentService.confirmPayment();

@@ -1,10 +1,5 @@
 import { RouteMeta } from '@analogjs/router';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
 import { lucideCheck } from '@ng-icons/lucide';
@@ -16,7 +11,6 @@ import {
 } from '@spartan-ng/ui-alert-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
 import { StripeConfirmPaymentService } from 'src/app/shared/data-access/stripe/stripe-confirm-payment.service';
 
 export const routeMeta: RouteMeta = {
@@ -51,10 +45,4 @@ export const routeMeta: RouteMeta = {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class OrderSuccessPageComponent implements OnInit {
-  private shoppingCartService = inject(ShoppingCartService);
-
-  ngOnInit(): void {
-    this.shoppingCartService.setEditable(true);
-  }
-}
+export default class OrderSuccessPageComponent {}
