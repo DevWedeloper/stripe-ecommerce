@@ -56,7 +56,7 @@ import { AuthService } from '../../data-access/auth.service';
     <ng-template #accountTpl>
       <hlm-menu class="w-40">
         @if (user()) {
-          <a hlmMenuItem routerLink="/account">
+          <a hlmMenuItem routerLink="/user">
             <hlm-icon name="lucideSettings" hlmMenuIcon />
             <span>Settings</span>
           </a>
