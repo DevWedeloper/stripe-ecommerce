@@ -32,7 +32,10 @@ export class StripePaymentIntentService {
         totalAmountInCents: convertToCents(this.total()),
         userId: this.user()?.id ?? null,
         orderDate: new Date(),
-        cart: this.cart(),
+        cart: this.cart().map(({ userId, ...rest }) => ({
+          sellerUserId: userId,
+          ...rest,
+        })),
       }),
     ),
   );
