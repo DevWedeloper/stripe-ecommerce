@@ -2,6 +2,8 @@ import {
   AddressInsert,
   AddressSelect,
   CountrySelect,
+  OrderItemsSelect,
+  OrderSelect,
   ProductImages,
   ProductItems,
   Products,
@@ -86,4 +88,8 @@ export type UpdateAddressData = {
   currentReceiverData: ReceiverInsert;
   newAddressData: AddressInsert;
   newReceiverData: ReceiverInsert;
+};
+
+export type OrderWithItems = OrderSelect & {
+  orderItems: OrderItemsSelect[];
 };
