@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
 
 const cartItemSchema = z.object({
+  sellerUserId: z.string(),
   productItemId: z.number(),
   sku: z.string(),
   quantity: z.number(),
