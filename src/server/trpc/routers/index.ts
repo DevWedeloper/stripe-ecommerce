@@ -3,12 +3,14 @@ import { addressRouter } from './addresses';
 import { authRouter } from './auth';
 import { categoriesRouter } from './categories';
 import { countriesRouter } from './countries';
+import { ordersRouter } from './orders';
 import { productsRouter } from './products';
 import { stripeRouter } from './stripe';
 
 export const appRouter = router({
   countries: countriesRouter,
   addresses: addressRouter,
+  orders: ordersRouter,
   products: productsRouter,
   categories: categoriesRouter,
   stripe: stripeRouter,
