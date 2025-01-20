@@ -13,30 +13,58 @@ type CreateOrder = {
 };
 
 export const createOrder = async (data: CreateOrder): Promise<void> => {
+  const groupedBySeller = data.productItems.reduce(
+    (acc, item) => {
+      if (!acc[item.sellerUserId]) {
+        acc[item.sellerUserId] = [];
+      }
+      acc[item.sellerUserId].push(item);
+      return acc;
+    },
+    {} as Record<string, CartItemReference[]>,
+  );
+
+  const ordersToInsert = Object.keys(groupedBySeller).map((sellerUserId) => {
+    const sellerItems = groupedBySeller[sellerUserId];
+    return {
+      userId: data.userId,
+      orderDate: data.orderDate,
+      shippingAddressId: data.shippingAddressId,
+      receiverId: data.receiverId,
+      total: sellerItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      ),
+    };
+  });
+
+  const orderItemsToInsert = Object.keys(groupedBySeller).flatMap(
+    (sellerUserId) => {
+      const sellerItems = groupedBySeller[sellerUserId];
+      return sellerItems.map((item) => ({
+        productItemId: item.productItemId,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+    },
+  );
+
+  const productItemIdsToUpdate = orderItemsToInsert.map(
+    (item) => item.productItemId,
+  );
+
   await db.transaction(async (trx) => {
-    const [order] = await trx
+    const ordersResult = await trx
       .insert(orders)
-      .values({
-        userId: data.userId,
-        orderDate: data.orderDate,
-        shippingAddressId: data.shippingAddressId,
-        receiverId: data.receiverId,
-        total: data.total,
-      })
+      .values(ordersToInsert)
       .returning({ id: orders.id });
 
-    const orderItemsData = data.productItems.map((item) => ({
-      productItemId: item.productItemId,
-      orderId: order.id,
-      quantity: item.quantity,
-      price: item.price,
+    const orderItemsWithOrderId = orderItemsToInsert.map((item, index) => ({
+      ...item,
+      orderId: ordersResult[index].id,
     }));
 
-    await trx.insert(orderItems).values(orderItemsData);
-
-    const orderItemsIds = orderItemsData.map(
-      ({ productItemId }) => productItemId,
-    );
+    await trx.insert(orderItems).values(orderItemsWithOrderId);
 
     await trx
       .update(productItems)
@@ -47,7 +75,7 @@ export const createOrder = async (data: CreateOrder): Promise<void> => {
       .where(
         and(
           eq(productItems.id, orderItems.productItemId),
-          inArray(orderItems.productItemId, orderItemsIds),
+          inArray(orderItems.productItemId, productItemIdsToUpdate),
         ),
       );
   });
