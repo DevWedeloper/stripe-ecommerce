@@ -1,5 +1,6 @@
 import {
   AddressAndReceiverData,
+  OrderWithItems,
   ProductWithImageAndPricing,
 } from 'src/db/types';
 
@@ -17,4 +18,12 @@ export type PaginatedAddressesAndReceivers = {
   totalPages: number;
   totalAddresses: number;
   addresses: AddressAndReceiverData[];
+};
+
+export type PaginatedOrdersWithItems = {
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  totalOrders: number;
+  orders: OrderWithItems[];
 };
