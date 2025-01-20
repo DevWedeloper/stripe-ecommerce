@@ -80,7 +80,6 @@ export class ProductListsService {
     distinctUntilChanged(
       (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr),
     ),
-    share(),
   );
 
   private products$ = this.filter$.pipe(
