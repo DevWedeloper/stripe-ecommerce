@@ -32,7 +32,7 @@ export type ProductDetails = Omit<Products, 'userId'> &
     variations: Record<string, string[]>;
   };
 
-export type ProductWithImageAndPricing = Omit<Products, 'userId'> &
+export type ProductWithImageAndPricing = Products &
   NullishImageObject & { lowestPrice: number };
 
 export type ProductItemObject = {
