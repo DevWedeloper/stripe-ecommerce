@@ -4,14 +4,21 @@ import { Router } from '@angular/router';
 import { StripeService } from 'ngx-stripe';
 import {
   Subject,
+  defer,
   filter,
+  iif,
   map,
   materialize,
   merge,
+  of,
   share,
   switchMap,
+  withLatestFrom,
 } from 'rxjs';
+import { TrpcClient } from 'src/trpc-client';
 import { errorStream, statusStream, successStream } from '../../utils/rxjs';
+import { FinalizedAddressService } from '../address/finalized-address.service';
+import { GetAddressCheckoutService } from '../address/get-address-checkout.service';
 import { ShoppingCartService } from '../shopping-cart.service';
 import { StripeConfirmationTokenService } from './stripe-confirmation-token.service';
 import { StripePaymentIntentService } from './stripe-payment-intent.service';
@@ -21,16 +28,75 @@ import { StripePaymentIntentService } from './stripe-payment-intent.service';
 })
 export class StripeConfirmPaymentService {
   private router = inject(Router);
+  private _trpc = inject(TrpcClient);
   private stripeService = inject(StripeService);
+  private stripeConfirmationTokenService = inject(
+    StripeConfirmationTokenService,
+  );
+  private stripePaymentIntentService = inject(StripePaymentIntentService);
   private shoppingCartService = inject(ShoppingCartService);
+  private getAddressCheckoutService = inject(GetAddressCheckoutService);
+  private finalizedAddressService = inject(FinalizedAddressService);
 
   private confirmPaymentTrigger$ = new Subject<void>();
 
-  private clientSecret = inject(StripePaymentIntentService).clientSecret;
-  private confirmationTokenId = inject(StripeConfirmationTokenService)
-    .confirmationTokenId;
+  private selectedAddress$ = this.getAddressCheckoutService.selectedAddress$;
+  private finalizedAddress$ = this.finalizedAddressService.address$;
+  private paymentIntentId$ = this.stripePaymentIntentService.paymentIntentId$;
+  private paymentIntentMetadata$ =
+    this.stripePaymentIntentService.paymentIntentMetadata$;
+
+  private clientSecret = this.stripePaymentIntentService.clientSecret;
+  private confirmationTokenId =
+    this.stripeConfirmationTokenService.confirmationTokenId;
 
   private confirmPayment$ = this.confirmPaymentTrigger$.pipe(
+    withLatestFrom(this.selectedAddress$, this.finalizedAddress$),
+    switchMap(([_, selectedAddress, finalizedAddress]) =>
+      iif(
+        () => !!selectedAddress,
+        defer(() =>
+          of(
+            (() => {
+              if (!selectedAddress) {
+                throw new Error(
+                  'Selected address cannot be null or undefined.',
+                );
+              }
+
+              return {
+                addressId: selectedAddress.addressId,
+                receiverId: selectedAddress.receiverId,
+              };
+            })(),
+          ),
+        ),
+        defer(() =>
+          this._trpc.addresses.createAddressWithoutUser.mutate(
+            (() => {
+              if (!finalizedAddress) {
+                throw new Error(
+                  'Finalized address cannot be null or undefined.',
+                );
+              }
+
+              return finalizedAddress;
+            })(),
+          ),
+        ),
+      ),
+    ),
+    withLatestFrom(this.paymentIntentId$, this.paymentIntentMetadata$),
+    switchMap(([{ addressId, receiverId }, id, metadata]) =>
+      this._trpc.stripe.updatePaymentIntentMetadata.mutate({
+        id,
+        metadata: {
+          ...metadata,
+          addressId: addressId,
+          receiverId: receiverId,
+        },
+      }),
+    ),
     map(() => {
       const clientSecret = this.clientSecret();
       const confirmationTokenId = this.confirmationTokenId();

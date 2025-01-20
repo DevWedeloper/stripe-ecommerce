@@ -1,6 +1,7 @@
 import { computed, effect, inject, Injectable } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { ConfirmationToken } from '@stripe/stripe-js';
 import { StripePaymentElementComponent, StripeService } from 'ngx-stripe';
 import {
   filter,
@@ -21,22 +22,25 @@ export class StripeConfirmationTokenService {
   private router = inject(Router);
   private stripeService = inject(StripeService);
 
-  private createConfirmationToken$ = new Subject<void>();
+  private createConfirmationToken$ = new Subject<ConfirmationToken.Shipping>();
   private paymentElement$ = new Subject<
     StripePaymentElementComponent | undefined
   >();
 
   private confirmationToken$ = this.createConfirmationToken$.pipe(
     withLatestFrom(this.paymentElement$),
-    map(([_, paymentElement]) => {
+    map(([shipping, paymentElement]) => {
       if (!paymentElement) {
         throw new Error('Payment element is undefined.');
       }
-      return { paymentElement };
+      return { shipping, paymentElement };
     }),
-    switchMap(({ paymentElement }) =>
+    switchMap(({ shipping, paymentElement }) =>
       this.stripeService.createConfirmationToken({
         elements: paymentElement.elements,
+        params: {
+          shipping,
+        },
       }),
     ),
     materialize(),
@@ -119,8 +123,8 @@ export class StripeConfirmationTokenService {
     });
   }
 
-  createConfirmationToken(): void {
-    this.createConfirmationToken$.next();
+  createConfirmationToken(data: ConfirmationToken.Shipping): void {
+    this.createConfirmationToken$.next(data);
   }
 
   setPaymentElement(
