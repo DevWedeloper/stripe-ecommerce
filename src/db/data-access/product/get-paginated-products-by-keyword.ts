@@ -76,6 +76,7 @@ export const getPaginatedProductsByKeyword = async (
     .with(productsQuery, thumbnailQuery, productLowestPricesQuery)
     .select({
       id: productsQuery.id,
+      sellerUserId: productsQuery.userId,
       name: productsQuery.name,
       description: productsQuery.description,
       currency: productsQuery.currency,
