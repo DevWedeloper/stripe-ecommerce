@@ -94,6 +94,7 @@ export default class ProductDetailPageComponent {
 
     this.shoppingCartService.addToCart({
       name: product.name,
+      userId: product.userId,
       description: product.description,
       currency: product.currency,
       imagePath: product.imagePath,
