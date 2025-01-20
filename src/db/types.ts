@@ -25,7 +25,7 @@ export type ImageObject = {
   placeholder: ProductImages['placeholder'];
 };
 
-export type ProductDetails = Omit<Products, 'userId'> &
+export type ProductDetails = Products &
   NullishImageObject & {
     items: ProductItemObject[];
     imageObjects: ImageObject[];
