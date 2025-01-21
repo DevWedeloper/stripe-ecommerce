@@ -300,6 +300,7 @@ export type AddressInsert = InferInsertModel<typeof addresses>;
 export type ReceiverSelect = InferSelectModel<typeof receivers>;
 export type ReceiverInsert = InferInsertModel<typeof receivers>;
 export type UserAddressesSelect = InferSelectModel<typeof userAddresses>;
+export type OrderStatusEnum = (typeof orderStatusEnum.enumValues)[number];
 export type OrderSelect = InferSelectModel<typeof orders>;
 export type OrderItemsSelect = InferSelectModel<typeof orderItems>;
 export type Products = InferSelectModel<typeof products>;
