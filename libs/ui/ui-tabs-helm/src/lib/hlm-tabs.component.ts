@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { BrnTabsDirective } from '@spartan-ng/brain/tabs';
+import { BrnTabsDirective } from '@spartan-ng/ui-tabs-brain';
 
 @Component({
   selector: 'hlm-tabs',

@@ -12,7 +12,7 @@ import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 import {
   BrnTabsPaginatedListDirective,
   BrnTabsTriggerDirective,
-} from '@spartan-ng/brain/tabs';
+} from '@spartan-ng/ui-tabs-brain';
 import { buttonVariants } from '@spartan-ng/ui-button-helm';
 import { hlm } from '@spartan-ng/ui-core';
 import { HlmIconComponent, provideIcons } from '@spartan-ng/ui-icon-helm';
