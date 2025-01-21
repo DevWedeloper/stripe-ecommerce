@@ -90,6 +90,9 @@
       ],
       "@spartan-ng/ui-radiogroup-helm": [
         "./libs/ui/ui-radiogroup-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-tabs-helm": [
+        "./libs/ui/ui-tabs-helm/src/index.ts"
       ]
     }
   },
