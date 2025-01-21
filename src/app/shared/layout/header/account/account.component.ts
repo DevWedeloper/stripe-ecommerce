@@ -18,7 +18,7 @@ import {
   HlmMenuSeparatorComponent,
 } from '@spartan-ng/ui-menu-helm';
 import { SignOutService } from './sign-out.service';
-import { AuthService } from '../../data-access/auth.service';
+import { AuthService } from '../../../data-access/auth.service';
 
 @Component({
   selector: 'app-account',

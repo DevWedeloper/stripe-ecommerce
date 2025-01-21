@@ -2,9 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { filter, map, materialize, merge, share } from 'rxjs';
-import { AuthService } from '../../data-access/auth.service';
-import { errorStream, successStream } from '../../utils/rxjs';
-import { showError } from '../../utils/toast';
+import { AuthService } from '../../../data-access/auth.service';
+import { errorStream, successStream } from '../../../utils/rxjs';
+import { showError } from '../../../utils/toast';
 
 @Injectable({
   providedIn: 'root',

@@ -10,8 +10,8 @@ import { lucideList, lucideSearch } from '@ng-icons/lucide';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { AppService } from '../shared/data-access/app.service';
-import { FooterComponent } from '../shared/footer/footer.component';
-import { HeaderComponent } from '../shared/header/header.component';
+import { FooterComponent } from '../shared/layout/footer/footer.component';
+import { HeaderComponent } from '../shared/layout/header/header.component';
 
 @Component({
   selector: 'app-home',

@@ -10,7 +10,7 @@ import {
   HlmMenuItemCheckComponent,
   HlmMenuItemCheckboxDirective,
 } from '@spartan-ng/ui-menu-helm';
-import { DarkMode, ThemeService } from '../ui/theme.service';
+import { DarkMode, ThemeService } from '../../ui/theme.service';
 
 @Component({
   selector: 'app-dark-mode',
