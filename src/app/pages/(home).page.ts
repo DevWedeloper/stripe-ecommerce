@@ -1,8 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
 import { lucideList, lucideSearch } from '@ng-icons/lucide';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { AppService } from '../shared/data-access/app.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 
@@ -60,4 +67,19 @@ import { HeaderComponent } from '../shared/header/header.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class HomePageComponent {}
+export default class HomePageComponent {
+  private router = inject(Router);
+  private appService = inject(AppService);
+
+  constructor() {
+    effect(() => {
+      const clearUrl = this.appService.clearUrl();
+      if (clearUrl) {
+        this.router.navigate([], {
+          queryParams: null,
+          fragment: undefined,
+        });
+      }
+    });
+  }
+}
