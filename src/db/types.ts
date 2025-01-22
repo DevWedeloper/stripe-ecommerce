@@ -91,5 +91,5 @@ export type UpdateAddressData = {
 };
 
 export type OrderWithItems = OrderSelect & {
-  orderItems: OrderItemsSelect[];
+  items: OrderItemsSelect[];
 };
