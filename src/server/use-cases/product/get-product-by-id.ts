@@ -1,5 +1,6 @@
 import { getProductById as fetchProductById } from 'src/db/data-access/product/get-product-by-id';
 import { ProductDetails } from 'src/db/types';
+import { reduceToRecord } from '../utils/record';
 import { sortByOrder } from '../utils/sort';
 
 export const getProductById = async (
@@ -15,13 +16,7 @@ export const getProductById = async (
 
   const product = {
     ...result,
-    variations: sortedVariations.reduce<Record<string, string[]>>(
-      (acc, { name: key, value }) => ({
-        ...acc,
-        [key]: acc[key] ? [...acc[key], value] : [value],
-      }),
-      {},
-    ),
+    variations: reduceToRecord(sortedVariations),
   };
 
   return product;
