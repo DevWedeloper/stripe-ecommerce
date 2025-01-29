@@ -1,5 +1,6 @@
 import { getProductById as fetchProductById } from 'src/db/data-access/product/get-product-by-id';
 import { ProductDetails } from 'src/db/types';
+import { sortByOrder } from '../utils/sort';
 
 export const getProductById = async (
   id: number,
@@ -10,11 +11,7 @@ export const getProductById = async (
     return null;
   }
 
-  const sortedVariations = result.variations.sort((a, b) => {
-    if (a.order === null) return 1;
-    if (b.order === null) return -1;
-    return a.order - b.order;
-  });
+  const sortedVariations = sortByOrder(result.variations);
 
   const product = {
     ...result,
