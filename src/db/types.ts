@@ -93,6 +93,6 @@ export type UpdateAddressData = {
 export type OrderWithItems = OrderSelect & {
   items: (OrderItemsSelect & {
     name: Products['name'];
-    variations: Record<string, string[]>;
+    variations: VariationObject[];
   })[];
 };
