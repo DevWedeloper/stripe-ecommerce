@@ -90,9 +90,11 @@ export type UpdateAddressData = {
   newReceiverData: ReceiverInsert;
 };
 
+export type OrderItemWithVariations = OrderItemsSelect & {
+  name: Products['name'];
+  variations: VariationObject[];
+};
+
 export type OrderWithItems = OrderSelect & {
-  items: (OrderItemsSelect & {
-    name: Products['name'];
-    variations: VariationObject[];
-  })[];
+  items: OrderItemWithVariations[];
 };
