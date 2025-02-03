@@ -27,14 +27,14 @@ export type ImageObject = {
   placeholder: ProductImages['placeholder'];
 };
 
-export type ProductDetails = Products &
+export type ProductDetails = Omit<Products, 'isDeleted'> &
   NullishImageObject & {
     items: ProductItemObject[];
     imageObjects: ImageObject[];
     variations: Record<string, string[]>;
   };
 
-export type ProductWithImageAndPricing = Products &
+export type ProductWithImageAndPricing = Omit<Products, 'isDeleted'> &
   NullishImageObject & { lowestPrice: number };
 
 export type ProductItemObject = {
