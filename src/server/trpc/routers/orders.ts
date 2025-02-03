@@ -1,3 +1,21 @@
-import { router } from '../trpc';
+import { createSelectSchema } from 'drizzle-zod';
+import { orderStatusEnum } from 'src/db/schema';
+import { getOrdersByUserId } from 'src/server/use-cases/order/get-orders-by-user-id';
+import { z } from 'zod';
+import { publicProcedure, router } from '../trpc';
 
-export const ordersRouter = router({});
+export const ordersRouter = router({
+  getByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        page: z.number(),
+        pageSize: z.number(),
+        status: z.optional(createSelectSchema(orderStatusEnum)),
+      }),
+    )
+    .query(
+      async ({ input: { userId, page, pageSize, status } }) =>
+        await getOrdersByUserId(userId, page, pageSize, status),
+    ),
+});
