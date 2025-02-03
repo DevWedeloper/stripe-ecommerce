@@ -4,6 +4,9 @@ import { hlmMuted } from '@spartan-ng/ui-typography-helm';
 @Component({
   selector: 'app-empty-order-lists',
   standalone: true,
+  host: {
+    class: 'flex flex-col items-center justify-center',
+  },
   template: `
     <img
       src="/empty-product-lists.svg"
