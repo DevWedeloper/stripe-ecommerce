@@ -3,32 +3,34 @@ import {
   Component,
   input,
   output,
+  viewChild,
 } from '@angular/core';
+import { FormControlStatus, FormGroup } from '@angular/forms';
 import {
-  StripeAddressElementChangeEvent,
-  StripeAddressElementOptions,
   StripeElementsOptions,
   StripeLinkAuthenticationElementChangeEvent,
+  StripeLinkAuthenticationElementOptions,
   StripePaymentElementChangeEvent,
   StripePaymentElementOptions,
 } from '@stripe/stripe-js';
 import {
-  StripeAddressComponent,
   StripeElementsDirective,
   StripeLinkAuthenticationComponent,
   StripePaymentElementComponent,
   StripeServiceInterface,
 } from 'ngx-stripe';
 import { HlmButtonWithLoadingComponent } from 'src/app/shared/ui/hlm-button-with-loading.component';
+import { CountrySelect } from 'src/db/schema';
+import { AddressFormCheckoutComponent } from './address-form-checkout.component';
 
 @Component({
   selector: 'app-shipping-details-form',
   standalone: true,
   imports: [
+    AddressFormCheckoutComponent,
     StripeElementsDirective,
     StripePaymentElementComponent,
     StripeLinkAuthenticationComponent,
-    StripeAddressComponent,
     HlmButtonWithLoadingComponent,
   ],
   template: `
@@ -36,10 +38,14 @@ import { HlmButtonWithLoadingComponent } from 'src/app/shared/ui/hlm-button-with
       [stripe]="stripe()"
       [elementsOptions]="elementsOptions()"
     >
-      <ngx-stripe-link-authentication (change)="emailChange.emit($event)" />
-      <ngx-stripe-address
-        [options]="shippingAddressOptions()"
-        (change)="shippingAddressChange.emit($event)"
+      <app-address-form-checkout
+        [form]="form()"
+        [countries]="countries()"
+        (statusChanges)="statusChange.emit($event)"
+      />
+      <ngx-stripe-link-authentication
+        [options]="linkAuthenticationOptions()"
+        (change)="emailChange.emit($event)"
       />
       <ngx-stripe-payment
         [options]="paymentElementOptions()"
@@ -59,14 +65,20 @@ import { HlmButtonWithLoadingComponent } from 'src/app/shared/ui/hlm-button-with
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShippingDetailsFormComponent {
+  form = input.required<FormGroup>();
+  countries = input.required<CountrySelect[]>();
   stripe = input.required<StripeServiceInterface>();
   elementsOptions = input.required<StripeElementsOptions>();
-  shippingAddressOptions = input.required<StripeAddressElementOptions>();
+  linkAuthenticationOptions =
+    input.required<StripeLinkAuthenticationElementOptions>();
   paymentElementOptions = input.required<StripePaymentElementOptions>();
   isLoading = input.required<boolean>();
   disabled = input.required<boolean>();
+  statusChange = output<FormControlStatus>();
   emailChange = output<StripeLinkAuthenticationElementChangeEvent>();
-  shippingAddressChange = output<StripeAddressElementChangeEvent>();
   paymentChange = output<StripePaymentElementChangeEvent>();
   completePurchase = output<void>();
+
+  elements = viewChild.required(StripeElementsDirective);
+  paymentElement = viewChild.required(StripePaymentElementComponent);
 }
