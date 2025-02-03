@@ -143,11 +143,12 @@ export const products = pgTable(
   {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     userId: uuid('user_id')
-      .references(() => users.id, { onDelete: 'cascade' })
+      .references(() => users.id)
       .notNull(),
     name: text('name').notNull(),
     description: text('description').notNull(),
     currency: char('currency', { length: 3 }).notNull(),
+    isDeleted: boolean('is_deleted').default(false).notNull()
   },
   (t) => [
     index('search_index').using(
@@ -165,7 +166,7 @@ export const productItems = pgTable(
   {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     productId: integer('product_id')
-      .references(() => products.id, { onDelete: 'cascade' })
+      .references(() => products.id)
       .notNull(),
     sku: text('sku').notNull(),
     stock: integer('stock').notNull(),
@@ -183,7 +184,7 @@ export const productImages = pgTable(
   {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     productId: integer('product_id')
-      .references(() => products.id, { onDelete: 'cascade' })
+      .references(() => products.id)
       .notNull(),
     imagePath: text('image_path').notNull(),
     placeholder: text('placeholder').notNull(),
@@ -218,10 +219,10 @@ export const productCategories = pgTable(
   {
     productId: integer('product_id')
       .notNull()
-      .references(() => products.id, { onDelete: 'cascade' }),
+      .references(() => products.id),
     categoryId: integer('category_id')
       .notNull()
-      .references(() => categories.id, { onDelete: 'cascade' }),
+      .references(() => categories.id),
   },
   (t) => [primaryKey({ columns: [t.productId, t.categoryId] })],
 );
@@ -252,7 +253,7 @@ export const productConfiguration = pgTable(
   {
     productItemId: integer('product_item_id')
       .notNull()
-      .references(() => productItems.id, { onDelete: 'cascade' }),
+      .references(() => productItems.id),
     variationOptionId: integer('variation_option_id').references(
       () => variationOptions.id,
       { onDelete: 'cascade' },
