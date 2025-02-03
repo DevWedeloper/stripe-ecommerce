@@ -55,6 +55,7 @@ export const getPaginatedProductsByCategoryName = async (
     inner join product_lowest_prices plp on plp.product_id = p.id 
     left join product_images pi on pi.product_id = p.id and pi.is_thumbnail = true
     where pc.category_id in (select id from filtered_categories)
+    and p.is_deleted = false
     offset ${offset}
     limit ${pageSize};
   `;

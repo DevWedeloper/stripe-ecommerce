@@ -1,4 +1,4 @@
-import { Column, eq, getTableColumns, sql } from 'drizzle-orm';
+import { and, Column, eq, getTableColumns, sql } from 'drizzle-orm';
 import {
   ImageObject,
   ProductDetails,
@@ -162,7 +162,7 @@ export const getProductById = async (
       eq(productItemAggregateQuery.productId, products.id),
     )
     .leftJoin(variationsQuery, eq(variationsQuery.productId, products.id))
-    .where(eq(products.id, id))
+    .where(and(eq(products.id, id), eq(products.isDeleted, false)))
     .limit(1);
 
   const [result] = await query;

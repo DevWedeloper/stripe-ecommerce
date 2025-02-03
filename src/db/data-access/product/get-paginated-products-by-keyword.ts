@@ -1,4 +1,4 @@
-import { desc, eq, getTableColumns, sql } from 'drizzle-orm';
+import { and, desc, eq, getTableColumns, sql } from 'drizzle-orm';
 import { db } from 'src/db';
 import {
   productImages,
@@ -41,9 +41,12 @@ export const getPaginatedProductsByKeyword = async (
       .leftJoin(productTags, eq(products.id, productTags.productId))
       .leftJoin(tags, eq(productTags.tagId, tags.id))
       .having(
-        sql`(
-          ${matchQuery} @@ websearch_to_tsquery('english', ${keyword})
-        )`,
+        and(
+          sql`(
+            ${matchQuery} @@ websearch_to_tsquery('english', ${keyword})
+          )`,
+          eq(products.isDeleted, false),
+        ),
       )
       .groupBy(products.id, tags.id)
       .orderBy((t) => [products.id, desc(t.rank)])
