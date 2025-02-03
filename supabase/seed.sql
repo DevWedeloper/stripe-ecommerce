@@ -103,12 +103,13 @@ inserted_user_addresses AS (
         inserted_receivers r
 ),
 inserted_products AS (
-    INSERT INTO products (user_id, name, description, currency)
+    INSERT INTO products (user_id, name, description, currency, is_deleted)
     SELECT
         u.id,
         p.name,
         p.description,
-        p.currency
+        p.currency,
+        false
     FROM
         inserted_users u
     CROSS JOIN (
