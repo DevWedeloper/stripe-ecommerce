@@ -93,6 +93,9 @@
       ],
       "@spartan-ng/ui-tabs-helm": [
         "./libs/ui/ui-tabs-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-hovercard-helm": [
+        "./libs/ui/ui-hovercard-helm/src/index.ts"
       ]
     }
   },
