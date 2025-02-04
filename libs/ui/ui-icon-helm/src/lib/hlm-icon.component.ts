@@ -12,7 +12,7 @@ import {
   type OnDestroy,
 } from '@angular/core';
 import { NgIconComponent, type IconName } from '@ng-icons/core';
-import { hlm } from '@spartan-ng/ui-core';
+import { hlm } from '@spartan-ng/brain/core';
 import { cva } from 'class-variance-authority';
 import type { ClassValue } from 'clsx';
 

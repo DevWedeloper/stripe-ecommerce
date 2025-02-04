@@ -15,7 +15,6 @@ import type { ClassValue } from 'clsx';
 import {
   EmblaCarouselDirective,
   type EmblaEventType,
-  type EmblaOptionsType,
   type EmblaPluginType,
 } from 'embla-carousel-angular';
 
