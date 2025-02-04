@@ -5,17 +5,18 @@ import {
   viewChild,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideShoppingCart } from '@ng-icons/lucide';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import {
   BrnPopoverComponent,
   BrnPopoverContentDirective,
   BrnPopoverTriggerDirective,
-} from '@spartan-ng/ui-popover-brain';
+} from '@spartan-ng/brain/popover';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { HlmPopoverContentDirective } from '@spartan-ng/ui-popover-helm';
-import { HlmScrollAreaComponent } from '@spartan-ng/ui-scrollarea-helm';
+import { HlmScrollAreaDirective } from '@spartan-ng/ui-scrollarea-helm';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ShoppingCartService } from '../../../data-access/shopping-cart.service';
 import { EmptyCartComponent } from '../../../ui/fallback/empty-cart.component';
 import { CartItemComponent } from './cart-item.component';
@@ -26,8 +27,10 @@ import { CartItemComponent } from './cart-item.component';
   imports: [
     RouterLink,
     HlmButtonDirective,
-    HlmIconComponent,
-    HlmScrollAreaComponent,
+    NgIcon,
+    HlmIconDirective,
+    NgScrollbarModule,
+    HlmScrollAreaDirective,
     BrnPopoverComponent,
     BrnPopoverTriggerDirective,
     BrnPopoverContentDirective,
@@ -52,22 +55,24 @@ import { CartItemComponent } from './cart-item.component';
             {{ totalQuantity() > 99 ? '99+' : totalQuantity() }}
           </span>
         }
-        <hlm-icon size="sm" name="lucideShoppingCart" />
+        <ng-icon hlm size="sm" name="lucideShoppingCart" />
       </button>
       <div hlmPopoverContent *brnPopoverContent="let ctx" class="w-80 p-2">
-        <hlm-scroll-area class="h-96">
+        <ng-scrollbar hlm class="h-96">
           @for (item of cart(); track $index) {
             <app-cart-item
               [item]="item"
               [isEditable]="isEditable()"
-              (removeFromCartChange)="removeFromCart(item.productItemId, item.sku)"
+              (removeFromCartChange)="
+                removeFromCart(item.productItemId, item.sku)
+              "
             />
           } @empty {
             <div class="flex h-96 items-center justify-center">
               <app-empty-cart />
             </div>
           }
-        </hlm-scroll-area>
+        </ng-scrollbar>
         <div class="flex flex-col gap-2">
           <a
             hlmBtn

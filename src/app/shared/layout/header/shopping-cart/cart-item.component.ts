@@ -5,10 +5,10 @@ import {
   input,
   output,
 } from '@angular/core';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideTrash2 } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { CartItem } from '../../../types/cart';
 import { ItemVariationComponent } from '../../../ui/item-variation.component';
 
@@ -19,7 +19,8 @@ import { ItemVariationComponent } from '../../../ui/item-variation.component';
     CurrencyPipe,
     NgOptimizedImage,
     HlmButtonDirective,
-    HlmIconComponent,
+    NgIcon,
+    HlmIconDirective,
     ItemVariationComponent,
   ],
   providers: [provideIcons({ lucideTrash2 })],
@@ -54,7 +55,7 @@ import { ItemVariationComponent } from '../../../ui/item-variation.component';
       (click)="removeFromCartChange.emit()"
       [disabled]="!isEditable()"
     >
-      <hlm-icon size="sm" class="mr-2" name="lucideTrash2" />
+      <ng-icon hlm size="sm" class="mr-2" name="lucideTrash2" />
       Remove
     </button>
   `,

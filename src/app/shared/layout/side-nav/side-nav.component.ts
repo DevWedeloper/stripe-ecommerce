@@ -4,22 +4,23 @@ import {
   computed,
   input,
 } from '@angular/core';
-import { hlm } from '@spartan-ng/ui-core';
-import { HlmScrollAreaComponent } from '@spartan-ng/ui-scrollarea-helm';
+import { hlm } from '@spartan-ng/brain/core';
+import { HlmScrollAreaDirective } from '@spartan-ng/ui-scrollarea-helm';
 import { ClassValue } from 'clsx';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 import { SideNavContentComponent } from './side-nav-content.component';
 
 @Component({
   selector: 'app-side-nav',
   standalone: true,
-  imports: [HlmScrollAreaComponent, SideNavContentComponent],
+  imports: [NgScrollbarModule, HlmScrollAreaDirective, SideNavContentComponent],
   host: {
     '[class]': 'computedClass()',
   },
   template: `
-    <hlm-scroll-area visibility="hover" class="h-screen">
+    <ng-scrollbar hlm visibility="hover" class="h-screen">
       <app-side-nav-content />
-    </hlm-scroll-area>
+    </ng-scrollbar>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

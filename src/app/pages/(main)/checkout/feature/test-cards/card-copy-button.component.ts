@@ -8,8 +8,8 @@ import {
   viewChild,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { hlm } from '@spartan-ng/brain/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { hlm } from '@spartan-ng/ui-core';
 import { delay, filter, fromEvent, map, merge, switchMap } from 'rxjs';
 
 @Component({

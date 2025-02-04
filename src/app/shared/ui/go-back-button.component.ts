@@ -7,25 +7,25 @@ import {
   input,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMoveLeft } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 
 @Component({
   selector: 'app-go-back-button',
   standalone: true,
-  imports: [RouterLink, HlmButtonDirective, HlmIconComponent],
+  imports: [RouterLink, HlmButtonDirective, NgIcon, HlmIconDirective],
   providers: [provideIcons({ lucideMoveLeft })],
   template: `
     @if (navigateBack()) {
       <button hlmBtn variant="ghost" size="lg" class="mb-2" (click)="goBack()">
-        <hlm-icon size="sm" class="mr-2" name="lucideMoveLeft" />
+        <ng-icon hlm size="sm" class="mr-2" name="lucideMoveLeft" />
         {{ text() }}
       </button>
     } @else {
       <a hlmBtn variant="ghost" size="lg" class="mb-2" [routerLink]="path()">
-        <hlm-icon size="sm" class="mr-2" name="lucideMoveLeft" />
+        <ng-icon hlm size="sm" class="mr-2" name="lucideMoveLeft" />
         {{ text() }}
       </a>
     }

@@ -1,8 +1,8 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { map, share, Subject, withLatestFrom } from 'rxjs';
-import { Address } from 'src/app/shared/types/address';
 import { AuthService } from 'src/app/shared/data-access/auth.service';
+import { Address } from 'src/app/shared/types/address';
 import {
   errorStream,
   materializeAndShare,

@@ -1,7 +1,7 @@
 import { RouteMeta } from '@analogjs/router';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck } from '@ng-icons/lucide';
 import {
   HlmAlertDescriptionDirective,
@@ -10,7 +10,7 @@ import {
   HlmAlertTitleDirective,
 } from '@spartan-ng/ui-alert-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { StripeConfirmPaymentService } from 'src/app/shared/data-access/stripe/stripe-confirm-payment.service';
 
 export const routeMeta: RouteMeta = {
@@ -23,7 +23,8 @@ export const routeMeta: RouteMeta = {
   imports: [
     RouterLink,
     HlmButtonDirective,
-    HlmIconComponent,
+    NgIcon,
+    HlmIconDirective,
     HlmAlertDirective,
     HlmAlertDescriptionDirective,
     HlmAlertIconDirective,
@@ -32,7 +33,7 @@ export const routeMeta: RouteMeta = {
   providers: [provideIcons({ lucideCheck })],
   template: `
     <div hlmAlert>
-      <hlm-icon hlmAlertIcon name="lucideCheck" />
+      <ng-icon hlm hlmAlertIcon name="lucideCheck" />
       <h4 hlmAlertTitle>Order Confirmed!</h4>
       <p hlmAlertDesc>
         Your order has been successfully placed. We’ll notify you when it’s on

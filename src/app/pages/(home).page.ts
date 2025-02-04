@@ -5,10 +5,10 @@ import {
   inject,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideList, lucideSearch } from '@ng-icons/lucide';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { AppService } from '../shared/data-access/app.service';
 import { FooterComponent } from '../shared/layout/footer/footer.component';
 import { HeaderComponent } from '../shared/layout/header/header.component';
@@ -17,7 +17,8 @@ import { HeaderComponent } from '../shared/layout/header/header.component';
   selector: 'app-home',
   standalone: true,
   imports: [
-    HlmIconComponent,
+    NgIcon,
+    HlmIconDirective,
     HlmCardDirective,
     HeaderComponent,
     FooterComponent,
@@ -44,7 +45,7 @@ import { HeaderComponent } from '../shared/layout/header/header.component';
 
         <div class="mx-auto mt-10 flex max-w-4xl flex-col gap-8 md:flex-row">
           <div hlmCard class="flex flex-col items-center p-6">
-            <hlm-icon size="xl" name="lucideList" class="mb-4" />
+            <ng-icon hlm size="xl" name="lucideList" class="mb-4" />
             <h3 class="text-lg font-medium">Explore Categories</h3>
             <p class="mt-2 text-center">
               Use our Categories dropdown in the top navigation bar to browse
@@ -53,7 +54,7 @@ import { HeaderComponent } from '../shared/layout/header/header.component';
           </div>
 
           <div hlmCard class="flex flex-col items-center p-6">
-            <hlm-icon size="xl" name="lucideSearch" class="mb-4" />
+            <ng-icon hlm size="xl" name="lucideSearch" class="mb-4" />
             <h3 class="text-lg font-medium">Search for Specific Products</h3>
             <p class="mt-2 text-center">
               Looking for something specific? Use the search bar at the top to

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { BrnDialogRef } from '@spartan-ng/ui-dialog-brain';
+import { BrnDialogRef } from '@spartan-ng/brain/dialog';
 import { take } from 'rxjs';
 import { matchPhrase } from 'src/app/shared/validators';
-import { ConfirmDeleteFormComponent } from '../ui/confirm-delete-form.component';
 import { DeleteUserService } from '../data-access/delete-user.service';
+import { ConfirmDeleteFormComponent } from '../ui/confirm-delete-form.component';
 
 @Component({
   selector: 'app-confirm-delete-account',

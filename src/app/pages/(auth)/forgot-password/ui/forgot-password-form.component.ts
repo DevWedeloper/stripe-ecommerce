@@ -5,7 +5,10 @@ import {
   output,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { sharedFormDeps, authInputErrorProvider } from 'src/app/shared/utils/form';
+import {
+  authInputErrorProvider,
+  sharedFormDeps,
+} from 'src/app/shared/utils/form';
 
 @Component({
   selector: 'app-forgot-password-form',

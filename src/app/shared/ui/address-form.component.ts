@@ -6,7 +6,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { FormGroup, FormGroupDirective } from '@angular/forms';
-import { BrnSelectImports } from '@spartan-ng/ui-select-brain';
+import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmSelectImports } from '@spartan-ng/ui-select-helm';
 import {
   authInputErrorProvider,

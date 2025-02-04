@@ -3,7 +3,11 @@ import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, materialize, merge, share, shareReplay } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
-import { errorStream, initialLoading, successStream } from '../../../utils/rxjs';
+import {
+  errorStream,
+  initialLoading,
+  successStream,
+} from '../../../utils/rxjs';
 import { showError } from '../../../utils/toast';
 
 @Injectable({

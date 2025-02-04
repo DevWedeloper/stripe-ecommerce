@@ -16,11 +16,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
       <p class="mb-2 font-bold">{{ variation.key }}</p>
       <div class="mb-2 flex gap-2">
         @for (value of variation.value; track $index) {
-          <button
-            hlmBtn
-            size="sm"
-            (click)="onClick(variation.key, value)"
-          >
+          <button hlmBtn size="sm" (click)="onClick(variation.key, value)">
             {{ value }}
           </button>
         }

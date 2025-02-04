@@ -4,7 +4,7 @@ import {
   computed,
   viewChild,
 } from '@angular/core';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideCheck,
   lucideChevronsUpDown,
@@ -13,14 +13,14 @@ import {
   lucideShieldCheck,
   lucideX,
 } from '@ng-icons/lucide';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import {
   BrnCollapsibleComponent,
   BrnCollapsibleContentComponent,
   BrnCollapsibleTriggerDirective,
-} from '@spartan-ng/ui-collapsible-brain';
-import { hlm } from '@spartan-ng/ui-core';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+} from '@spartan-ng/brain/collapsible';
+import { hlm } from '@spartan-ng/brain/core';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { CardCopyButtonComponent } from './card-copy-button.component';
 
 @Component({
@@ -28,7 +28,8 @@ import { CardCopyButtonComponent } from './card-copy-button.component';
   standalone: true,
   imports: [
     HlmButtonDirective,
-    HlmIconComponent,
+    NgIcon,
+    HlmIconDirective,
     BrnCollapsibleComponent,
     BrnCollapsibleTriggerDirective,
     BrnCollapsibleContentComponent,
@@ -50,11 +51,11 @@ import { CardCopyButtonComponent } from './card-copy-button.component';
     >
       <div class="flex items-center justify-between">
         <h4 class="flex items-center gap-2 text-sm font-semibold">
-          <hlm-icon size="sm" name="lucideCreditCard" />
+          <ng-icon hlm size="sm" name="lucideCreditCard" />
           TEST CARDS
         </h4>
         <button brnCollapsibleTrigger hlmBtn variant="ghost" size="icon">
-          <hlm-icon size="sm" name="lucideChevronsUpDown" />
+          <ng-icon hlm size="sm" name="lucideChevronsUpDown" />
           <span class="sr-only">Toggle</span>
         </button>
       </div>
@@ -63,31 +64,31 @@ import { CardCopyButtonComponent } from './card-copy-button.component';
           <div class="flex flex-col gap-2">
             <app-card-copy-button [cardNumber]="cardNumbers.success">
               <span class="flex items-center gap-2">
-                <hlm-icon size="sm" name="lucideCheck" />
+                <ng-icon hlm size="sm" name="lucideCheck" />
                 Success
               </span>
               <span class="flex items-center gap-2">
-                <hlm-icon size="sm" name="lucideEllipsis" />
+                <ng-icon hlm size="sm" name="lucideEllipsis" />
                 4242
               </span>
             </app-card-copy-button>
             <app-card-copy-button [cardNumber]="cardNumbers.authentication">
               <span class="flex items-center gap-2">
-                <hlm-icon size="sm" name="lucideShieldCheck" />
+                <ng-icon hlm size="sm" name="lucideShieldCheck" />
                 Authentication
               </span>
               <span class="flex items-center gap-2">
-                <hlm-icon size="sm" name="lucideEllipsis" />
+                <ng-icon hlm size="sm" name="lucideEllipsis" />
                 3155
               </span>
             </app-card-copy-button>
             <app-card-copy-button [cardNumber]="cardNumbers.decline">
               <span class="flex items-center gap-2">
-                <hlm-icon size="sm" name="lucideX" />
+                <ng-icon hlm size="sm" name="lucideX" />
                 Decline
               </span>
               <span class="flex items-center gap-2">
-                <hlm-icon size="sm" name="lucideEllipsis" />
+                <ng-icon hlm size="sm" name="lucideEllipsis" />
                 0002
               </span>
             </app-card-copy-button>

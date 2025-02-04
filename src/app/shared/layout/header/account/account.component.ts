@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideCircleUser,
   lucideLogIn,
@@ -8,17 +8,17 @@ import {
   lucideSettings,
   lucideUserCheck,
 } from '@ng-icons/lucide';
+import { BrnMenuTriggerDirective } from '@spartan-ng/brain/menu';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { BrnMenuTriggerDirective } from '@spartan-ng/ui-menu-brain';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import {
   HlmMenuComponent,
   HlmMenuItemDirective,
   HlmMenuItemIconDirective,
   HlmMenuSeparatorComponent,
 } from '@spartan-ng/ui-menu-helm';
-import { SignOutService } from './sign-out.service';
 import { AuthService } from '../../../data-access/auth.service';
+import { SignOutService } from './sign-out.service';
 
 @Component({
   selector: 'app-account',
@@ -26,7 +26,8 @@ import { AuthService } from '../../../data-access/auth.service';
   imports: [
     RouterLink,
     HlmButtonDirective,
-    HlmIconComponent,
+    NgIcon,
+    HlmIconDirective,
     BrnMenuTriggerDirective,
     HlmMenuComponent,
     HlmMenuItemDirective,
@@ -50,33 +51,33 @@ import { AuthService } from '../../../data-access/auth.service';
       [brnMenuTriggerFor]="accountTpl"
       hlmBtn
     >
-      <hlm-icon size="sm" name="lucideCircleUser" />
+      <ng-icon hlm size="sm" name="lucideCircleUser" />
       <span class="sr-only">Open account menu</span>
     </button>
     <ng-template #accountTpl>
       <hlm-menu class="w-40">
         @if (user()) {
           <a hlmMenuItem routerLink="/user">
-            <hlm-icon name="lucideSettings" hlmMenuIcon />
+            <ng-icon hlm name="lucideSettings" hlmMenuIcon />
             <span>Settings</span>
           </a>
 
           <hlm-menu-separator />
 
           <button hlmMenuItem (click)="signOut()">
-            <hlm-icon name="lucideLogOut" hlmMenuIcon />
+            <ng-icon hlm name="lucideLogOut" hlmMenuIcon />
             <span>Logout</span>
           </button>
         } @else {
           <a hlmMenuItem routerLink="/login">
-            <hlm-icon name="lucideLogIn" hlmMenuIcon />
+            <ng-icon hlm name="lucideLogIn" hlmMenuIcon />
             <span>Login</span>
           </a>
 
           <hlm-menu-separator />
 
           <a hlmMenuItem routerLink="/sign-up">
-            <hlm-icon name="lucideUserCheck" hlmMenuIcon />
+            <ng-icon hlm name="lucideUserCheck" hlmMenuIcon />
             <span>Sign-Up</span>
           </a>
         }

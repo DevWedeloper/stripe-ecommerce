@@ -1,13 +1,13 @@
 import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import {
   BrnSheetContentDirective,
   BrnSheetTriggerDirective,
-} from '@spartan-ng/ui-sheet-brain';
+} from '@spartan-ng/brain/sheet';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import {
   HlmSheetComponent,
   HlmSheetContentComponent,
@@ -21,7 +21,8 @@ import { ViewCartComponent } from 'src/app/shared/ui/view-cart.component';
   imports: [
     CurrencyPipe,
     HlmButtonDirective,
-    HlmIconComponent,
+    NgIcon,
+    HlmIconDirective,
     BrnSheetTriggerDirective,
     BrnSheetContentDirective,
     HlmSheetComponent,
@@ -39,7 +40,7 @@ import { ViewCartComponent } from 'src/app/shared/ui/view-cart.component';
       <hlm-sheet side="top">
         <button variant="outline" brnSheetTrigger hlmBtn>
           View Details
-          <hlm-icon size="sm" class="ml-2" name="lucideChevronDown" />
+          <ng-icon hlm size="sm" class="ml-2" name="lucideChevronDown" />
         </button>
         <hlm-sheet-content *brnSheetContent>
           <app-view-cart [cart]="cart()" [total]="total()" />

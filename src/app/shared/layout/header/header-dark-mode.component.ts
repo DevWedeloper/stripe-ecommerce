@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMoon } from '@ng-icons/lucide';
+import { BrnMenuTriggerDirective } from '@spartan-ng/brain/menu';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { BrnMenuTriggerDirective } from '@spartan-ng/ui-menu-brain';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import {
   HlmMenuComponent,
   HlmMenuItemCheckComponent,
@@ -21,7 +21,8 @@ import { DarkMode, ThemeService } from '../../ui/theme.service';
     HlmMenuItemCheckComponent,
     HlmMenuItemCheckboxDirective,
     HlmButtonDirective,
-    HlmIconComponent,
+    NgIcon,
+    HlmIconDirective,
   ],
   providers: [provideIcons({ lucideMoon })],
   template: `
@@ -32,7 +33,7 @@ import { DarkMode, ThemeService } from '../../ui/theme.service';
       [brnMenuTriggerFor]="themeTpl"
       hlmBtn
     >
-      <hlm-icon name="lucideMoon" size="sm" />
+      <ng-icon hlm name="lucideMoon" size="sm" />
       <span class="sr-only">Open menu to change theme</span>
     </button>
     <ng-template #themeTpl>

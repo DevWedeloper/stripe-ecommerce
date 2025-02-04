@@ -6,10 +6,10 @@ import {
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 
 @Component({
@@ -19,7 +19,8 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
     FormsModule,
     HlmInputDirective,
     HlmButtonDirective,
-    HlmIconComponent,
+    NgIcon,
+    HlmIconDirective,
   ],
   providers: [provideIcons({ lucideSearch })],
   template: `
@@ -39,7 +40,7 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
         name="keyword"
       />
       <button hlmBtn size="sm" variant="outline">
-        <hlm-icon size="sm" name="lucideSearch" />
+        <ng-icon hlm size="sm" name="lucideSearch" />
       </button>
     </form>
   `,

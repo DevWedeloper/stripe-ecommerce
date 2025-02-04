@@ -5,17 +5,17 @@ import {
   input,
   model,
 } from '@angular/core';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMinus, lucidePlus } from '@ng-icons/lucide';
+import { hlm } from '@spartan-ng/brain/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { hlm } from '@spartan-ng/ui-core';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { ClassValue } from 'clsx';
 
 @Component({
   selector: 'app-quantity-selector',
   standalone: true,
-  imports: [HlmButtonDirective, HlmIconComponent],
+  imports: [HlmButtonDirective, NgIcon, HlmIconDirective],
   providers: [provideIcons({ lucidePlus, lucideMinus })],
   host: {
     '[class]': 'computedClass()',
@@ -27,7 +27,7 @@ import { ClassValue } from 'clsx';
       [disabled]="quantity() <= 1"
       class="h-6 w-6 rounded-full p-0"
     >
-      <hlm-icon size="sm" name="lucideMinus" />
+      <ng-icon hlm size="sm" name="lucideMinus" />
     </button>
     <span class="text-lg">{{ quantity() }}</span>
     <button
@@ -36,7 +36,7 @@ import { ClassValue } from 'clsx';
       [disabled]="quantity() >= stock()"
       class="h-6 w-6 rounded-full p-0"
     >
-      <hlm-icon size="sm" name="lucidePlus" />
+      <ng-icon hlm size="sm" name="lucidePlus" />
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

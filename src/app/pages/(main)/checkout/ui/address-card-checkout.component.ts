@@ -4,15 +4,15 @@ import {
   input,
   output,
 } from '@angular/core';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePen } from '@ng-icons/lucide';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { AddressAndReceiverData } from 'src/db/types';
 
 @Component({
   selector: 'app-address-card-checkout',
-  imports: [HlmIconComponent],
+  imports: [NgIcon, HlmIconDirective],
   providers: [provideIcons({ lucidePen })],
   host: {
     class: 'relative flex w-full flex-col gap-2 p-4',
@@ -33,7 +33,7 @@ import { AddressAndReceiverData } from 'src/db/types';
         class="h-6 w-6 rounded-full p-0"
         (click)="editChange.emit()"
       >
-        <hlm-icon size="sm" name="lucidePen" />
+        <ng-icon hlm size="sm" name="lucidePen" />
         <span class="sr-only">Edit address</span>
       </button>
     </div>

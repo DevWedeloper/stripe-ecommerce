@@ -35,7 +35,9 @@ export class SetAsDefaultAddressService {
         userId: user.id,
       };
     }),
-    materializeAndShare((data) => this._trpc.addresses.setAsDefault.mutate(data)),
+    materializeAndShare((data) =>
+      this._trpc.addresses.setAsDefault.mutate(data),
+    ),
   );
 
   setAsDefaultSuccess$ = this.setAsDefault$.pipe(successStream(), share());

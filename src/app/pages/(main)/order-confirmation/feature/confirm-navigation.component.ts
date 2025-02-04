@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { BrnDialogRef } from '@spartan-ng/brain/dialog';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { BrnDialogRef } from '@spartan-ng/ui-dialog-brain';
 import {
   HlmDialogDescriptionDirective,
   HlmDialogFooterComponent,
