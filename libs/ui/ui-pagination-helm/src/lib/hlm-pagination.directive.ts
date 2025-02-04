@@ -1,6 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
-import { hlm } from '@spartan-ng/ui-core';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { hlm } from '@spartan-ng/brain/core';
+import { type VariantProps, cva } from 'class-variance-authority';
 import type { ClassValue } from 'clsx';
 
 export const paginationVariants = cva('mx-auto flex w-full justify-center', {
@@ -13,15 +13,19 @@ export type PaginationVariants = VariantProps;
   selector: '[hlmPagination]',
   standalone: true,
   host: {
+    role: 'navigation',
     '[class]': '_computedClass()',
-    '[attr.role]': '"navigation"',
-    '[attr.aria-label]': '"pagination"',
+    '[attr.aria-label]': 'ariaLabel()',
   },
 })
 export class HlmPaginationDirective {
-  public readonly class = input<ClassValue>('');
+  public readonly userClass = input<ClassValue>('', { alias: 'class' });
 
-  protected _computedClass = computed(() =>
-    hlm(paginationVariants(), this.class()),
+  public readonly ariaLabel = input<string>('pagination', {
+    alias: 'aria-label',
+  });
+
+  protected readonly _computedClass = computed(() =>
+    hlm(paginationVariants(), this.userClass()),
   );
 }

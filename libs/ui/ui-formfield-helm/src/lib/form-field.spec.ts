@@ -1,3 +1,5 @@
+/* eslint-disable @angular-eslint/component-class-suffix */
+/* eslint-disable @angular-eslint/component-selector */
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { render, screen } from '@testing-library/angular';
@@ -8,7 +10,7 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import {
   ErrorStateMatcher,
   ShowOnDirtyErrorStateMatcher,
-} from '@spartan-ng/ui-forms-brain';
+} from '@spartan-ng/brain/forms';
 import { HlmErrorDirective } from './hlm-error.directive';
 import { HlmFormFieldComponent } from './hlm-form-field.component';
 import { HlmHintDirective } from './hlm-hint.directive';
@@ -43,7 +45,7 @@ const DIRECTIVES = [
   `,
 })
 class SingleFormFieldMock {
-  name = new FormControl('', Validators.required);
+  public name = new FormControl('', Validators.required);
 }
 
 @Component({
@@ -72,7 +74,7 @@ class SingleFormFieldMock {
   ],
 })
 class SingleFormFieldDirtyMock {
-  name = new FormControl('', Validators.required);
+  public name = new FormControl('', Validators.required);
 }
 
 describe('Hlm Form Field Component', () => {

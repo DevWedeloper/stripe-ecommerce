@@ -12,7 +12,7 @@ import {
   hlm,
   injectExposedSideProvider,
   injectExposesStateProvider,
-} from '@spartan-ng/ui-core';
+} from '@spartan-ng/brain/core';
 import type { ClassValue } from 'clsx';
 
 @Component({

@@ -1,6 +1,6 @@
-import { Directive, Input, computed, input, signal } from '@angular/core';
-import { hlm } from '@spartan-ng/ui-core';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { Directive, computed, input } from '@angular/core';
+import { hlm } from '@spartan-ng/brain/core';
+import { type VariantProps, cva } from 'class-variance-authority';
 import type { ClassValue } from 'clsx';
 
 export const alertVariants = cva(
@@ -10,7 +10,7 @@ export const alertVariants = cva(
       variant: {
         default: 'bg-background text-foreground',
         destructive:
-          'text-destructive border-destructive/50 dark:border-destructive [&>[hlmAlertIcon]]:text-destructive text-destructive',
+          'text-destructive border-destructive/50 dark:border-destructive [&>[hlmAlertIcon]]:text-destructive',
       },
     },
     defaultVariants: {
@@ -30,13 +30,9 @@ export type AlertVariants = VariantProps;
 })
 export class HlmAlertDirective {
   public readonly userClass = input<ClassValue>('', { alias: 'class' });
-  protected _computedClass = computed(() =>
-    hlm(alertVariants({ variant: this._variant() }), this.userClass()),
+  protected readonly _computedClass = computed(() =>
+    hlm(alertVariants({ variant: this.variant() }), this.userClass()),
   );
 
-  private readonly _variant = signal<AlertVariants['variant']>('default');
-  @Input()
-  set variant(variant: AlertVariants['variant']) {
-    this._variant.set(variant);
-  }
+  public readonly variant = input<AlertVariants['variant']>('default');
 }

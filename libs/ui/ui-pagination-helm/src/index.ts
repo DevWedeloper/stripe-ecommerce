@@ -26,7 +26,6 @@ export const HlmPaginationImports = [
   HlmPaginationPreviousComponent,
   HlmPaginationNextComponent,
   HlmPaginationEllipsisComponent,
-  HlmPaginationNextComponent,
   HlmNumberedPaginationComponent,
 ] as const;
 

@@ -1,6 +1,7 @@
 import { Directive, computed, input } from '@angular/core';
-import { hlm } from '@spartan-ng/ui-core';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { hlm } from '@spartan-ng/brain/core';
+import { type VariantProps, cva } from 'class-variance-authority';
+import { ClassValue } from 'clsx';
 
 export const paginationContentVariants = cva(
   'flex flex-row items-center gap-1',
@@ -19,8 +20,8 @@ export type PaginationContentVariants = VariantProps;
   },
 })
 export class HlmPaginationContentDirective {
-  public readonly class = input('');
+  public readonly userClass = input<ClassValue>('', { alias: 'class' });
   protected readonly _computedClass = computed(() =>
-    hlm(paginationContentVariants(), this.class()),
+    hlm(paginationContentVariants(), this.userClass()),
   );
 }

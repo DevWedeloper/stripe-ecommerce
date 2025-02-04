@@ -1,16 +1,15 @@
 import type { ComponentType } from '@angular/cdk/portal';
-import { Injectable, inject, type TemplateRef } from '@angular/core';
+import { Injectable, type TemplateRef, inject } from '@angular/core';
 import {
+  type BrnDialogOptions,
   BrnDialogService,
   DEFAULT_BRN_DIALOG_OPTIONS,
   cssClassesToArray,
-  type BrnDialogOptions,
-} from '@spartan-ng/ui-dialog-brain';
+} from '@spartan-ng/brain/dialog';
 import { HlmDialogContentComponent } from './hlm-dialog-content.component';
 import { hlmDialogOverlayClass } from './hlm-dialog-overlay.directive';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type HlmDialogOptions<DialogContext = any> = BrnDialogOptions & {
+export type HlmDialogOptions<DialogContext = unknown> = BrnDialogOptions & {
   contentClass?: string;
   context?: DialogContext;
 };
@@ -22,16 +21,16 @@ export class HlmDialogService {
   private readonly _brnDialogService = inject(BrnDialogService);
 
   public open(component: ComponentType | TemplateRef, options?: Partial) {
-    options = {
+    const mergedOptions = {
       ...DEFAULT_BRN_DIALOG_OPTIONS,
       closeDelay: 100,
-      // eslint-disable-next-line
+
       ...(options ?? {}),
       backdropClass: cssClassesToArray(
         `${hlmDialogOverlayClass} ${options?.backdropClass ?? ''}`,
       ),
       context: {
-        ...options?.context,
+        ...(options?.context ?? {}),
         $component: component,
         $dynamicComponentClass: options?.contentClass,
       },
@@ -40,8 +39,8 @@ export class HlmDialogService {
     return this._brnDialogService.open(
       HlmDialogContentComponent,
       undefined,
-      options.context,
-      options,
+      mergedOptions.context,
+      mergedOptions,
     );
   }
 }

@@ -40,6 +40,9 @@
       "@spartan-ng/ui-input-helm": [
         "./libs/ui/ui-input-helm/src/index.ts"
       ],
+      "@spartan-ng/ui-formfield-helm": [
+        "./libs/ui/ui-formfield-helm/src/index.ts"
+      ],
       "@spartan-ng/ui-typography-helm": [
         "./libs/ui/ui-typography-helm/src/index.ts"
       ],
@@ -78,9 +81,6 @@
       ],
       "@spartan-ng/ui-dialog-helm": [
         "./libs/ui/ui-dialog-helm/src/index.ts"
-      ],
-      "@spartan-ng/ui-formfield-helm": [
-        "./libs/ui/ui-formfield-helm/src/index.ts"
       ],
       "@spartan-ng/ui-carousel-helm": [
         "./libs/ui/ui-carousel-helm/src/index.ts"

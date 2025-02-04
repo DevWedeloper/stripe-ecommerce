@@ -8,14 +8,15 @@ import {
   input,
   signal,
 } from '@angular/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideX } from '@ng-icons/lucide';
 import {
   hlm,
   injectExposedSideProvider,
   injectExposesStateProvider,
-} from '@spartan-ng/ui-core';
-import { HlmIconComponent, provideIcons } from '@spartan-ng/ui-icon-helm';
-import { BrnSheetCloseDirective } from '@spartan-ng/ui-sheet-brain';
+} from '@spartan-ng/brain/core';
+import { BrnSheetCloseDirective } from '@spartan-ng/brain/sheet';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { cva } from 'class-variance-authority';
 import type { ClassValue } from 'clsx';
 import { HlmSheetCloseDirective } from './hlm-sheet-close.directive';
@@ -42,7 +43,12 @@ export const sheetVariants = cva(
 @Component({
   selector: 'hlm-sheet-content',
   standalone: true,
-  imports: [HlmSheetCloseDirective, BrnSheetCloseDirective, HlmIconComponent],
+  imports: [
+    HlmSheetCloseDirective,
+    BrnSheetCloseDirective,
+    NgIcon,
+    HlmIconDirective,
+  ],
   providers: [provideIcons({ lucideX })],
   host: {
     '[class]': '_computedClass()',
@@ -52,16 +58,16 @@ export const sheetVariants = cva(
     <ng-content />
     <button brnSheetClose hlm>
       <span class="sr-only">Close</span>
-      <hlm-icon class="flex h-4 w-4" size="100%" name="lucideX" />
+      <ng-icon hlm size="sm" name="lucideX" />
     </button>
   `,
 })
 export class HlmSheetContentComponent {
-  private _stateProvider = injectExposesStateProvider({ host: true });
-  private _sideProvider = injectExposedSideProvider({ host: true });
+  private readonly _stateProvider = injectExposesStateProvider({ host: true });
+  private readonly _sideProvider = injectExposedSideProvider({ host: true });
   public state = this._stateProvider.state ?? signal('closed');
-  private _renderer = inject(Renderer2);
-  private _element = inject(ElementRef);
+  private readonly _renderer = inject(Renderer2);
+  private readonly _element = inject(ElementRef);
 
   constructor() {
     effect(() => {

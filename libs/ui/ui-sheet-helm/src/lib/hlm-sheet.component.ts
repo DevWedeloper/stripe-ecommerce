@@ -4,11 +4,11 @@ import {
   ViewEncapsulation,
   forwardRef,
 } from '@angular/core';
-import { BrnDialogComponent } from '@spartan-ng/ui-dialog-brain';
+import { BrnDialogComponent } from '@spartan-ng/brain/dialog';
 import {
   BrnSheetComponent,
   BrnSheetOverlayComponent,
-} from '@spartan-ng/ui-sheet-brain';
+} from '@spartan-ng/brain/sheet';
 import { HlmSheetOverlayDirective } from './hlm-sheet-overlay.directive';
 
 @Component({

@@ -8,7 +8,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { hlm, injectExposesStateProvider } from '@spartan-ng/ui-core';
+import { hlm, injectExposesStateProvider } from '@spartan-ng/brain/core';
 import type { ClassValue } from 'clsx';
 
 @Directive({
@@ -19,10 +19,10 @@ import type { ClassValue } from 'clsx';
   },
 })
 export class HlmPopoverContentDirective {
-  private _stateProvider = injectExposesStateProvider({ host: true });
+  private readonly _stateProvider = injectExposesStateProvider({ host: true });
   public state = this._stateProvider.state ?? signal('closed');
-  private _renderer = inject(Renderer2);
-  private _element = inject(ElementRef);
+  private readonly _renderer = inject(Renderer2);
+  private readonly _element = inject(ElementRef);
 
   constructor() {
     effect(() => {

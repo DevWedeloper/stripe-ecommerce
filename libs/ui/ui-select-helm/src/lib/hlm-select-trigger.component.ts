@@ -1,21 +1,19 @@
 import {
   Component,
-  ContentChild,
-  ViewChild,
   computed,
+  contentChild,
   inject,
   input,
-  type ElementRef,
 } from '@angular/core';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
-import { hlm } from '@spartan-ng/ui-core';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { hlm } from '@spartan-ng/brain/core';
 import {
   BrnSelectComponent,
   BrnSelectTriggerDirective,
-} from '@spartan-ng/ui-select-brain';
-import { cva, type VariantProps } from 'class-variance-authority';
+} from '@spartan-ng/brain/select';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
+import { type VariantProps, cva } from 'class-variance-authority';
 import type { ClassValue } from 'clsx';
 
 export const selectTriggerVariants = cva(
@@ -43,8 +41,9 @@ type SelectTriggerVariants = VariantProps;
 @Component({
   selector: 'hlm-select-trigger',
   standalone: true,
-  imports: [BrnSelectTriggerDirective, HlmIconComponent],
+  imports: [BrnSelectTriggerDirective, NgIcon, HlmIconDirective],
   providers: [provideIcons({ lucideChevronDown })],
+
   template: `
     <button
       [class]="_computedClass()"
@@ -54,20 +53,21 @@ type SelectTriggerVariants = VariantProps;
       type="button"
     >
       <ng-content />
-      @if (icon) {
+      @if (icon()) {
         <ng-content select="hlm-icon" />
       } @else {
-        <hlm-icon class="ml-2 h-4 w-4 flex-none" name="lucideChevronDown" />
+        <ng-icon
+          hlm
+          size="sm"
+          class="ml-2 flex-none"
+          name="lucideChevronDown"
+        />
       }
     </button>
   `,
 })
 export class HlmSelectTriggerComponent {
-  @ViewChild('button', { static: true })
-  public buttonEl!: ElementRef;
-
-  @ContentChild(HlmIconComponent, { static: false })
-  protected icon!: HlmIconComponent;
+  protected readonly icon = contentChild(HlmIconDirective);
 
   protected readonly brnSelect = inject(BrnSelectComponent, { optional: true });
 

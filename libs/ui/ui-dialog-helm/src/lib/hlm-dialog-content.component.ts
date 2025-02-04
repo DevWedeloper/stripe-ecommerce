@@ -7,14 +7,15 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideX } from '@ng-icons/lucide';
-import { hlm } from '@spartan-ng/ui-core';
+import { hlm } from '@spartan-ng/brain/core';
 import {
   BrnDialogCloseDirective,
   BrnDialogRef,
   injectBrnDialogContext,
-} from '@spartan-ng/ui-dialog-brain';
-import { HlmIconComponent, provideIcons } from '@spartan-ng/ui-icon-helm';
+} from '@spartan-ng/brain/dialog';
+import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import type { ClassValue } from 'clsx';
 import { HlmDialogCloseDirective } from './hlm-dialog-close.directive';
 
@@ -25,7 +26,8 @@ import { HlmDialogCloseDirective } from './hlm-dialog-close.directive';
     NgComponentOutlet,
     BrnDialogCloseDirective,
     HlmDialogCloseDirective,
-    HlmIconComponent,
+    NgIcon,
+    HlmIconDirective,
   ],
   providers: [provideIcons({ lucideX })],
   host: {
@@ -38,6 +40,11 @@ import { HlmDialogCloseDirective } from './hlm-dialog-close.directive';
     } @else {
       <ng-content />
     }
+
+    <button brnDialogClose hlm>
+      <span class="sr-only">Close</span>
+      <ng-icon hlm size="sm" name="lucideX" />
+    </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
