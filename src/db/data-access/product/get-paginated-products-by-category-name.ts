@@ -42,7 +42,7 @@ export const getPaginatedProductsByCategoryName = async (
 
     select distinct
       p.id,
-      p.userId as "userId", 
+      p.user_id as "userId", 
       p.name, 
       p.description, 
       p.currency, 
