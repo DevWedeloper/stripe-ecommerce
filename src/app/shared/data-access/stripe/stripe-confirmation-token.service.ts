@@ -9,6 +9,7 @@ import {
   materialize,
   merge,
   share,
+  shareReplay,
   Subject,
   switchMap,
   withLatestFrom,
@@ -56,6 +57,7 @@ export class StripeConfirmationTokenService {
     this.confirmationTokenSuccess$.pipe(
       filter((data) => data.error === undefined),
       map((data) => data.confirmationToken),
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
   private confirmationTokenSuccessWithError$ =
@@ -69,8 +71,9 @@ export class StripeConfirmationTokenService {
     share(),
   );
 
-  private confirmationTokenId$ = this.confirmationTokenSuccessWithData$.pipe(
+  confirmationTokenId$ = this.confirmationTokenSuccessWithData$.pipe(
     map((data) => data.id),
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
 
   private emailAndShippingAddress$ =
@@ -96,10 +99,6 @@ export class StripeConfirmationTokenService {
   private status = toSignal(this.status$, { initialValue: 'initial' as const });
 
   private error = toSignal(this.confirmationTokenError$, {
-    initialValue: null,
-  });
-
-  confirmationTokenId = toSignal(this.confirmationTokenId$, {
     initialValue: null,
   });
 

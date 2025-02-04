@@ -45,10 +45,9 @@ export class StripeConfirmPaymentService {
   private paymentIntentId$ = this.stripePaymentIntentService.paymentIntentId$;
   private paymentIntentMetadata$ =
     this.stripePaymentIntentService.paymentIntentMetadata$;
-
-  private clientSecret = this.stripePaymentIntentService.clientSecret;
-  private confirmationTokenId =
-    this.stripeConfirmationTokenService.confirmationTokenId;
+  private clientSecret$ = this.stripePaymentIntentService.clientSecret$;
+  private confirmationTokenId$ =
+    this.stripeConfirmationTokenService.confirmationTokenId$;
 
   private confirmPayment$ = this.confirmPaymentTrigger$.pipe(
     withLatestFrom(this.selectedAddress$, this.finalizedAddress$),
@@ -97,16 +96,10 @@ export class StripeConfirmPaymentService {
         },
       }),
     ),
-    map(() => {
-      const clientSecret = this.clientSecret();
-      const confirmationTokenId = this.confirmationTokenId();
-
+    withLatestFrom(this.clientSecret$, this.confirmationTokenId$),
+    map(([_, clientSecret, confirmationTokenId]) => {
       if (!clientSecret) {
         throw new Error('Client secret is null.');
-      }
-
-      if (!confirmationTokenId) {
-        throw new Error('Confirm token id is null.');
       }
 
       return { clientSecret, confirmationTokenId };

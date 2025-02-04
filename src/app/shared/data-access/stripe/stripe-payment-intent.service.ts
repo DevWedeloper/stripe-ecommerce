@@ -50,10 +50,10 @@ export class StripePaymentIntentService {
     share(),
   );
 
-  private clientSecret$ = merge(
+  clientSecret$ = merge(
     this.createPaymentIntent$.pipe(map(() => null)),
     this.paymentIntentSuccess$.pipe(map((pi) => pi.client_secret)),
-  );
+  ).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   paymentIntentId$ = this.paymentIntentSuccess$.pipe(
     map((data) => data.id),
