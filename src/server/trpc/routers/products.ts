@@ -9,6 +9,7 @@ export const productsRouter = router({
   getById: publicProcedure
     .input(positiveIntSchema)
     .query(async ({ input }) => await getProductById(input)),
+
   getByCategoryName: publicProcedure
     .input(
       z.object({
@@ -21,6 +22,7 @@ export const productsRouter = router({
       async ({ input: { name, page, pageSize } }) =>
         await getProductsByCategoryName(name, page, pageSize),
     ),
+
   searchByKeyword: publicProcedure
     .input(
       z.object({
