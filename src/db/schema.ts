@@ -323,3 +323,6 @@ export type Variations = InferSelectModel<typeof variations>;
 export type VariationsInsert = InferInsertModel<typeof variations>;
 export type VariationOptions = InferSelectModel<typeof variationOptions>;
 export type VariationOptionsInsert = InferInsertModel<typeof variationOptions>;
+export type ProductConfigurationInsert = InferInsertModel<
+  typeof productConfiguration
+>;
