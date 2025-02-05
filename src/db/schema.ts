@@ -314,6 +314,7 @@ export type OrderStatusEnum = (typeof orderStatusEnum.enumValues)[number];
 export type OrderSelect = InferSelectModel<typeof orders>;
 export type OrderItemsSelect = InferSelectModel<typeof orderItems>;
 export type Products = InferSelectModel<typeof products>;
+export type ProductInsert = InferInsertModel<typeof products>;
 export type ProductItems = InferSelectModel<typeof productItems>;
 export type Categories = InferSelectModel<typeof categories>;
 export type ProductImages = InferSelectModel<typeof productImages>;
