@@ -1,17 +1,24 @@
 import {
   AddressInsert,
   AddressSelect,
+  Categories,
   CountrySelect,
   OrderItemsSelect,
   OrderSelect,
   ProductImages,
+  ProductImagesInsert,
+  ProductInsert,
   ProductItems,
+  ProductItemsInsert,
   Products,
   ReceiverInsert,
   ReceiverSelect,
+  TagsSelect,
   UserAddressesSelect,
   VariationOptions,
+  VariationOptionsInsert,
   Variations,
+  VariationsInsert,
 } from './schema';
 
 type Nullable<T> = T | null;
@@ -25,6 +32,20 @@ export type ImageObject = {
   id: ProductImages['id'];
   imagePath: ProductImages['imagePath'];
   placeholder: ProductImages['placeholder'];
+};
+
+export type CreateProductData = {
+  productData: ProductInsert;
+  variationsData: VariationsInsert[];
+  variationOptionsData: (Omit<VariationOptionsInsert, 'variationId'> & {
+    variationName: VariationsInsert['name'];
+  })[];
+  productItemsData: (ProductItemsInsert & {
+    variationValue: VariationOptions['value'];
+  })[];
+  categoryId: Categories['id'];
+  productImagesData: ProductImagesInsert[];
+  tagIds?: TagsSelect['id'][];
 };
 
 export type ProductDetails = Omit<Products, 'isDeleted'> &
