@@ -319,6 +319,7 @@ export type ProductItems = InferSelectModel<typeof productItems>;
 export type ProductItemsInsert = InferInsertModel<typeof productItems>;
 export type Categories = InferSelectModel<typeof categories>;
 export type ProductImages = InferSelectModel<typeof productImages>;
+export type ProductImagesInsert = InferInsertModel<typeof productImages>;
 export type Variations = InferSelectModel<typeof variations>;
 export type VariationsInsert = InferInsertModel<typeof variations>;
 export type VariationOptions = InferSelectModel<typeof variationOptions>;
