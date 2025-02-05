@@ -40,7 +40,7 @@ export type CreateProductData = {
   variationOptionsData: (Omit<VariationOptionsInsert, 'variationId'> & {
     variationName: VariationsInsert['name'];
   })[];
-  productItemsData: (ProductItemsInsert & {
+  productItemsData: (Omit<ProductItemsInsert, 'productId'> & {
     variationValue: VariationOptions['value'];
   })[];
   categoryId: Categories['id'];
