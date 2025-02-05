@@ -227,13 +227,17 @@ export const productCategories = pgTable(
   (t) => [primaryKey({ columns: [t.productId, t.categoryId] })],
 );
 
-export const variations = pgTable('variations', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  productId: integer('product_id')
-    .notNull()
-    .references(() => products.id),
-  name: text('name').notNull(),
-});
+export const variations = pgTable(
+  'variations',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    productId: integer('product_id')
+      .notNull()
+      .references(() => products.id),
+    name: text('name').notNull(),
+  },
+  (t) => [unique().on(t.productId, t.name)],
+);
 
 export const variationOptions = pgTable(
   'variation_options',
@@ -245,7 +249,10 @@ export const variationOptions = pgTable(
     value: text('value').notNull(),
     order: smallint('order'),
   },
-  (t) => [index('variation_id_idx').on(t.variationId)],
+  (t) => [
+    index('variation_id_idx').on(t.variationId),
+    unique().on(t.variationId, t.value),
+  ],
 );
 
 export const productConfiguration = pgTable(
