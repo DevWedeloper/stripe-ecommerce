@@ -239,27 +239,27 @@ FROM
         (t.name = 'Eco-Friendly' AND p.name IN ('Refrigerator C'))
     );
 
-INSERT INTO variations (name, category_id)
-SELECT v.variation_name, c.id
+INSERT INTO variations (name, product_id)
+SELECT v.variation_name, p.id AS product_id
 FROM (
     VALUES 
-        -- Variations for Smartphones
-        ('Color', 'Smartphones'),
-        ('Storage Capacity', 'Smartphones'),
+        -- Variations for Smartphone A
+        ('Color', 'Smartphone A'),
+        ('Storage Capacity', 'Smartphone A'),
 
-        -- Variations for Laptops
-        ('Color', 'Laptops'),
-        ('RAM Size', 'Laptops'),
+        -- Variations for Laptop B
+        ('Color', 'Laptop B'),
+        ('RAM Size', 'Laptop B'),
 
-        -- Variations for Refrigerators
-        ('Color', 'Refrigerators'),
-        ('Capacity', 'Refrigerators'),
+        -- Variations for Refrigerator C
+        ('Color', 'Refrigerator C'),
+        ('Capacity', 'Refrigerator C'),
 
-        -- Variations for Washing Machines
-        ('Color', 'Washing Machines'),
-        ('Load Type', 'Washing Machines')
-) AS v(variation_name, category_name)
-JOIN categories c ON c.name = v.category_name;
+        -- Variations for Washing Machine D
+        ('Color', 'Washing Machine D'),
+        ('Load Type', 'Washing Machine D')
+) AS v(variation_name, product_name)
+JOIN products p ON p.name = v.product_name;
 
 INSERT INTO variation_options (variation_id, value, "order")
 SELECT v.id, o.value, o."order"
@@ -306,22 +306,20 @@ FROM (
         ('Load Type', 'Washing Machines', 'Top Load', 2)
 ) AS o(variation_name, category_name, value, "order")
 JOIN variations v ON v.name = o.variation_name
-JOIN categories c ON c.id = v.category_id AND c.name = o.category_name;
+JOIN product_categories pc ON pc.product_id = v.product_id
+JOIN categories c ON c.id = pc.category_id AND c.name = o.category_name;
 
 WITH product_variation_mapping AS (
     SELECT 
         pi.id AS product_item_id,
         vo.id AS variation_option_id,
         v.id AS variation_id,
-        p.name AS product_name,
-        v.name AS variation_name,
-        vo.value AS option_value
+        pi.product_id AS product_id,
+        v.product_id AS variation_product_id
     FROM 
         product_items pi
     JOIN products p ON p.id = pi.product_id
-    JOIN product_categories pc ON pc.product_id = p.id 
-    JOIN categories c ON c.id = pc.category_id  
-    JOIN variations v ON v.category_id = c.id
+    JOIN variations v ON v.product_id = p.id
     JOIN variation_options vo ON vo.variation_id = v.id
     WHERE
         -- Ensure each product_item corresponds only to unique variation options
@@ -357,10 +355,12 @@ WITH product_variation_mapping AS (
             (vo.value IN ('Top Load') AND pi.sku IN ('SKU_D_TopLoad_White', 'SKU_D_TopLoad_Gray', 'SKU_D_TopLoad_Silver'))
         ))
 )
-INSERT INTO product_configuration (product_item_id, variation_option_id, variation_id)
+INSERT INTO product_configuration (product_item_id, variation_option_id, variation_id, product_id, variation_product_id)
 SELECT 
     product_item_id,
     variation_option_id,
-    variation_id
+    variation_id,
+    product_id,
+    variation_product_id
 FROM 
     product_variation_mapping;
