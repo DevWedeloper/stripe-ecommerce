@@ -148,7 +148,7 @@ export const products = pgTable(
     name: text('name').notNull(),
     description: text('description').notNull(),
     currency: char('currency', { length: 3 }).notNull(),
-    isDeleted: boolean('is_deleted').default(false).notNull()
+    isDeleted: boolean('is_deleted').default(false).notNull(),
   },
   (t) => [
     index('search_index').using(
@@ -229,9 +229,9 @@ export const productCategories = pgTable(
 
 export const variations = pgTable('variations', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  categoryId: integer('category_id')
+  productId: integer('product_id')
     .notNull()
-    .references(() => categories.id, { onDelete: 'set null' }),
+    .references(() => products.id),
   name: text('name').notNull(),
 });
 
@@ -256,15 +256,24 @@ export const productConfiguration = pgTable(
       .references(() => productItems.id),
     variationOptionId: integer('variation_option_id').references(
       () => variationOptions.id,
-      { onDelete: 'cascade' },
     ),
     variationId: integer('variation_id')
       .notNull()
-      .references(() => variations.id, { onDelete: 'cascade' }),
+      .references(() => variations.id),
+    productId: integer('product_id')
+      .notNull()
+      .references(() => products.id),
+    variationProductId: integer('variation_product_id')
+      .notNull()
+      .references(() => products.id),
   },
   (t) => [
     primaryKey({ columns: [t.productItemId, t.variationOptionId] }),
     unique().on(t.productItemId, t.variationId),
+    check(
+      'product_configuration_product_check',
+      sql`${t.productId} = ${t.variationProductId}`,
+    ),
   ],
 );
 
