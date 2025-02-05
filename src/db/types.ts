@@ -35,7 +35,7 @@ export type ImageObject = {
 };
 
 export type CreateProductData = {
-  productData: ProductInsert;
+  productData: Omit<ProductInsert, 'isDeleted'>;
   variationsData: VariationsInsert[];
   variationOptionsData: (Omit<VariationOptionsInsert, 'variationId'> & {
     variationName: VariationsInsert['name'];
