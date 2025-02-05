@@ -44,7 +44,7 @@ export type CreateProductData = {
     variationValue: VariationOptions['value'];
   })[];
   categoryId: Categories['id'];
-  productImagesData: ProductImagesInsert[];
+  productImagesData: Omit<ProductImagesInsert, 'productId'>[];
   tagIds?: TagsSelect['id'][];
 };
 
