@@ -5,6 +5,7 @@ import { categoriesRouter } from './categories';
 import { countriesRouter } from './countries';
 import { ordersRouter } from './orders';
 import { productsRouter } from './products';
+import { storageRouter } from './storage';
 import { stripeRouter } from './stripe';
 
 export const appRouter = router({
@@ -15,6 +16,7 @@ export const appRouter = router({
   categories: categoriesRouter,
   stripe: stripeRouter,
   auth: authRouter,
+  storage: storageRouter,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;
