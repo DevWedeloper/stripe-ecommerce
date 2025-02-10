@@ -1,7 +1,6 @@
 import { encode } from 'blurhash';
-import { createCanvas, Image } from 'canvas';
 
-const loadImage = async (src: string): Promise<Image> =>
+const loadImage = async (src: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve(img);
@@ -9,8 +8,10 @@ const loadImage = async (src: string): Promise<Image> =>
     img.src = src;
   });
 
-const getImageData = (image: Image): ImageData => {
-  const canvas = createCanvas(image.width, image.height);
+const getImageData = (image: HTMLImageElement): ImageData => {
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
   const context = canvas.getContext('2d');
 
   if (!context) {
@@ -19,12 +20,7 @@ const getImageData = (image: Image): ImageData => {
 
   context.drawImage(image, 0, 0);
 
-  return context.getImageData(
-    0,
-    0,
-    image.width,
-    image.height,
-  ) as unknown as ImageData;
+  return context.getImageData(0, 0, image.width, image.height);
 };
 
 export const generatePlaceholder = async (
