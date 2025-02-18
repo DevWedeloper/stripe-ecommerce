@@ -33,6 +33,7 @@ import { InputErrorComponent } from './input-error/input-error.component';
     [formControl]:not([withoutValidationErrors]),
     [formControlName]:not([withoutValidationErrors]),
     [formGroupName]:not([withoutValidationErrors]),
+    [formArrayName]:not([withoutValidationErrors]),
     [ngModelGroup]:not([withoutValidationErrors])
   `,
   standalone: true,
