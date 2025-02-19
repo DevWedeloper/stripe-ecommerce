@@ -55,3 +55,10 @@ export const matchPhrase =
     const value = control.value || '';
     return value === expectedPhrase ? null : { matchPhrase: true };
   };
+
+export const isInteger = (
+  control: AbstractControl,
+): ValidationErrors | null => {
+  const value = control.value || '';
+  return /^[0-9]+$/.test(value) ? null : { isInteger: true };
+};
