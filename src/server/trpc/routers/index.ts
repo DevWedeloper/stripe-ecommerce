@@ -7,6 +7,7 @@ import { ordersRouter } from './orders';
 import { productsRouter } from './products';
 import { storageRouter } from './storage';
 import { stripeRouter } from './stripe';
+import { tagsRouter } from './tags';
 
 export const appRouter = router({
   countries: countriesRouter,
@@ -14,6 +15,7 @@ export const appRouter = router({
   orders: ordersRouter,
   products: productsRouter,
   categories: categoriesRouter,
+  tags: tagsRouter,
   stripe: stripeRouter,
   auth: authRouter,
   storage: storageRouter,
