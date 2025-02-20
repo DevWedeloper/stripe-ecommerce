@@ -32,6 +32,7 @@ import { StripePaymentIntentService } from 'src/app/shared/data-access/stripe/st
 import { ThemeService } from 'src/app/shared/ui/theme.service';
 import { initializeAddressForm } from 'src/app/shared/utils/form';
 import { GetAddressCheckoutService } from '../../../../shared/data-access/address/get-address-checkout.service';
+import { AddressFormCheckoutComponent } from '../ui/address-form-checkout.component';
 import { ShippingDetailsFormComponent } from '../ui/shipping-details-form.component';
 import { ChangeAddressButtonComponent } from './change-address/change-address-button.component';
 
@@ -42,6 +43,7 @@ import { ChangeAddressButtonComponent } from './change-address/change-address-bu
     ReactiveFormsModule,
     HlmSpinnerComponent,
     ShippingDetailsFormComponent,
+    AddressFormCheckoutComponent,
     ChangeAddressButtonComponent,
   ],
   template: `
@@ -52,19 +54,22 @@ import { ChangeAddressButtonComponent } from './change-address/change-address-bu
             <app-change-address-button class="self-end" />
           }
           <app-shipping-details-form
-            [form]="form()"
-            [countries]="countries()"
             [stripe]="stripe"
             [elementsOptions]="elementsOptions()"
             [linkAuthenticationOptions]="linkAuthenticationOptions()"
             [paymentElementOptions]="paymentElementOptions"
             [isLoading]="isConfirmationTokenLoading()"
             [disabled]="!validFields() || isConfirmationTokenLoading()"
-            (statusChange)="statusChange($event)"
             (emailChange)="emailChange($event)"
             (paymentChange)="paymentChange($event)"
             (completePurchase)="completePurchase()"
-          />
+          >
+            <app-address-form-checkout
+              [form]="form()"
+              [countries]="countries()"
+              (statusChanges)="statusChange($event)"
+            />
+          </app-shipping-details-form>
         </div>
       }
     } @else {
