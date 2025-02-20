@@ -5,7 +5,7 @@ import {
   HlmMenuItemDirective,
   HlmSubMenuComponent,
 } from '@spartan-ng/ui-menu-helm';
-import { CategoryWithSubcategories } from 'src/server/use-cases/get-category-tree';
+import { CategoryWithSubcategories } from 'src/server/use-cases/category/get-category-tree';
 import { redirectToCategory } from './category-utils';
 
 @Component({
