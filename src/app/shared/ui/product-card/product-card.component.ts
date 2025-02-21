@@ -15,7 +15,7 @@ import { ProductWithImageAndPricing } from 'src/db/types';
     <a
       hlmCard
       class="flex h-full max-w-sm flex-col overflow-hidden rounded-lg border-2 border-border bg-background transition delay-150 ease-in-out hover:scale-105"
-      [routerLink]="'/product/' + product().id"
+      [routerLink]="path()"
     >
       <div class="relative h-48 w-full">
         <img
@@ -42,4 +42,5 @@ import { ProductWithImageAndPricing } from 'src/db/types';
 })
 export class ProductCardComponent {
   product = input.required<ProductWithImageAndPricing>();
+  path = input.required<string>();
 }

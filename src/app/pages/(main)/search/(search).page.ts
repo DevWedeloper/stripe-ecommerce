@@ -26,7 +26,10 @@ import { SearchService } from './data-access/search.service';
           class="grid animate-fade-in grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
         >
           @for (product of products(); track product.id) {
-            <app-product-card [product]="product" />
+            <app-product-card
+              [product]="product"
+              [path]="'/product/' + product.id"
+            />
           }
         </div>
         <hlm-numbered-pagination
