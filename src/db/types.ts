@@ -41,10 +41,7 @@ export type CreateProductData = {
     variationName: VariationsInsert['name'];
   })[];
   productItemsData: (Omit<ProductItemsInsert, 'productId'> & {
-    variations: {
-      variationName: Variations['name'];
-      variationValue: VariationOptions['value'];
-    }[];
+    variations: VariationObject[];
   })[];
   categoryId: Categories['id'];
   productImagesData: Omit<ProductImagesInsert, 'productId'>[];

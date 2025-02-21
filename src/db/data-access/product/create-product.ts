@@ -83,8 +83,8 @@ export const createProduct = async ({
         sku: item.sku,
         stock: item.stock,
         price: item.price,
-        variationName: variation.variationName,
-        variationValue: variation.variationValue,
+        variationName: variation.name,
+        variationValue: variation.value,
       })),
     );
 

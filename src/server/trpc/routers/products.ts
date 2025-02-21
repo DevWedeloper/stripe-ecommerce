@@ -37,8 +37,9 @@ export const productsRouter = router({
               z.object({
                 variations: z.array(
                   z.object({
-                    variationName: z.string(),
-                    variationValue: z.string(),
+                    name: z.string(),
+                    value: z.string(),
+                    order: z.number().nullable(),
                   }),
                 ),
               }),
