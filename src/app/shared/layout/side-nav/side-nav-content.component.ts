@@ -40,6 +40,10 @@ import { SideNavLinksComponent } from './side-nav-links.component';
     <div class="mb-4">
       <a appSideNavHeading appSideNavHeadingLink="order">Order</a>
     </div>
+
+    <div class="mb-4">
+      <a appSideNavHeading appSideNavHeadingLink="product">Product</a>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
