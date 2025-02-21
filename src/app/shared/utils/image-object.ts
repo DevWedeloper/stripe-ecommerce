@@ -4,9 +4,9 @@ import { ProductDetails, ProductWithImageAndPricing } from 'src/db/types';
 import { environment } from 'src/environments/environment';
 import { PaginatedProducts } from 'src/server/use-cases/types/paginated';
 
-const getS3ImageUrl = (imagePath: string | null): string => {
+const getS3ImageUrl = (imagePath: string): string => {
   const s3Url = environment.s3Url;
-  return imagePath ? `${s3Url}/${imagePath}` : '/fallback.svg';
+  return `${s3Url}/${imagePath}`;
 };
 
 const decodeBlurHashToImage = (blurHash: string): string => {
@@ -33,8 +33,10 @@ const transformImagePathAndPlaceholder = (
   imagePath: string | null,
   placeholder: string | null,
 ) => ({
-  imagePath: imagePath ? getS3ImageUrl(imagePath) : '',
-  placeholder: placeholder ? decodeBlurHashToImage(placeholder) : '',
+  imagePath: imagePath ? getS3ImageUrl(imagePath) : '/fallback.svg',
+  placeholder: placeholder
+    ? decodeBlurHashToImage(placeholder)
+    : decodeBlurHashToImage('00D]o8'),
 });
 
 export const transformProductImageObjects = (
