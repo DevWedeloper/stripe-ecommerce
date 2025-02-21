@@ -89,7 +89,7 @@ export const productsRouter = router({
         await searchProductsByKeyword(keyword, page, pageSize),
     ),
 
-  getByUserId: publicProcedure
+  getAllByUserId: publicProcedure
     .input(
       z.object({
         userId: z.string(),
