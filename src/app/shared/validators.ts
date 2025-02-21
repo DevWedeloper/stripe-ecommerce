@@ -59,6 +59,11 @@ export const matchPhrase =
 export const isInteger = (
   control: AbstractControl,
 ): ValidationErrors | null => {
-  const value = control.value || '';
-  return /^[0-9]+$/.test(value) ? null : { isInteger: true };
+  const value = control.value;
+  if (Array.isArray(value)) {
+    const invalid = value.some((val) => !Number.isInteger(val));
+    return invalid ? { isInteger: true } : null;
+  }
+
+  return Number.isInteger(value) ? null : { isInteger: true };
 };
