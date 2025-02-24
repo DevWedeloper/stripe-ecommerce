@@ -45,7 +45,6 @@ export const getPaginatedProductsByCategoryName = async (
       p.user_id as "userId", 
       p.name, 
       p.description, 
-      p.currency, 
       pi.image_path as "imagePath", 
       pi.placeholder, 
       plp.lowestPrice as "lowestPrice", 

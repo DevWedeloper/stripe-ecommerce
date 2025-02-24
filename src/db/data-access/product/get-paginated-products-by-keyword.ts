@@ -82,7 +82,6 @@ export const getPaginatedProductsByKeyword = async (
       userId: productsQuery.userId,
       name: productsQuery.name,
       description: productsQuery.description,
-      currency: productsQuery.currency,
       imagePath: thumbnailQuery.imagePath,
       placeholder: thumbnailQuery.placeholder,
       lowestPrice: productLowestPricesQuery.lowestPrice,

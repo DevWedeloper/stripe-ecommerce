@@ -43,7 +43,7 @@ import { ItemVariationComponent } from '../../../ui/item-variation.component';
         <app-item-variation [variations]="item().variations" />
         <p class="text-sm">{{ item().description }}</p>
         <p class="text-sm font-semibold">
-          {{ item().price | currency: item().currency }} x
+          {{ item().price | currency: 'USD' }} x
           {{ item().quantity }}
         </p>
       </div>

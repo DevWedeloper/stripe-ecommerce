@@ -55,7 +55,6 @@ import { ProductVariationsComponent } from './ui/product-variations.component';
               <app-product-pricing-details
                 [stock]="currentItem()!.stock"
                 [price]="currentItem()!.price"
-                [currency]="product()!.currency"
                 [(quantity)]="quantity"
                 (addToCart)="addToCart()"
               />
@@ -96,7 +95,6 @@ export default class ProductDetailPageComponent {
       name: product.name,
       userId: product.userId,
       description: product.description,
-      currency: product.currency,
       imagePath: product.imagePath,
       placeholder: product.placeholder,
       sku: currentItem.sku,

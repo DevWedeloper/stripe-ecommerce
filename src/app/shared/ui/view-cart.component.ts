@@ -31,12 +31,12 @@ import { ItemVariationComponent } from './item-variation.component';
           <div class="flex flex-col items-end justify-center">
             <span class="font-semibold">
               {{
-                product.price * product.quantity | currency: product.currency
+                product.price * product.quantity | currency: 'USD'
               }}
             </span>
             @if (product.quantity > 1) {
               <span class="${hlmMuted} text-sm">
-                {{ product.price | currency: product.currency }} each
+                {{ product.price | currency: 'USD' }} each
               </span>
             }
           </div>

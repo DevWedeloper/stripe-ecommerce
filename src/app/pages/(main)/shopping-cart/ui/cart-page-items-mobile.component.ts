@@ -47,7 +47,7 @@ import { QuantitySelectorComponent } from 'src/app/shared/ui/quantity-selector.c
         <app-item-variation [variations]="item().variations" />
         <div class="flex items-center justify-between">
           <p class="text-lg font-semibold">
-            {{ item().price * item().quantity | currency: item().currency }}
+            {{ item().price * item().quantity | currency: 'USD' }}
           </p>
           <app-quantity-selector
             [quantity]="item().quantity"

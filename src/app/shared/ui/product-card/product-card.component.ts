@@ -31,10 +31,10 @@ import { ProductWithImageAndPricing } from 'src/db/types';
         <p class="mb-4">{{ product().description }}</p>
         <div class="mb-2 mt-auto flex items-center justify-between">
           <span class="text-lg font-bold">
-            {{ product().lowestPrice | currency: product().currency }}
+            {{ product().lowestPrice | currency: 'USD' }}
           </span>
         </div>
-        <div class="text-sm">{{ product().currency }}</div>
+        <div class="text-sm">USD</div>
       </div>
     </a>
   `,

@@ -16,7 +16,7 @@ import { QuantitySelectorComponent } from 'src/app/shared/ui/quantity-selector.c
   template: `
     <div class="mb-4 text-xl font-semibold">
       Price:
-      {{ price() | currency: currency() }}
+      {{ price() | currency: 'USD' }}
     </div>
     <div class="mb-4">
       Stock:
@@ -42,7 +42,6 @@ import { QuantitySelectorComponent } from 'src/app/shared/ui/quantity-selector.c
 export class ProductPricingDetailsComponent {
   stock = input.required<number>();
   price = input.required<number>();
-  currency = input.required<string>();
   quantity = model.required<number>();
   addToCart = output<void>();
 

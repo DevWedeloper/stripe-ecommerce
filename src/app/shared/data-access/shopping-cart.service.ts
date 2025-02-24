@@ -27,7 +27,6 @@ const variationObjectSchema = z.object({
 const cartItemSchema = z.object({
   name: z.string(),
   description: z.string(),
-  currency: z.string().length(3),
   sku: z.string(),
   stock: z.number().nonnegative(),
   price: z.number().nonnegative(),

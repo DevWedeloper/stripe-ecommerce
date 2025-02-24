@@ -103,22 +103,21 @@ inserted_user_addresses AS (
         inserted_receivers r
 ),
 inserted_products AS (
-    INSERT INTO products (user_id, name, description, currency, is_deleted)
+    INSERT INTO products (user_id, name, description, is_deleted)
     SELECT
         u.id,
         p.name,
         p.description,
-        p.currency,
         false
     FROM
         inserted_users u
     CROSS JOIN (
         VALUES
-            ('Smartphone A', 'High-quality smartphone with latest features', 'USD'),
-            ('Laptop B', 'Powerful laptop for gaming and productivity', 'USD'),
-            ('Refrigerator C', 'Energy-efficient refrigerator with large capacity', 'USD'),
-            ('Washing Machine D', 'Automatic washing machine with multiple modes', 'USD')
-    ) AS p(name, description, currency)
+            ('Smartphone A', 'High-quality smartphone with latest features'),
+            ('Laptop B', 'Powerful laptop for gaming and productivity'),
+            ('Refrigerator C', 'Energy-efficient refrigerator with large capacity'),
+            ('Washing Machine D', 'Automatic washing machine with multiple modes')
+    ) AS p(name, description)
     RETURNING id, name
 ),
 inserted_items AS (

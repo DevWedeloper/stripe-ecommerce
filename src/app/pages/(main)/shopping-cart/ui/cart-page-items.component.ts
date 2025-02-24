@@ -56,7 +56,7 @@ import { QuantitySelectorComponent } from 'src/app/shared/ui/quantity-selector.c
 
       <div class="flex flex-col items-center justify-end gap-4">
         <span class="text-2xl font-semibold">
-          {{ item().price * item().quantity | currency: item().currency }}
+          {{ item().price * item().quantity | currency: 'USD' }}
         </span>
         <button
           hlmBtn

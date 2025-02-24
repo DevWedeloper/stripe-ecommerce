@@ -147,7 +147,6 @@ export const products = pgTable(
       .notNull(),
     name: text('name').notNull(),
     description: text('description').notNull(),
-    currency: char('currency', { length: 3 }).notNull(),
     isDeleted: boolean('is_deleted').default(false).notNull(),
   },
   (t) => [
