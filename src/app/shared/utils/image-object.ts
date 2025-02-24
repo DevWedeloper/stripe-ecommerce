@@ -4,7 +4,7 @@ import { ProductDetails, ProductWithImageAndPricing } from 'src/db/types';
 import { environment } from 'src/environments/environment';
 import { PaginatedProducts } from 'src/server/use-cases/types/paginated';
 
-const getS3ImageUrl = (imagePath: string): string => {
+export const getS3ImageUrl = (imagePath: string): string => {
   const s3Url = environment.s3Url;
   return `${s3Url}/${imagePath}`;
 };
