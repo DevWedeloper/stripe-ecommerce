@@ -56,14 +56,16 @@ export const matchPhrase =
     return value === expectedPhrase ? null : { matchPhrase: true };
   };
 
-export const isInteger = (
+export const isPositiveInteger = (
   control: AbstractControl,
 ): ValidationErrors | null => {
   const value = control.value;
   if (Array.isArray(value)) {
-    const invalid = value.some((val) => !Number.isInteger(val));
-    return invalid ? { isInteger: true } : null;
+    const invalid = value.some((val) => !Number.isInteger(val) || val <= 0);
+    return invalid ? { isPositiveInteger: true } : null;
   }
 
-  return Number.isInteger(value) ? null : { isInteger: true };
+  return Number.isInteger(value) && value > 0
+    ? null
+    : { isPositiveInteger: true };
 };

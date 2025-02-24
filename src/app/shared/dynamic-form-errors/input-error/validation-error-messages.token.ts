@@ -15,7 +15,7 @@ export const ERROR_MESSAGES: { [key: string]: (args?: any) => string } = {
   hasDigit: () => `Should contain at least one digit`,
   hasSpecialChar: () => `Should contain at least one special character`,
   zodEmail: () => `It should be a valid email`,
-  isInteger: () => `Should be an integer`,
+  isPositiveInteger: () => `Should be a positive integer`,
 };
 
 export const VALIDATION_ERROR_MESSAGES = new InjectionToken(
