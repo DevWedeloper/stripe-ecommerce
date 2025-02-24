@@ -14,7 +14,7 @@ import { ProductWithImageAndPricing } from 'src/db/types';
   template: `
     <a
       hlmCard
-      class="flex h-full max-w-sm flex-col overflow-hidden rounded-lg border-2 border-border bg-background transition delay-150 ease-in-out hover:scale-105"
+      class="flex w-full max-w-sm flex-col overflow-hidden rounded-lg border-2 border-border bg-background transition delay-150 ease-in-out hover:scale-105"
       [routerLink]="path()"
     >
       <div class="relative h-48 w-full">
