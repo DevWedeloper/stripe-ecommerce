@@ -8,7 +8,7 @@ export const passwordShouldMatch = (
   const confirmPassword = control.get('confirmPassword');
   const errors = { passwordShouldMatch: { mismatch: true } };
 
-  if (password?.value === confirmPassword?.value) {
+  if (password?.getRawValue() === confirmPassword?.getRawValue()) {
     return null;
   }
 
@@ -20,31 +20,31 @@ export const passwordShouldMatch = (
 export const hasUpperCase = (
   control: AbstractControl,
 ): ValidationErrors | null => {
-  const value = control.value || '';
+  const value = control.getRawValue() || '';
   return /[A-Z]/.test(value) ? null : { hasUpperCase: true };
 };
 
 export const hasLowerCase = (
   control: AbstractControl,
 ): ValidationErrors | null => {
-  const value = control.value || '';
+  const value = control.getRawValue() || '';
   return /[a-z]/.test(value) ? null : { hasLowerCase: true };
 };
 
 export const hasDigit = (control: AbstractControl): ValidationErrors | null => {
-  const value = control.value || '';
+  const value = control.getRawValue() || '';
   return /\d/.test(value) ? null : { hasDigit: true };
 };
 
 export const hasSpecialChar = (
   control: AbstractControl,
 ): ValidationErrors | null => {
-  const value = control.value || '';
+  const value = control.getRawValue() || '';
   return /[\p{P}\p{S}]/u.test(value) ? null : { hasSpecialChar: true };
 };
 
 export const zodEmail = (control: AbstractControl): ValidationErrors | null => {
-  const value = control.value || '';
+  const value = control.getRawValue() || '';
   const emailSchema = z.string().email();
   const validation = emailSchema.safeParse(value);
   return validation.success ? null : { zodEmail: true };
@@ -52,14 +52,14 @@ export const zodEmail = (control: AbstractControl): ValidationErrors | null => {
 
 export const matchPhrase =
   (expectedPhrase: string) => (control: AbstractControl) => {
-    const value = control.value || '';
+    const value = control.getRawValue() || '';
     return value === expectedPhrase ? null : { matchPhrase: true };
   };
 
 export const isPositiveInteger = (
   control: AbstractControl,
 ): ValidationErrors | null => {
-  const value = control.value;
+  const value = control.getRawValue();
   if (Array.isArray(value)) {
     const invalid = value.some((val) => !Number.isInteger(val) || val <= 0);
     return invalid ? { isPositiveInteger: true } : null;
