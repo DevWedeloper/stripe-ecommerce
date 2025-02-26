@@ -26,11 +26,11 @@ export const getPaginatedProductsByUserId = async (
   const productLowestPricesQuery = db.$with('product_lowest_prices_query').as(
     db
       .select({
-        productId: productItems.id,
+        productId: productItems.productId,
         lowestPrice: sql<number>`min(${productItems.price})`.as('lowest_price'),
       })
       .from(productItems)
-      .groupBy(productItems.id),
+      .groupBy(productItems.productId),
   );
 
   const query = db
