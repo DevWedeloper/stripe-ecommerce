@@ -32,6 +32,7 @@ export type ImageObject = {
   id: ProductImages['id'];
   imagePath: ProductImages['imagePath'];
   placeholder: ProductImages['placeholder'];
+  order: ProductImages['order'];
 };
 
 export type CreateProductData = {

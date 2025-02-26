@@ -36,8 +36,10 @@ export const getProductById = async (
         imageObjects: sql<ImageObject[]>`
           array_agg(
             json_build_object(
+              'id', ${productImages.id},
               'imagePath', ${productImages.imagePath}, 
-              'placeholder', ${productImages.placeholder}
+              'placeholder', ${productImages.placeholder},
+              'order', ${productImages.order}
             )
           )
         `.as('image_objects'),
