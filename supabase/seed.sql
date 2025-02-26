@@ -170,33 +170,34 @@ inserted_items AS (
     RETURNING id, product_id
 ),
 inserted_images AS (
-    INSERT INTO product_images (product_id, image_path, placeholder, is_thumbnail)
+    INSERT INTO product_images (product_id, image_path, placeholder, is_thumbnail, order)
     SELECT 
         ip.id, 
         v.image_path, 
         v.placeholder, 
-        v.is_thumbnail
+        v.is_thumbnail,
+        v.order
     FROM inserted_products ip
     JOIN (
         VALUES
             -- Smartphone A images
-            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', true),
-            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false),
-            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false),
-            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false),
+            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', true, 1),
+            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false, 2),
+            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false, 3),
+            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false, 4),
 
             -- Laptop B images
-            ('Laptop B', 'product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', true),
-            ('Laptop B', 'product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false),
-            ('Laptop B', 'product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false),
+            ('Laptop B', 'product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', true, 1),
+            ('Laptop B', 'product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false, 2),
+            ('Laptop B', 'product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false, 3),
 
             -- Refrigerator C images
-            ('Refrigerator C', 'product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', true),
-            ('Refrigerator C', 'product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', false),
+            ('Refrigerator C', 'product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', true, 1),
+            ('Refrigerator C', 'product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', false, 2),
 
             -- Washing Machine D images
-            ('Washing Machine D', 'product-images/washing_machine_d.webp', 'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ', true)
-    ) AS v(product_name, image_path, placeholder, is_thumbnail)
+            ('Washing Machine D', 'product-images/washing_machine_d.webp', 'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ', true, 1)
+    ) AS v(product_name, image_path, placeholder, is_thumbnail, order)
     ON v.product_name = ip.name
 )
 

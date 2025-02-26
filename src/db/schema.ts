@@ -188,6 +188,7 @@ export const productImages = pgTable(
     imagePath: text('image_path').notNull(),
     placeholder: text('placeholder').notNull(),
     isThumbnail: boolean('is_thumbnail').default(false),
+    order: smallint('order'),
   },
   (t) => [
     uniqueIndex('unique_thumbnail_per_product')
