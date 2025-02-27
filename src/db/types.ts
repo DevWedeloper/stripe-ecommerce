@@ -51,6 +51,7 @@ export type CreateProductData = {
 
 export type UpdateProductData = {
   userId: string;
+  productId: Products['id'];
   productData?: Omit<Products, 'isDeleted'>;
   productItemsData?: Omit<ProductItems, 'productId'>[];
   productImagesData?: {
