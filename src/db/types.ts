@@ -73,7 +73,10 @@ export type UpdateProductData = {
     addedVariationOptions?: VariationOptionsInsert[];
   };
   categoryId?: Categories['id'];
-  tagIds?: TagsSelect['id'][];
+  tagIds?: {
+    addedTagIds?: TagsSelect['id'][];
+    deletedTagIds?: TagsSelect['id'][];
+  };
 };
 
 export type ProductDetails = Omit<Products, 'isDeleted'> &
