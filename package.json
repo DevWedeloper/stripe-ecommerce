@@ -48,6 +48,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "front-matter": "^4.0.2",
+    "lodash": "^4.17.21",
     "marked": "^5.0.2",
     "marked-gfm-heading-id": "^3.1.0",
     "marked-highlight": "^2.0.1",
