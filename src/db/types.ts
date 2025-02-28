@@ -49,36 +49,6 @@ export type CreateProductData = {
   tagIds?: TagsSelect['id'][];
 };
 
-export type UpdateProductData = {
-  userId: string;
-  productId: Products['id'];
-  productData?: Omit<Products, 'isDeleted'>;
-  productItemsData?: Omit<ProductItems, 'productId'>[];
-  productImagesData?: {
-    updatedImages?: {
-      id: ProductImages['id'];
-      isThumbnail: ProductImages['isThumbnail'];
-      order: ProductImages['order'];
-    }[];
-    addedImages?: ProductImagesInsert[];
-    deletedImages?: {
-      id: ProductImages['id'];
-    }[];
-  };
-  variationOptionsData?: {
-    updatedVariationOptions?: {
-      id: VariationOptions['id'];
-      order: VariationOptions['order'];
-    }[];
-    addedVariationOptions?: VariationOptionsInsert[];
-  };
-  categoryId?: Categories['id'];
-  tagIds?: {
-    addedTagIds?: TagsSelect['id'][];
-    deletedTagIds?: TagsSelect['id'][];
-  };
-};
-
 export type ProductDetails = Omit<Products, 'isDeleted'> &
   NullishImageObject & {
     items: ProductItemObject[];
