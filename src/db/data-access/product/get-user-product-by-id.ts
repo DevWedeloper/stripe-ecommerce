@@ -15,7 +15,10 @@ import {
 import { ImageObject, ProductItemObject, VariationObject } from 'src/db/types';
 
 type ImageObjectWithThumbnail = ImageObject & { isThumbnail: boolean };
-type VariationObjectWithVariationId = VariationObject & { id: number };
+type VariationObjectWithIds = VariationObject & {
+  variationId: number;
+  optionId: number;
+};
 
 export const getUserProductById = async ({
   userId,
@@ -56,6 +59,7 @@ export const getUserProductById = async ({
         variationId: sql<number>`${variations.id}`.as('variation_id'),
         variationName: variations.name,
         variationValue: variationOptions.value,
+        optionsId: sql<number>`${variationOptions.id}`.as('option_id'),
         variationOptionsOrder: variationOptions.order,
       })
       .from(productItems)
@@ -126,9 +130,11 @@ export const getUserProductById = async ({
     db
       .select({
         productId: productItemDetailsQuery.productId,
-        variations: sql<VariationObjectWithVariationId[]>`
+        variations: sql<VariationObjectWithIds[]>`
           array_agg(
             distinct jsonb_build_object(
+              'variationId', ${productItemDetailsQuery.variationId},
+              'optionId', ${productItemDetailsQuery.optionsId},
               'name', ${productItemDetailsQuery.variationName},
               'value', ${productItemDetailsQuery.variationValue},
               'order', ${productItemDetailsQuery.variationOptionsOrder}
