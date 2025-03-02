@@ -5,6 +5,7 @@ import {
   variationOptions,
   variations,
 } from 'src/db/schema';
+import { updateProductSchema } from 'src/schemas/product';
 import { positiveIntSchema } from 'src/schemas/zod-schemas';
 import { createProduct } from 'src/server/use-cases/product/create-product';
 import { getProductById } from 'src/server/use-cases/product/get-product-by-id';
@@ -12,6 +13,7 @@ import { getProductsByCategoryName } from 'src/server/use-cases/product/get-prod
 import { getProductsByUserId } from 'src/server/use-cases/product/get-products-by-user-id';
 import { getUserProductById } from 'src/server/use-cases/product/get-user-product-by-id';
 import { searchProductsByKeyword } from 'src/server/use-cases/product/search-products-by-keyword';
+import { updateProductByUserId } from 'src/server/use-cases/product/update-product-by-user-id';
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
 
@@ -112,4 +114,8 @@ export const productsRouter = router({
       }),
     )
     .query(async ({ input }) => await getUserProductById(input)),
+
+  updateByUserId: publicProcedure
+    .input(updateProductSchema)
+    .mutation(async ({ input }) => await updateProductByUserId(input)),
 });
