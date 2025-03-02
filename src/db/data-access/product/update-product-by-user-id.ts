@@ -96,93 +96,89 @@ export const updateProductByUserId = async ({
         );
     }
 
-    if (productImagesData) {
-      const { updatedImages, addedImages, deletedImages } = productImagesData;
+    const { updatedImages, addedImages, deletedImages } = productImagesData;
 
-      // Ensure deletion happens first in case a user sets a new thumbnail
-      // and deletes the previous thumbnail at the same time.
-      if (deletedImages.length > 0) {
-        const idsToDelete = deletedImages.map((image) => image.id);
+    // Ensure deletion happens first in case a user sets a new thumbnail
+    // and deletes the previous thumbnail at the same time.
+    if (deletedImages.length > 0) {
+      const idsToDelete = deletedImages.map((image) => image.id);
 
-        await trx
-          .delete(productImages)
-          .where(inArray(productImages.id, idsToDelete));
-      }
-
-      if (updatedImages.length > 0) {
-        const ids = updatedImages.map((item) => item.id);
-
-        const newThumbnail = updatedImages.find((item) => item.isThumbnail);
-
-        if (newThumbnail) {
-          await trx
-            .update(productImages)
-            .set({ isThumbnail: false })
-            .where(
-              and(
-                eq(productImages.id, newThumbnail.id),
-                eq(productImages.isThumbnail, true),
-              ),
-            );
-        }
-
-        const isThumbnailCase = sql`CASE`;
-        const orderCase = sql`CASE`;
-
-        updatedImages.forEach((item) => {
-          isThumbnailCase.append(
-            sql` WHEN ${productImages.id} = ${item.id} THEN ${item.isThumbnail}`,
-          );
-          orderCase.append(
-            sql` WHEN ${productImages.id} = ${item.id} THEN ${item.order}`,
-          );
-        });
-
-        isThumbnailCase.append(sql` ELSE ${productImages.isThumbnail} END`);
-        orderCase.append(sql` ELSE ${productImages.order} END`);
-
-        await trx
-          .update(productImages)
-          .set({
-            isThumbnail: isThumbnailCase,
-            order: orderCase,
-          })
-          .where(inArray(productImages.id, ids));
-      }
-
-      if (addedImages.length > 0) {
-        await trx.insert(productImages).values(addedImages);
-      }
+      await trx
+        .delete(productImages)
+        .where(inArray(productImages.id, idsToDelete));
     }
 
-    if (variationOptionsData) {
-      const { updatedVariationOptions, addedVariationOptions } =
-        variationOptionsData;
+    if (updatedImages.length > 0) {
+      const ids = updatedImages.map((item) => item.id);
 
-      if (updatedVariationOptions.length > 0) {
-        const ids = updatedVariationOptions.map((item) => item.id);
+      const newThumbnail = updatedImages.find((item) => item.isThumbnail);
 
-        const orderCase = sql`CASE`;
-
-        updatedVariationOptions.forEach((item) => {
-          orderCase.append(
-            sql` WHEN ${variationOptions.id} = ${item.id} THEN ${item.order}`,
-          );
-        });
-
-        orderCase.append(sql` ELSE ${variationOptions.order} END`);
-
+      if (newThumbnail) {
         await trx
-          .update(variationOptions)
-          .set({
-            order: orderCase,
-          })
-          .where(inArray(variationOptions.id, ids));
+          .update(productImages)
+          .set({ isThumbnail: false })
+          .where(
+            and(
+              eq(productImages.id, newThumbnail.id),
+              eq(productImages.isThumbnail, true),
+            ),
+          );
       }
 
-      if (addedVariationOptions.length > 0) {
-        await trx.insert(variationOptions).values(addedVariationOptions);
-      }
+      const isThumbnailCase = sql`CASE`;
+      const orderCase = sql`CASE`;
+
+      updatedImages.forEach((item) => {
+        isThumbnailCase.append(
+          sql` WHEN ${productImages.id} = ${item.id} THEN ${item.isThumbnail}`,
+        );
+        orderCase.append(
+          sql` WHEN ${productImages.id} = ${item.id} THEN ${item.order}`,
+        );
+      });
+
+      isThumbnailCase.append(sql` ELSE ${productImages.isThumbnail} END`);
+      orderCase.append(sql` ELSE ${productImages.order} END`);
+
+      await trx
+        .update(productImages)
+        .set({
+          isThumbnail: isThumbnailCase,
+          order: orderCase,
+        })
+        .where(inArray(productImages.id, ids));
+    }
+
+    if (addedImages.length > 0) {
+      await trx.insert(productImages).values(addedImages);
+    }
+
+    const { updatedVariationOptions, addedVariationOptions } =
+      variationOptionsData;
+
+    if (updatedVariationOptions.length > 0) {
+      const ids = updatedVariationOptions.map((item) => item.id);
+
+      const orderCase = sql`CASE`;
+
+      updatedVariationOptions.forEach((item) => {
+        orderCase.append(
+          sql` WHEN ${variationOptions.id} = ${item.id} THEN ${item.order}`,
+        );
+      });
+
+      orderCase.append(sql` ELSE ${variationOptions.order} END`);
+
+      await trx
+        .update(variationOptions)
+        .set({
+          order: orderCase,
+        })
+        .where(inArray(variationOptions.id, ids));
+    }
+
+    if (addedVariationOptions.length > 0) {
+      await trx.insert(variationOptions).values(addedVariationOptions);
     }
 
     if (categoryId) {
@@ -196,24 +192,22 @@ export const updateProductByUserId = async ({
       });
     }
 
-    if (tagIds) {
-      const { addedTagIds, deletedTagIds } = tagIds;
+    const { addedTagIds, deletedTagIds } = tagIds;
 
-      if (addedTagIds.length > 0) {
-        const tagInserts = addedTagIds.map((tagId) => ({ productId, tagId }));
-        await trx.insert(productTags).values(tagInserts);
-      }
+    if (addedTagIds.length > 0) {
+      const tagInserts = addedTagIds.map((tagId) => ({ productId, tagId }));
+      await trx.insert(productTags).values(tagInserts);
+    }
 
-      if (deletedTagIds.length > 0) {
-        await trx
-          .delete(productTags)
-          .where(
-            and(
-              eq(productTags.productId, productId),
-              inArray(productTags.tagId, deletedTagIds),
-            ),
-          );
-      }
+    if (deletedTagIds.length > 0) {
+      await trx
+        .delete(productTags)
+        .where(
+          and(
+            eq(productTags.productId, productId),
+            inArray(productTags.tagId, deletedTagIds),
+          ),
+        );
     }
   });
 };
