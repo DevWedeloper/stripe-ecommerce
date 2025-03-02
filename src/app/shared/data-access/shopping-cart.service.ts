@@ -21,7 +21,7 @@ type UniqueItemIdentifier = {
 const variationObjectSchema = z.object({
   name: z.string(),
   value: z.string(),
-  order: z.number().nullable().optional(),
+  order: z.number(),
 });
 
 const cartItemSchema = z.object({

@@ -188,7 +188,7 @@ export const productImages = pgTable(
     imagePath: text('image_path').notNull(),
     placeholder: text('placeholder').notNull(),
     isThumbnail: boolean('is_thumbnail').default(false),
-    order: smallint('order'),
+    order: smallint('order').notNull(),
   },
   (t) => [
     uniqueIndex('unique_thumbnail_per_product')
@@ -247,7 +247,7 @@ export const variationOptions = pgTable(
       .notNull()
       .references(() => variations.id, { onDelete: 'cascade' }),
     value: text('value').notNull(),
-    order: smallint('order'),
+    order: smallint('order').notNull(),
   },
   (t) => [
     index('variation_id_idx').on(t.variationId),

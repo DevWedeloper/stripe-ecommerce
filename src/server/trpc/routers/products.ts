@@ -41,7 +41,7 @@ export const productsRouter = router({
                   z.object({
                     name: z.string(),
                     value: z.string(),
-                    order: z.number().nullable(),
+                    order: z.number(),
                   }),
                 ),
               }),
@@ -53,6 +53,7 @@ export const productsRouter = router({
             imagePath: z.string(),
             placeholder: z.string(),
             isThumbnail: z.boolean(),
+            order: z.number(),
           }),
         ),
         tagIds: z.array(z.number()).optional(),
