@@ -1,5 +1,13 @@
 import { encode } from 'blurhash';
 
+const fileToBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 const loadImage = async (src: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const img = new Image();
@@ -23,11 +31,14 @@ const getImageData = (image: HTMLImageElement): ImageData => {
   return context.getImageData(0, 0, image.width, image.height);
 };
 
-export const generatePlaceholder = async (
-  imageUrl: string,
-): Promise<string> => {
+const generatePlaceholder = async (imageUrl: string): Promise<string> => {
   const image = await loadImage(imageUrl);
   const imageData = getImageData(image);
 
   return encode(imageData.data, imageData.width, imageData.height, 4, 4);
+};
+
+export const fileToPlaceholder = async (file: File): Promise<string> => {
+  const base64 = await fileToBase64(file);
+  return generatePlaceholder(base64);
 };
