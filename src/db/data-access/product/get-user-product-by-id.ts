@@ -20,6 +20,8 @@ type VariationObjectWithIds = VariationObject & {
   optionId: number;
 };
 
+export type UserProductData = ReturnType<typeof getUserProductById>;
+
 export const getUserProductById = async ({
   userId,
   productId,
