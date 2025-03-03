@@ -98,16 +98,6 @@ export const updateProductByUserId = async ({
 
     const { updatedImages, addedImages, deletedImages } = productImagesData;
 
-    // Ensure deletion happens first in case a user sets a new thumbnail
-    // and deletes the previous thumbnail at the same time.
-    if (deletedImages.length > 0) {
-      const idsToDelete = deletedImages.map((image) => image.id);
-
-      await trx
-        .delete(productImages)
-        .where(inArray(productImages.id, idsToDelete));
-    }
-
     if (updatedImages.length > 0) {
       const ids = updatedImages.map((item) => item.id);
 
@@ -151,6 +141,14 @@ export const updateProductByUserId = async ({
 
     if (addedImages.length > 0) {
       await trx.insert(productImages).values(addedImages);
+    }
+
+    if (deletedImages.length > 0) {
+      const idsToDelete = deletedImages.map((image) => image.id);
+
+      await trx
+        .delete(productImages)
+        .where(inArray(productImages.id, idsToDelete));
     }
 
     const productImagesQuery =
