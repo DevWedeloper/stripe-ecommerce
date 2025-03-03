@@ -8,19 +8,28 @@ import {
 } from 'src/db/schema';
 import { z } from 'zod';
 
+const productImagesInsertWithoutProductId = createInsertSchema(
+  productImages,
+).omit({
+  productId: true,
+});
+const variationOptionsInsertWithoutVariationId = createInsertSchema(
+  variationOptions,
+).omit({
+  variationId: true,
+});
+
 export const createProductSchema = z.object({
   productData: createInsertSchema(products).omit({ isDeleted: true }),
   variationsData: z.array(
     createInsertSchema(variations).omit({ productId: true }),
   ),
   variationOptionsData: z.array(
-    createInsertSchema(variationOptions)
-      .omit({ variationId: true })
-      .merge(
-        z.object({
-          variationName: z.string(),
-        }),
-      ),
+    variationOptionsInsertWithoutVariationId.merge(
+      z.object({
+        variationName: z.string(),
+      }),
+    ),
   ),
   productItemsData: z.array(
     createInsertSchema(productItems)
@@ -38,14 +47,7 @@ export const createProductSchema = z.object({
       ),
   ),
   categoryId: z.number(),
-  productImagesData: z.array(
-    z.object({
-      imagePath: z.string(),
-      placeholder: z.string(),
-      isThumbnail: z.boolean(),
-      order: z.number(),
-    }),
-  ),
+  productImagesData: z.array(productImagesInsertWithoutProductId),
   tagIds: z.array(z.number()).optional(),
 });
 
@@ -64,9 +66,7 @@ const productUpdateSchema = z.object({
           order: true,
         }),
       ),
-      addedOptions: z.array(
-        createInsertSchema(variationOptions).omit({ variationId: true }),
-      ),
+      addedOptions: z.array(variationOptionsInsertWithoutVariationId),
     }),
   ),
   items: z.array(createSelectSchema(productItems).omit({ productId: true })),
@@ -78,7 +78,7 @@ const productUpdateSchema = z.object({
         order: true,
       }),
     ),
-    added: z.array(createInsertSchema(productImages).omit({ productId: true })),
+    added: z.array(productImagesInsertWithoutProductId),
   }),
   categoryId: z.number(),
   tagIds: z.array(z.number()),
