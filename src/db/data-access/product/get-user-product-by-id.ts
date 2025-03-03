@@ -33,7 +33,7 @@ export const getUserProductById = async ({
     db
       .select({
         productId: productImages.productId,
-        imageObjects: sql<ImageObjectWithThumbnail[]>`
+        imageObjects: sql<ImageObjectWithThumbnail[] | null>`
           array_agg(
             json_build_object(
               'id', ${productImages.id},
