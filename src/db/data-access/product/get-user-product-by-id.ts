@@ -14,7 +14,7 @@ import {
 } from 'src/db/schema';
 import { ImageObject, ProductItemObject, VariationObject } from 'src/db/types';
 
-type ImageObjectWithThumbnail = ImageObject & { isThumbnail: boolean };
+export type ImageObjectWithThumbnail = ImageObject & { isThumbnail: boolean };
 type VariationObjectWithIds = VariationObject & {
   variationId: number;
   optionId: number;
