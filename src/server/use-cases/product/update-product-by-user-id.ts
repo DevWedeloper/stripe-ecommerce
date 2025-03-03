@@ -1,8 +1,9 @@
 import { difference, isEqual, pick } from 'lodash-es';
+import { getUserProductById } from 'src/db/data-access/product/get-user-product-by-id';
 import { updateProductByUserId as updateProductByUserIdFromDb } from 'src/db/data-access/product/update-product-by-user-id';
 import { UpdateProductSchema } from 'src/schemas/product';
 
-export const updateProductByUserId = ({
+export const updateProductByUserId = async ({
   userId,
   productId,
   original,
@@ -98,7 +99,7 @@ export const updateProductByUserId = ({
 
   const tagIds = { addedTagIds, deletedTagIds };
 
-  return updateProductByUserIdFromDb({
+  await updateProductByUserIdFromDb({
     userId,
     productId,
     productData,
@@ -108,4 +109,6 @@ export const updateProductByUserId = ({
     categoryId,
     tagIds,
   });
+
+  return getUserProductById({ userId, productId });
 };
