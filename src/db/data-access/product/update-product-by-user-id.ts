@@ -1,4 +1,4 @@
-import { and, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, eq, getTableColumns, inArray, sql } from 'drizzle-orm';
 import { db } from 'src/db';
 import {
   Categories,
@@ -56,8 +56,8 @@ export const updateProductByUserId = async ({
   variationOptionsData,
   categoryId,
   tagIds,
-}: UpdateProductData): Promise<void> => {
-  await db.transaction(async (trx) => {
+}: UpdateProductData) => {
+  const result = await db.transaction(async (trx) => {
     if (productData) {
       const { id, name, description } = productData;
       await trx
@@ -119,7 +119,7 @@ export const updateProductByUserId = async ({
           .set({ isThumbnail: false })
           .where(
             and(
-              eq(productImages.id, newThumbnail.id),
+              eq(productImages.productId, productId),
               eq(productImages.isThumbnail, true),
             ),
           );
@@ -152,6 +152,19 @@ export const updateProductByUserId = async ({
     if (addedImages.length > 0) {
       await trx.insert(productImages).values(addedImages);
     }
+
+    const productImagesQuery =
+      deletedImages.length > 0 ||
+      addedImages.length > 0 ||
+      updatedImages.length > 0
+        ? await trx
+            .select({
+              ...getTableColumns(productImages),
+            })
+            .from(productImages)
+            .where(eq(productImages.productId, productId))
+            .orderBy(asc(productImages.order))
+        : [];
 
     const { updatedVariationOptions, addedVariationOptions } =
       variationOptionsData;
@@ -209,5 +222,9 @@ export const updateProductByUserId = async ({
           ),
         );
     }
+
+    return productImagesQuery;
   });
+
+  return { productImages: result };
 };
