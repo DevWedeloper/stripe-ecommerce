@@ -87,14 +87,14 @@ export const getUserProductById = async ({
           stock: productItemDetailsQuery.stock,
           price: productItemDetailsQuery.price,
           variations: sql<VariationObject[]>`
-              array_agg(
-                json_build_object(
-                  'name', ${productItemDetailsQuery.variationName},
-                  'value', ${productItemDetailsQuery.variationValue},
-                  'order', ${productItemDetailsQuery.variationOptionsOrder}
-                )
+            array_agg(
+              json_build_object(
+                'name', ${productItemDetailsQuery.variationName},
+                'value', ${productItemDetailsQuery.variationValue},
+                'order', ${productItemDetailsQuery.variationOptionsOrder}
               )
-            `.as('variations'),
+            )
+          `.as('variations'),
         })
         .from(productItemDetailsQuery)
         .groupBy(
