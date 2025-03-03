@@ -11,7 +11,7 @@ import {
   VariationOptionsInsert,
   variations,
 } from 'src/db/schema';
-import { CreateProductData } from 'src/db/types';
+import { CreateProductSchema } from 'src/schemas/product';
 
 export const createProduct = async ({
   productData,
@@ -21,7 +21,7 @@ export const createProduct = async ({
   categoryId,
   productImagesData,
   tagIds,
-}: CreateProductData): Promise<void> => {
+}: CreateProductSchema): Promise<void> => {
   await db.transaction(async (trx) => {
     const productResult = await trx
       .insert(products)
