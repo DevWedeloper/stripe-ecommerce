@@ -40,6 +40,7 @@ export const getUserProductById = async ({
               'isThumbnail', ${productImages.isThumbnail},
               'order', ${productImages.order}
             )
+            order by ${productImages.order} asc
           )
         `.as('image_objects'),
       })
