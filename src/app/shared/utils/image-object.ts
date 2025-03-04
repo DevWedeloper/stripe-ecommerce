@@ -4,9 +4,15 @@ import { ProductDetails, ProductWithImageAndPricing } from 'src/db/types';
 import { environment } from 'src/environments/environment';
 import { PaginatedProducts } from 'src/server/use-cases/types/paginated';
 
-export const getS3ImageUrl = (imagePath: string): string => {
+export const getS3ImageUrl = ({
+  path,
+  bucketName,
+}: {
+  path: string;
+  bucketName: string;
+}): string => {
   const s3Url = environment.s3Url;
-  return `${s3Url}/${imagePath}`;
+  return `${s3Url}/${bucketName}/${path}`;
 };
 
 const decodeBlurHashToImage = (blurHash: string): string => {
@@ -30,10 +36,16 @@ const decodeBlurHashToImage = (blurHash: string): string => {
 };
 
 const transformImagePathAndPlaceholder = (
-  imagePath: string | null,
+  path: string | null,
   placeholder: string | null,
+  bucketName: string,
 ) => ({
-  imagePath: imagePath ? getS3ImageUrl(imagePath) : '/fallback.svg',
+  imagePath: path
+    ? getS3ImageUrl({
+        path,
+        bucketName,
+      })
+    : '/fallback.svg',
   placeholder: placeholder
     ? decodeBlurHashToImage(placeholder)
     : decodeBlurHashToImage('00D]o8'),
@@ -43,12 +55,17 @@ export const transformProductImageObjects = (
   products: ProductDetails,
 ): ProductDetails => ({
   ...products,
-  ...transformImagePathAndPlaceholder(products.imagePath, products.placeholder),
+  ...transformImagePathAndPlaceholder(
+    products.imagePath,
+    products.placeholder,
+    environment.productImagesS3Bucket,
+  ),
   imageObjects: products.imageObjects.map((imageObject) => ({
     ...imageObject,
     ...transformImagePathAndPlaceholder(
       imageObject.imagePath,
       imageObject.placeholder,
+      environment.productImagesS3Bucket,
     ),
   })),
 });
@@ -57,7 +74,11 @@ const transformProductImagePathAndPlaceholder = (
   product: ProductWithImageAndPricing,
 ): ProductWithImageAndPricing => ({
   ...product,
-  ...transformImagePathAndPlaceholder(product.imagePath, product.placeholder),
+  ...transformImagePathAndPlaceholder(
+    product.imagePath,
+    product.placeholder,
+    environment.productImagesS3Bucket,
+  ),
 });
 
 export const transformProductImagePathsAndPlaceholders = (

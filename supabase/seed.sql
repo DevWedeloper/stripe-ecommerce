@@ -181,22 +181,22 @@ inserted_images AS (
     JOIN (
         VALUES
             -- Smartphone A images
-            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', true, 1),
-            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false, 2),
-            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false, 3),
-            ('Smartphone A', 'product-images/smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false, 4),
+            ('Smartphone A', 'smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', true, 1),
+            ('Smartphone A', 'smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false, 2),
+            ('Smartphone A', 'smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false, 3),
+            ('Smartphone A', 'smartphone_a.webp', 'LAS$ovt7~qt7t7fQt7j[IUay%Mj[', false, 4),
 
             -- Laptop B images
-            ('Laptop B', 'product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', true, 1),
-            ('Laptop B', 'product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false, 2),
-            ('Laptop B', 'product-images/laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false, 3),
+            ('Laptop B', 'laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', true, 1),
+            ('Laptop B', 'laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false, 2),
+            ('Laptop B', 'laptop_b.webp', 'LQRW0bt7?bof~qWBM{ay4nof%Mj[', false, 3),
 
             -- Refrigerator C images
-            ('Refrigerator C', 'product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', true, 1),
-            ('Refrigerator C', 'product-images/refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', false, 2),
+            ('Refrigerator C', 'refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', true, 1),
+            ('Refrigerator C', 'refrigerator_c.webp', 'LSRp8-WB~qxu-;WBIUt7xuayRjay', false, 2),
 
             -- Washing Machine D images
-            ('Washing Machine D', 'product-images/washing_machine_d.webp', 'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ', true, 1)
+            ('Washing Machine D', 'washing_machine_d.webp', 'LaOf}eSeR4ay*0R*X9WV%2aeRjjZ', true, 1)
     ) AS v(product_name, image_path, placeholder, is_thumbnail, order)
     ON v.product_name = ip.name
 )

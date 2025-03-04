@@ -12,9 +12,7 @@ export const deleteProductByUserId = async (
   { userId, productId }: { userId: string; productId: number },
 ) => {
   const images = await getProductImagesByUserId(userId, productId);
-  const paths = images.map((image) =>
-    image.imagePath.replace(`${SUPABASE_PRODUCT_IMAGES_S3_BUCKET}/`, ''),
-  );
+  const paths = images.map((image) => image.imagePath);
 
   if (paths.length > 0) {
     const { error } = await supabase.storage
