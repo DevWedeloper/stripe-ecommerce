@@ -22,7 +22,7 @@ type StatusStreams<TLoading, TSuccess, TError> = {
   error: Observable<TError>;
 };
 
-type DisableTemporarily<TEnable, TDisable> = {
+type ToggleDisable<TEnable, TDisable> = {
   enable: Observable<TEnable>;
   disable: Observable<TDisable>;
 };
@@ -80,5 +80,5 @@ export const initialLoading = () =>
 export const toggleDisableStream = <TEnable, TDisable>({
   enable,
   disable,
-}: DisableTemporarily<TEnable, TDisable>) =>
+}: ToggleDisable<TEnable, TDisable>) =>
   merge(enable.pipe(map(() => false)), disable.pipe(map(() => true)));
