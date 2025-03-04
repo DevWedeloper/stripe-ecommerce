@@ -1,5 +1,5 @@
 import { createProductSchema, updateProductSchema } from 'src/schemas/product';
-import { positiveIntSchema } from 'src/schemas/zod-schemas';
+import { positiveIntSchema } from 'src/schemas/shared/numbers';
 import { createProduct } from 'src/server/use-cases/product/create-product';
 import { deleteProductByUserId } from 'src/server/use-cases/product/delete-product-by-user-id';
 import { getProductById } from 'src/server/use-cases/product/get-product-by-id';

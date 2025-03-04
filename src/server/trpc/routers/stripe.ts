@@ -1,4 +1,4 @@
-import { positiveIntSchema } from 'src/schemas/zod-schemas';
+import { positiveIntSchema } from 'src/schemas/shared/numbers';
 import { createPaymentIntent } from 'src/server/use-cases/stripe/create-payment-intent';
 import { updatePaymentIntentMetadata } from 'src/server/use-cases/stripe/update-payment-intent-metadata';
 import { z } from 'zod';
@@ -25,14 +25,7 @@ export const stripeRouter = router({
       }),
     )
     .mutation(
-      async ({
-        input: {
-          totalAmountInCents,
-          userId,
-          orderDate,
-          cart,
-        },
-      }) =>
+      async ({ input: { totalAmountInCents, userId, orderDate, cart } }) =>
         await createPaymentIntent({
           totalAmountInCents,
           userId,

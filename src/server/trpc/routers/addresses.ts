@@ -1,6 +1,6 @@
 import { createInsertSchema } from 'drizzle-zod';
 import { addresses, receivers } from 'src/db/schema';
-import { positiveIntSchema } from 'src/schemas/zod-schemas';
+import { positiveIntSchema } from 'src/schemas/shared/numbers';
 import { createAddress } from 'src/server/use-cases/address/create-address';
 import { createAddressWithoutUser } from 'src/server/use-cases/address/create-address-without-user';
 import { deleteAddress } from 'src/server/use-cases/address/delete-address';
