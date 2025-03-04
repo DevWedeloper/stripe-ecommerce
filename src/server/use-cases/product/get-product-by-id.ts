@@ -13,10 +13,12 @@ export const getProductById = async (
   }
 
   const sortedVariations = sortByOrder(result.variations);
+  const sortedImageObjects = sortByOrder(result.imageObjects);
 
   const product = {
     ...result,
     variations: reduceToRecord(sortedVariations),
+    imageObjects: sortedImageObjects,
   };
 
   return product;
