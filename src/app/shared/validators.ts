@@ -1,4 +1,5 @@
 import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { intSchema, positiveIntSchema } from 'src/schemas/shared/numbers';
 import { z } from 'zod';
 
 export const passwordShouldMatch = (
@@ -62,7 +63,7 @@ export const isInteger = (
   const value = control.value;
 
   if (Array.isArray(value)) {
-    const invalid = value.some((val) => !Number.isInteger(val));
+    const invalid = value.some((val) => !intSchema.safeParse(val));
     return invalid ? { isInteger: true } : null;
   }
 
@@ -73,12 +74,15 @@ export const isPositiveInteger = (
   control: AbstractControl,
 ): ValidationErrors | null => {
   const value = control.getRawValue();
+
   if (Array.isArray(value)) {
-    const invalid = value.some((val) => !Number.isInteger(val) || val <= 0);
+    const invalid = value.some(
+      (val) => !positiveIntSchema.safeParse(val).success,
+    );
     return invalid ? { isPositiveInteger: true } : null;
   }
 
-  return Number.isInteger(value) && value > 0
+  return positiveIntSchema.safeParse(value).success
     ? null
     : { isPositiveInteger: true };
 };
