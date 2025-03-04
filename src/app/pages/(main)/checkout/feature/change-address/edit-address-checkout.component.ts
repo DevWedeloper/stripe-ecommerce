@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -33,7 +32,7 @@ import { disableTemporarilyStream } from 'src/app/shared/utils/rxjs';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditAddressCheckoutComponent implements AfterViewInit {
+export class EditAddressCheckoutComponent {
   private fb = inject(FormBuilder);
 
   private selectedAddressService = inject(SelectedAddressService);
@@ -139,16 +138,5 @@ export class EditAddressCheckoutComponent implements AfterViewInit {
     };
 
     this.updateAddressService.updateAddress(data);
-  }
-
-  // For some reason the select is not being initialized with the correct value so I have to do this until I find a better solution
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const countryId = this.selectedAddress()?.countryId;
-
-      if (!countryId) return;
-
-      this.form().patchValue({ countryId });
-    }, 19);
   }
 }

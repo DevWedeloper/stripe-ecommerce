@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -14,7 +13,6 @@ import { initializeAddressForm } from 'src/app/shared/utils/form';
 import { disableTemporarilyStream } from 'src/app/shared/utils/rxjs';
 import { UpdateAddressService } from '../../../../../shared/data-access/address/update-address.service';
 import { AddressFormComponent } from '../../../../../shared/ui/address-form.component';
-
 @Component({
   selector: 'app-update-address',
   imports: [AddressFormComponent],
@@ -29,7 +27,7 @@ import { AddressFormComponent } from '../../../../../shared/ui/address-form.comp
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UpdateAddressComponent implements AfterViewInit {
+export class UpdateAddressComponent {
   private fb = inject(FormBuilder);
 
   private selectedAddressService = inject(SelectedAddressService);
@@ -133,16 +131,5 @@ export class UpdateAddressComponent implements AfterViewInit {
     };
 
     this.updateAddressService.updateAddress(data);
-  }
-
-  // For some reason the select is not being initialized with the correct value so I have to do this until I find a better solution
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const countryId = this.selectedAddress()?.countryId;
-
-      if (!countryId) return;
-
-      this.form().patchValue({ countryId });
-    }, 19);
   }
 }
