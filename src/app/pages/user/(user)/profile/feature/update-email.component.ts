@@ -8,7 +8,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ValueChangeEvent } from '@angular/forms';
 import { filter } from 'rxjs';
 import { emailField } from 'src/app/shared/utils/form';
-import { disableTemporarilyStream } from 'src/app/shared/utils/rxjs';
+import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { UpdateEmailService } from '../data-access/update-email.service';
 import { UpdateEmailFormComponent } from '../ui/update-email-form.component';
 
@@ -40,7 +40,7 @@ export class UpdateEmailComponent {
     ...emailField,
   });
 
-  private disableTemporarily$ = disableTemporarilyStream({
+  private disableTemporarily$ = toggleDisableStream({
     enable: this.form.events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),

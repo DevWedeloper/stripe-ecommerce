@@ -7,7 +7,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { filter } from 'rxjs';
 import { emailField } from 'src/app/shared/utils/form';
-import { disableTemporarilyStream } from 'src/app/shared/utils/rxjs';
+import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { isNotAuthenticatedGuard } from '../../../shared/guards/is-not-authenticated.guard';
 import { ForgotPasswordService } from './data-access/forgot-password.service';
 import { ForgotPasswordFormComponent } from './ui/forgot-password-form.component';
@@ -71,7 +71,7 @@ export default class ForgotPasswordPageComponent {
     ...emailField,
   });
 
-  private disableTemporarily$ = disableTemporarilyStream({
+  private disableTemporarily$ = toggleDisableStream({
     enable: this.form.events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),

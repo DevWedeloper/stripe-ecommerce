@@ -16,7 +16,7 @@ import {
   emailField,
   passwordWithValidationField,
 } from 'src/app/shared/utils/form';
-import { disableTemporarilyStream } from 'src/app/shared/utils/rxjs';
+import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { passwordShouldMatch } from 'src/app/shared/validators';
 import { isNotAuthenticatedGuard } from '../../../shared/guards/is-not-authenticated.guard';
 import { SignUpService } from './data-access/sign-up.service';
@@ -91,7 +91,7 @@ export default class SignUpPageComponent {
     },
   );
 
-  private disableTemporarily$ = disableTemporarilyStream({
+  private disableTemporarily$ = toggleDisableStream({
     enable: this.form.events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),

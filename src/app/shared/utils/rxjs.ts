@@ -77,7 +77,7 @@ export const initialLoading = () =>
     startWith(true),
   );
 
-export const disableTemporarilyStream = <TEnable, TDisable>({
+export const toggleDisableStream = <TEnable, TDisable>({
   enable,
   disable,
 }: DisableTemporarily<TEnable, TDisable>) =>

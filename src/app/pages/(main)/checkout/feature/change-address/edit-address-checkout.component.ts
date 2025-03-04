@@ -14,7 +14,7 @@ import { UpdateAddressService } from 'src/app/shared/data-access/address/update-
 import { CountriesService } from 'src/app/shared/data-access/countries.service';
 import { AddressFormComponent } from 'src/app/shared/ui/address-form.component';
 import { initializeAddressForm } from 'src/app/shared/utils/form';
-import { disableTemporarilyStream } from 'src/app/shared/utils/rxjs';
+import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 
 @Component({
   selector: 'app-edit-address-checkout',
@@ -62,7 +62,7 @@ export class EditAddressCheckoutComponent {
     });
   });
 
-  private disableTemporarily$ = disableTemporarilyStream({
+  private disableTemporarily$ = toggleDisableStream({
     enable: this.form().events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),

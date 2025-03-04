@@ -10,7 +10,7 @@ import { combineLatest, filter, map } from 'rxjs';
 import { SelectedAddressService } from 'src/app/shared/data-access/address/selected-address.service';
 import { CountriesService } from 'src/app/shared/data-access/countries.service';
 import { initializeAddressForm } from 'src/app/shared/utils/form';
-import { disableTemporarilyStream } from 'src/app/shared/utils/rxjs';
+import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { UpdateAddressService } from '../../../../../shared/data-access/address/update-address.service';
 import { AddressFormComponent } from '../../../../../shared/ui/address-form.component';
 @Component({
@@ -55,7 +55,7 @@ export class UpdateAddressComponent {
     });
   });
 
-  private disableTemporarily$ = disableTemporarilyStream({
+  private disableTemporarily$ = toggleDisableStream({
     enable: this.form().events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),

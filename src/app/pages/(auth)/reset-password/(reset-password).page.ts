@@ -10,7 +10,7 @@ import {
   confirmPasswordField,
   passwordWithValidationField,
 } from 'src/app/shared/utils/form';
-import { disableTemporarilyStream } from 'src/app/shared/utils/rxjs';
+import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { passwordShouldMatch } from 'src/app/shared/validators';
 import { isAuthenticatedGuard } from '../../../shared/guards/is-authenticated.guard';
 import { ResetPasswordService } from './data-access/reset-password.service';
@@ -69,7 +69,7 @@ export default class ResetPasswordPageComponent {
     },
   );
 
-  private disableTemporarily$ = disableTemporarilyStream({
+  private disableTemporarily$ = toggleDisableStream({
     enable: this.form.events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),
