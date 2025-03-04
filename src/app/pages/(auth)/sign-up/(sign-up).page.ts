@@ -44,7 +44,7 @@ export const routeMeta: RouteMeta = {
       <app-sign-up-form
         [form]="form"
         [isLoading]="isLoading()"
-        [disableTemporarily]="disableTemporarily()"
+        [disable]="disable()"
         (submitChange)="onSubmit()"
       />
     </div>
@@ -91,14 +91,14 @@ export default class SignUpPageComponent {
     },
   );
 
-  private disableTemporarily$ = toggleDisableStream({
+  private disable$ = toggleDisableStream({
     enable: this.form.events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),
     disable: this.error$,
   });
 
-  protected disableTemporarily = toSignal(this.disableTemporarily$, {
+  protected disable = toSignal(this.disable$, {
     initialValue: false,
   });
 

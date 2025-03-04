@@ -20,7 +20,7 @@ import { UpdateEmailFormComponent } from '../ui/update-email-form.component';
     <app-update-email-form
       [form]="form"
       [isLoading]="isLoading()"
-      [disableTemporarily]="disableTemporarily()"
+      [disable]="disable()"
       (submitChange)="onSubmit()"
     />
   `,
@@ -40,14 +40,14 @@ export class UpdateEmailComponent {
     ...emailField,
   });
 
-  private disableTemporarily$ = toggleDisableStream({
+  private disable$ = toggleDisableStream({
     enable: this.form.events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),
     disable: this.error$,
   });
 
-  protected disableTemporarily = toSignal(this.disableTemporarily$, {
+  protected disable = toSignal(this.disable$, {
     initialValue: false,
   });
 

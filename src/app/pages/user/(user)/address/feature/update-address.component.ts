@@ -21,7 +21,7 @@ import { AddressFormComponent } from '../../../../../shared/ui/address-form.comp
       [form]="form()"
       [countries]="countries()"
       [isLoading]="isLoading()"
-      [disableTemporarily]="disableTemporarily() || sameAsSelectedAddress()"
+      [disable]="disable() || sameAsSelectedAddress()"
       (submitChange)="onSubmit()"
     />
   `,
@@ -55,14 +55,14 @@ export class UpdateAddressComponent {
     });
   });
 
-  private disableTemporarily$ = toggleDisableStream({
+  private disable$ = toggleDisableStream({
     enable: this.form().events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),
     disable: this.error$,
   });
 
-  protected disableTemporarily = toSignal(this.disableTemporarily$, {
+  protected disable = toSignal(this.disable$, {
     initialValue: false,
   });
 

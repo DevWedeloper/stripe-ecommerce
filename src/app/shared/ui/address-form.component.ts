@@ -117,7 +117,7 @@ import { CountrySelect } from 'src/db/schema';
 
       <button
         hlmBtnWithLoading
-        [disabled]="form().invalid || isLoading() || disableTemporarily()"
+        [disabled]="form().invalid || isLoading() || disable()"
         class="w-full"
         [isLoading]="isLoading()"
       >
@@ -131,7 +131,7 @@ export class AddressFormComponent {
   form = input.required<FormGroup>();
   countries = input.required<CountrySelect[]>();
   isLoading = input.required<boolean>();
-  disableTemporarily = input.required<boolean>();
+  disable = input.required<boolean>();
   submitChange = output<void>();
 
   formDir = viewChild.required(FormGroupDirective);

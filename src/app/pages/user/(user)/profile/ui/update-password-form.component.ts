@@ -62,7 +62,7 @@ import {
         <div hlmCardFooter class="flex justify-end">
           <button
             hlmBtnWithLoading
-            [disabled]="form().invalid || isLoading() || disableTemporarily()"
+            [disabled]="form().invalid || isLoading() || disable()"
             [isLoading]="isLoading()"
           >
             Submit
@@ -76,7 +76,7 @@ import {
 export class UpdatePasswordFormComponent {
   form = input.required<FormGroup>();
   isLoading = input.required<boolean>();
-  disableTemporarily = input.required<boolean>();
+  disable = input.required<boolean>();
   submitChange = output<void>();
 
   formDir = viewChild.required(FormGroupDirective);

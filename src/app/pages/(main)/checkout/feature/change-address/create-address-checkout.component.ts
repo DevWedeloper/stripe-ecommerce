@@ -24,7 +24,7 @@ import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
       [form]="form"
       [countries]="countries()"
       [isLoading]="isLoading()"
-      [disableTemporarily]="disableTemporarily()"
+      [disable]="disable()"
       (submitChange)="onSubmit()"
     />
     <button hlmBtn class="w-full" (click)="cancelChange.emit()">Cancel</button>
@@ -49,14 +49,14 @@ export class CreateAddressCheckoutComponent {
 
   protected form = initializeAddressForm(this.fb);
 
-  private disableTemporarily$ = toggleDisableStream({
+  private disable$ = toggleDisableStream({
     enable: this.form.events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),
     disable: this.error$,
   });
 
-  protected disableTemporarily = toSignal(this.disableTemporarily$, {
+  protected disable = toSignal(this.disable$, {
     initialValue: false,
   });
 

@@ -38,7 +38,7 @@ export const routeMeta: RouteMeta = {
       <app-reset-password-form
         [form]="form"
         [isLoading]="isLoading()"
-        [disableTemporarily]="disableTemporarily()"
+        [disable]="disable()"
         (submitChange)="onSubmit()"
       />
     </div>
@@ -69,14 +69,14 @@ export default class ResetPasswordPageComponent {
     },
   );
 
-  private disableTemporarily$ = toggleDisableStream({
+  private disable$ = toggleDisableStream({
     enable: this.form.events.pipe(
       filter((event) => event instanceof ValueChangeEvent),
     ),
     disable: this.error$,
   });
 
-  protected disableTemporarily = toSignal(this.disableTemporarily$, {
+  protected disable = toSignal(this.disable$, {
     initialValue: false,
   });
 

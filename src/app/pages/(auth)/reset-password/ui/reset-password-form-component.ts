@@ -53,7 +53,7 @@ import {
 
       <button
         hlmBtnWithLoading
-        [disabled]="form().invalid || isLoading() || disableTemporarily()"
+        [disabled]="form().invalid || isLoading() || disable()"
         class="w-full"
         [isLoading]="isLoading()"
       >
@@ -66,7 +66,7 @@ import {
 export class ResetPasswordFormComponent {
   form = input.required<FormGroup>();
   isLoading = input.required<boolean>();
-  disableTemporarily = input.required<boolean>();
+  disable = input.required<boolean>();
   submitChange = output<void>();
 
   protected onSubmit(): void {
