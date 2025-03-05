@@ -7,6 +7,7 @@ import {
   inject,
   input,
   signal,
+  untracked,
 } from '@angular/core';
 import { FormGroupDirective, NgControl, NgForm } from '@angular/forms';
 import { hlm } from '@spartan-ng/brain/core';
@@ -36,7 +37,7 @@ export const inputVariants = cva(
     },
   },
 );
-type InputVariants = VariantProps;
+type InputVariants = VariantProps<typeof inputVariants>;
 
 @Directive({
   selector: '[hlmInput]',
@@ -95,14 +96,14 @@ export class HlmInputDirective implements BrnFormFieldControl, DoCheck {
       this._parentForm,
     );
 
-    effect(
-      () => {
+    effect(() => {
+      const error = this._errorStateTracker.errorState();
+      untracked(() => {
         if (this.ngControl) {
-          this.setError(this._errorStateTracker.errorState());
+          this.setError(error);
         }
-      },
-      { allowSignalWrites: true },
-    );
+      });
+    });
   }
 
   ngDoCheck() {
