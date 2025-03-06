@@ -11,7 +11,7 @@ export const protectedProcedure = t.procedure.use(
   async ({ ctx: { event }, next }) => {
     const supabase = createClient(event);
 
-    const { error } = await supabase.auth.getUser();
+    const { data, error } = await supabase.auth.getUser();
 
     if (error) {
       throw new TRPCError({
@@ -20,6 +20,10 @@ export const protectedProcedure = t.procedure.use(
       });
     }
 
-    return next();
+    return next({
+      ctx: {
+        user: data.user,
+      },
+    });
   },
 );
