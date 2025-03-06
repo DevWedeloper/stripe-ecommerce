@@ -10,10 +10,10 @@ import { searchProductsByKeyword } from 'src/server/use-cases/product/search-pro
 import { updateProductByUserId } from 'src/server/use-cases/product/update-product-by-user-id';
 import { createClient } from 'src/supabase/server';
 import { z } from 'zod';
-import { publicProcedure, router } from '../trpc';
+import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 export const productsRouter = router({
-  create: publicProcedure
+  create: protectedProcedure
     .input(createProductSchema)
     .mutation(async ({ input }) => await createProduct(input)),
 
@@ -47,7 +47,7 @@ export const productsRouter = router({
         await searchProductsByKeyword(keyword, page, pageSize),
     ),
 
-  getAllByUserId: publicProcedure
+  getAllByUserId: protectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -60,7 +60,7 @@ export const productsRouter = router({
         await getProductsByUserId(userId, page, pageSize),
     ),
 
-  getByUserId: publicProcedure
+  getByUserId: protectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -69,11 +69,11 @@ export const productsRouter = router({
     )
     .query(async ({ input }) => await getUserProductById(input)),
 
-  updateByUserId: publicProcedure
+  updateByUserId: protectedProcedure
     .input(updateProductSchema)
     .mutation(async ({ input }) => await updateProductByUserId(input)),
 
-  deleteByUserId: publicProcedure
+  deleteByUserId: protectedProcedure
     .input(
       z.object({
         userId: z.string(),

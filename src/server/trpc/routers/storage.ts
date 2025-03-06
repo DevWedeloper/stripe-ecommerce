@@ -1,10 +1,10 @@
 import { createSignedUploadUrl } from 'src/server/use-cases/storage/create-signed-upload-url';
 import { createClient } from 'src/supabase/server';
 import { z } from 'zod';
-import { publicProcedure, router } from '../trpc';
+import { protectedProcedure, router } from '../trpc';
 
 export const storageRouter = router({
-  createSignedUploadUrl: publicProcedure
+  createSignedUploadUrl: protectedProcedure
     .input(
       z.object({
         storageId: z.string(),

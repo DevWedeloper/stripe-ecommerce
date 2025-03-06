@@ -8,10 +8,10 @@ import { getAddressesByUserId } from 'src/server/use-cases/address/get-addresses
 import { setAsDefaultAddress } from 'src/server/use-cases/address/set-as-default-address';
 import { updateAddress } from 'src/server/use-cases/address/update-address';
 import { z } from 'zod';
-import { publicProcedure, router } from '../trpc';
+import { protectedProcedure, router } from '../trpc';
 
 export const addressRouter = router({
-  createAddress: publicProcedure
+  createAddress: protectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -24,11 +24,11 @@ export const addressRouter = router({
       async ({ input: { userId, data } }) => await createAddress(userId, data),
     ),
 
-  createAddressWithoutUser: publicProcedure
+  createAddressWithoutUser: protectedProcedure
     .input(createInsertSchema(addresses).merge(createInsertSchema(receivers)))
     .mutation(async ({ input }) => await createAddressWithoutUser(input)),
 
-  getByUserId: publicProcedure
+  getByUserId: protectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -41,7 +41,7 @@ export const addressRouter = router({
         await getAddressesByUserId(userId, page, pageSize),
     ),
 
-  setAsDefault: publicProcedure
+  setAsDefault: protectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -54,7 +54,7 @@ export const addressRouter = router({
         await setAsDefaultAddress(userId, addressId, receiverId),
     ),
 
-  updateAddress: publicProcedure
+  updateAddress: protectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -68,7 +68,7 @@ export const addressRouter = router({
     )
     .mutation(async ({ input }) => await updateAddress(input)),
 
-  deleteAddress: publicProcedure
+  deleteAddress: protectedProcedure
     .input(
       z.object({
         userId: z.string(),

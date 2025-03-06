@@ -3,10 +3,10 @@ import { orderStatusEnum } from 'src/db/schema';
 import { getOrdersByUserId } from 'src/server/use-cases/order/get-orders-by-user-id';
 import { updateOrderStatus } from 'src/server/use-cases/order/update-order-status';
 import { z } from 'zod';
-import { publicProcedure, router } from '../trpc';
+import { protectedProcedure, router } from '../trpc';
 
 export const ordersRouter = router({
-  getByUserId: publicProcedure
+  getByUserId: protectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -20,7 +20,7 @@ export const ordersRouter = router({
         await getOrdersByUserId(userId, page, pageSize, status),
     ),
 
-  updateStatus: publicProcedure
+  updateStatus: protectedProcedure
     .input(
       z.object({
         orderId: z.number(),

@@ -11,7 +11,7 @@ import { updateEmail } from 'src/server/use-cases/auth/update-email';
 import { updatePassword } from 'src/server/use-cases/auth/update-password';
 import { createAdminClient, createClient } from 'src/supabase/server';
 import { z } from 'zod';
-import { publicProcedure, router } from '../trpc';
+import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 const emailSchema = z.string().email();
 const passwordSchema = z.string();
@@ -76,14 +76,14 @@ export const authRouter = router({
       return handleResult(result);
     }),
 
-  updateEmail: publicProcedure
+  updateEmail: protectedProcedure
     .input(z.object({ email: emailSchema }))
     .mutation(async ({ input, ctx: { event } }) => {
       const result = await updateEmail(createClient(event), input);
       return handleResult(result);
     }),
 
-  updatePassword: publicProcedure
+  updatePassword: protectedProcedure
     .input(z.object({ password: passwordWithValidationSchema }))
     .mutation(async ({ input, ctx: { event } }) => {
       const result = await updatePassword(createClient(event), input);
@@ -120,7 +120,7 @@ export const authRouter = router({
     return handleResult(result);
   }),
 
-  deleteUser: publicProcedure
+  deleteUser: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx: { event } }) => {
       const result = await deleteUser(createAdminClient(event), input);
