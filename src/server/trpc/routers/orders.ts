@@ -9,15 +9,18 @@ export const ordersRouter = router({
   getByUserId: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
         page: z.number(),
         pageSize: z.number(),
         status: z.optional(createSelectSchema(orderStatusEnum)),
       }),
     )
     .query(
-      async ({ input: { userId, page, pageSize, status } }) =>
-        await getOrdersByUserId(userId, page, pageSize, status),
+      async ({
+        ctx: {
+          user: { id },
+        },
+        input: { page, pageSize, status },
+      }) => await getOrdersByUserId(id, page, pageSize, status),
     ),
 
   updateStatus: protectedProcedure

@@ -12,16 +12,14 @@ import { protectedProcedure, router } from '../trpc';
 
 export const addressRouter = router({
   createAddress: protectedProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-        data: createInsertSchema(addresses).merge(
-          createInsertSchema(receivers),
-        ),
-      }),
-    )
+    .input(createInsertSchema(addresses).merge(createInsertSchema(receivers)))
     .mutation(
-      async ({ input: { userId, data } }) => await createAddress(userId, data),
+      async ({
+        ctx: {
+          user: { id },
+        },
+        input,
+      }) => await createAddress(id, input),
     ),
 
   createAddressWithoutUser: protectedProcedure
@@ -31,33 +29,38 @@ export const addressRouter = router({
   getByUserId: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
         page: positiveIntSchema,
         pageSize: positiveIntSchema,
       }),
     )
     .query(
-      async ({ input: { userId, page, pageSize } }) =>
-        await getAddressesByUserId(userId, page, pageSize),
+      async ({
+        ctx: {
+          user: { id },
+        },
+        input: { page, pageSize },
+      }) => await getAddressesByUserId(id, page, pageSize),
     ),
 
   setAsDefault: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
         addressId: positiveIntSchema,
         receiverId: positiveIntSchema,
       }),
     )
     .mutation(
-      async ({ input: { userId, addressId, receiverId } }) =>
-        await setAsDefaultAddress(userId, addressId, receiverId),
+      async ({
+        ctx: {
+          user: { id },
+        },
+        input: { addressId, receiverId },
+      }) => await setAsDefaultAddress(id, addressId, receiverId),
     ),
 
   updateAddress: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
         addressId: positiveIntSchema,
         receiverId: positiveIntSchema,
         currentAddressData: createInsertSchema(addresses),
@@ -66,18 +69,28 @@ export const addressRouter = router({
         newReceiverData: createInsertSchema(receivers),
       }),
     )
-    .mutation(async ({ input }) => await updateAddress(input)),
+    .mutation(
+      async ({
+        ctx: {
+          user: { id },
+        },
+        input,
+      }) => await updateAddress({ ...input, userId: id }),
+    ),
 
   deleteAddress: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
         addressId: positiveIntSchema,
         receiverId: positiveIntSchema,
       }),
     )
     .mutation(
-      async ({ input: { userId, addressId, receiverId } }) =>
-        await deleteAddress(userId, addressId, receiverId),
+      async ({
+        ctx: {
+          user: { id },
+        },
+        input: { addressId, receiverId },
+      }) => await deleteAddress(id, addressId, receiverId),
     ),
 });

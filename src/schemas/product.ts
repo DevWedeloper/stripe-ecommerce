@@ -85,7 +85,6 @@ const productUpdateSchema = z.object({
 });
 
 export const updateProductSchema = z.object({
-  userId: z.string(),
   productId: z.number(),
   original: productUpdateSchema,
   modified: productUpdateSchema,

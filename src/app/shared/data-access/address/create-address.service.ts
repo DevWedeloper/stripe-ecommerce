@@ -1,7 +1,6 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { map, share, Subject, withLatestFrom } from 'rxjs';
-import { AuthService } from 'src/app/shared/data-access/auth.service';
+import { share, Subject } from 'rxjs';
 import { Address } from 'src/app/shared/types/address';
 import {
   errorStream,
@@ -17,18 +16,10 @@ import { TrpcClient } from 'src/trpc-client';
 })
 export class CreateAddressService {
   private _trpc = inject(TrpcClient);
-  private authService = inject(AuthService);
 
   private createAddressTrigger$ = new Subject<Address>();
 
   private createAddress$ = this.createAddressTrigger$.pipe(
-    withLatestFrom(this.authService.user$),
-    map(([data, user]) => {
-      if (!user) {
-        throw new Error('User is not authenticated.');
-      }
-      return { userId: user.id, data };
-    }),
     materializeAndShare((data) =>
       this._trpc.addresses.createAddress.mutate(data),
     ),

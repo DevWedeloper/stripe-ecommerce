@@ -1,7 +1,6 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, filter, map, share, withLatestFrom } from 'rxjs';
-import { AuthService } from 'src/app/shared/data-access/auth.service';
+import { BehaviorSubject, filter, share } from 'rxjs';
 import {
   errorStream,
   materializeAndShare,
@@ -16,7 +15,6 @@ import { TrpcClient } from 'src/trpc-client';
 })
 export class DeleteAddressService {
   private _trpc = inject(TrpcClient);
-  private authService = inject(AuthService);
 
   private deleteAddressTrigger$ = new BehaviorSubject<{
     addressId: number;
@@ -25,16 +23,6 @@ export class DeleteAddressService {
 
   private deleteAddress$ = this.deleteAddressTrigger$.pipe(
     filter(Boolean),
-    withLatestFrom(this.authService.user$),
-    map(([data, user]) => {
-      if (!user) {
-        throw new Error('User is not authenticated.');
-      }
-      return {
-        ...data,
-        userId: user.id,
-      };
-    }),
     materializeAndShare((data) =>
       this._trpc.addresses.deleteAddress.mutate(data),
     ),

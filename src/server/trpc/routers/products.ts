@@ -50,38 +50,60 @@ export const productsRouter = router({
   getAllByUserId: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
         page: positiveIntSchema,
         pageSize: positiveIntSchema,
       }),
     )
     .query(
-      async ({ input: { userId, page, pageSize } }) =>
-        await getProductsByUserId(userId, page, pageSize),
+      async ({
+        ctx: {
+          user: { id },
+        },
+        input: { page, pageSize },
+      }) => await getProductsByUserId(id, page, pageSize),
     ),
 
   getByUserId: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
         productId: positiveIntSchema,
       }),
     )
-    .query(async ({ input }) => await getUserProductById(input)),
+    .query(
+      async ({
+        ctx: {
+          user: { id },
+        },
+        input,
+      }) => await getUserProductById({ ...input, userId: id }),
+    ),
 
-  updateByUserId: protectedProcedure
-    .input(updateProductSchema)
-    .mutation(async ({ input }) => await updateProductByUserId(input)),
+  updateByUserId: protectedProcedure.input(updateProductSchema).mutation(
+    async ({
+      ctx: {
+        user: { id },
+      },
+      input,
+    }) => await updateProductByUserId(id, input),
+  ),
 
   deleteByUserId: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
         productId: positiveIntSchema,
       }),
     )
     .mutation(
-      async ({ input, ctx: { event } }) =>
-        await deleteProductByUserId(createClient(event), input),
+      async ({
+        ctx: {
+          event,
+          user: { id },
+        },
+        input,
+      }) =>
+        await deleteProductByUserId(createClient(event), {
+          ...input,
+          userId: id,
+        }),
     ),
 });

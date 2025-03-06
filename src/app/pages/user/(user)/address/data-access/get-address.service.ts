@@ -1,17 +1,8 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import {
-  map,
-  merge,
-  scan,
-  startWith,
-  Subject,
-  switchMap,
-  withLatestFrom,
-} from 'rxjs';
+import { merge, scan, startWith, Subject, switchMap } from 'rxjs';
 import { CreateAddressService } from 'src/app/shared/data-access/address/create-address.service';
 import { UpdateAddressService } from 'src/app/shared/data-access/address/update-address.service';
-import { AuthService } from 'src/app/shared/data-access/auth.service';
 import {
   errorStream,
   finalizedStatusStream,
@@ -29,7 +20,6 @@ import { SetAsDefaultAddressService } from './set-as-default-address.service';
 })
 export class GetAddressService {
   private _trpc = inject(TrpcClient);
-  private authService = inject(AuthService);
   private createAddressService = inject(CreateAddressService);
   private updateAddressService = inject(UpdateAddressService);
   private setAsDefaultAddressService = inject(SetAsDefaultAddressService);
@@ -53,14 +43,12 @@ export class GetAddressService {
       this.nextBatch$.pipe(
         startWith(0),
         scan((acc) => acc + 1, 0),
-        withLatestFrom(this.authService.user$),
-        map(([page, user]) => {
-          if (!user) {
-            throw new Error('User is not authenticated.');
-          }
-          return { userId: user.id, page, pageSize: this.pageSize };
-        }),
-        switchMap((data) => this._trpc.addresses.getByUserId.query(data)),
+        switchMap((page) =>
+          this._trpc.addresses.getByUserId.query({
+            page,
+            pageSize: this.pageSize,
+          }),
+        ),
         scan((acc, curr) => ({
           page: curr.page,
           pageSize: curr.pageSize,

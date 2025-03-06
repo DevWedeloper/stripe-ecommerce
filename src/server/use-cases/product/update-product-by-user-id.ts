@@ -3,12 +3,10 @@ import { getUserProductById } from 'src/db/data-access/product/get-user-product-
 import { updateProductByUserId as updateProductByUserIdFromDb } from 'src/db/data-access/product/update-product-by-user-id';
 import { UpdateProductSchema } from 'src/schemas/product';
 
-export const updateProductByUserId = async ({
-  userId,
-  productId,
-  original,
-  modified,
-}: UpdateProductSchema) => {
+export const updateProductByUserId = async (
+  userId: string,
+  { productId, original, modified }: UpdateProductSchema,
+) => {
   const isNameAndDescriptionSame = isEqual(
     pick(original, ['name', 'description']),
     pick(modified, ['name', 'description']),
