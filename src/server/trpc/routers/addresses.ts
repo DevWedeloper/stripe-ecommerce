@@ -1,5 +1,6 @@
 import { createInsertSchema } from 'drizzle-zod';
 import { addresses, receivers } from 'src/db/schema';
+import { updateAddressSchema } from 'src/schemas/address';
 import { positiveIntSchema } from 'src/schemas/shared/numbers';
 import { createAddress } from 'src/server/use-cases/address/create-address';
 import { createAddressWithoutUser } from 'src/server/use-cases/address/create-address-without-user';
@@ -58,25 +59,14 @@ export const addressRouter = router({
       }) => await setAsDefaultAddress(id, addressId, receiverId),
     ),
 
-  updateAddress: protectedProcedure
-    .input(
-      z.object({
-        addressId: positiveIntSchema,
-        receiverId: positiveIntSchema,
-        currentAddressData: createInsertSchema(addresses),
-        currentReceiverData: createInsertSchema(receivers),
-        newAddressData: createInsertSchema(addresses),
-        newReceiverData: createInsertSchema(receivers),
-      }),
-    )
-    .mutation(
-      async ({
-        ctx: {
-          user: { id },
-        },
-        input,
-      }) => await updateAddress({ ...input, userId: id }),
-    ),
+  updateAddress: protectedProcedure.input(updateAddressSchema).mutation(
+    async ({
+      ctx: {
+        user: { id },
+      },
+      input,
+    }) => await updateAddress(id, input),
+  ),
 
   deleteAddress: protectedProcedure
     .input(

@@ -8,7 +8,7 @@ import {
   successStream,
 } from 'src/app/shared/utils/rxjs';
 import { showError } from 'src/app/shared/utils/toast';
-import { UpdateAddressData } from 'src/db/types';
+import { UpdateAddressSchema } from 'src/schemas/address';
 import { TrpcClient } from 'src/trpc-client';
 
 @Injectable({
@@ -17,10 +17,8 @@ import { TrpcClient } from 'src/trpc-client';
 export class UpdateAddressService {
   private _trpc = inject(TrpcClient);
 
-  private updateAddressTrigger$ = new BehaviorSubject<Omit<
-    UpdateAddressData,
-    'userId'
-  > | null>(null);
+  private updateAddressTrigger$ =
+    new BehaviorSubject<UpdateAddressSchema | null>(null);
 
   private updateAddress$ = this.updateAddressTrigger$.pipe(
     filter(Boolean),
@@ -49,7 +47,7 @@ export class UpdateAddressService {
       .subscribe((error) => showError(error.message));
   }
 
-  updateAddress(data: Omit<UpdateAddressData, 'userId'>): void {
+  updateAddress(data: UpdateAddressSchema): void {
     this.updateAddressTrigger$.next(data);
   }
 }

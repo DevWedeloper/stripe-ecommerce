@@ -99,8 +99,6 @@ export class EditAddressCheckoutComponent {
     if (!selectedAddress) return;
 
     const {
-      addressId,
-      receiverId,
       addressLine1,
       addressLine2,
       city,
@@ -108,12 +106,15 @@ export class EditAddressCheckoutComponent {
       postalCode,
       countryId,
       fullName,
-    } = selectedAddress;
+    } = this.form().getRawValue();
+
+    if (!countryId) throw new Error('countryId cannot be null.');
+
+    const { addressId, receiverId } = selectedAddress;
 
     const data = {
-      addressId,
-      receiverId,
-      currentAddressData: {
+      address: {
+        id: addressId,
         addressLine1,
         addressLine2,
         city,
@@ -121,19 +122,9 @@ export class EditAddressCheckoutComponent {
         postalCode,
         countryId,
       },
-      currentReceiverData: {
+      receiver: {
+        id: receiverId,
         fullName,
-      },
-      newAddressData: {
-        addressLine1: this.form().getRawValue().addressLine1,
-        addressLine2: this.form().getRawValue().addressLine2,
-        city: this.form().getRawValue().city,
-        state: this.form().getRawValue().state,
-        postalCode: this.form().getRawValue().postalCode,
-        countryId,
-      },
-      newReceiverData: {
-        fullName: this.form().getRawValue().fullName,
       },
     };
 
