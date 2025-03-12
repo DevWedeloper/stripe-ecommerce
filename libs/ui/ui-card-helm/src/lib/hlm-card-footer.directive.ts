@@ -14,7 +14,7 @@ export const cardFooterVariants = cva('flex p-6 pt-0', {
     direction: 'row',
   },
 });
-export type CardFooterVariants = VariantProps;
+export type CardFooterVariants = VariantProps<typeof cardFooterVariants>;
 
 @Directive({
   selector: '[hlmCardFooter]',

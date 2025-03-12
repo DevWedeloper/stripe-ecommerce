@@ -18,7 +18,7 @@ export const hlmMenuItemVariants = cva(
     defaultVariants: { inset: false },
   },
 );
-export type HlmMenuItemVariants = VariantProps;
+export type HlmMenuItemVariants = VariantProps<typeof hlmMenuItemVariants>;
 
 @Directive({
   selector: '[hlmMenuItem]',

@@ -14,7 +14,7 @@ export const cardHeaderVariants = cva('flex p-6', {
     direction: 'column',
   },
 });
-export type CardHeaderVariants = VariantProps;
+export type CardHeaderVariants = VariantProps<typeof cardHeaderVariants>;
 
 @Directive({
   selector: '[hlmCardHeader]',

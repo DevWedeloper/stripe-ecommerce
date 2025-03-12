@@ -15,7 +15,9 @@ const BrnButtonConfigToken = new InjectionToken<BrnButtonConfig>(
   'BrnButtonConfig',
 );
 
-export function provideBrnButtonConfig(config: Partial): ValueProvider {
+export function provideBrnButtonConfig(
+  config: Partial<BrnButtonConfig>,
+): ValueProvider {
   return {
     provide: BrnButtonConfigToken,
     useValue: { ...defaultConfig, ...config },

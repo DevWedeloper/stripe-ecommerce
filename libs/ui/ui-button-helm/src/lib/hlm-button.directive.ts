@@ -32,7 +32,7 @@ export const buttonVariants = cva(
     },
   },
 );
-export type ButtonVariants = VariantProps;
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 @Directive({
   selector: '[hlmBtn]',

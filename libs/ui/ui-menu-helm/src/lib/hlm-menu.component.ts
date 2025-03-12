@@ -18,7 +18,7 @@ export const menuVariants = cva(
     },
   },
 );
-type MenuVariants = VariantProps;
+type MenuVariants = VariantProps<typeof menuVariants>;
 
 @Component({
   selector: 'hlm-menu',

@@ -7,7 +7,7 @@ export const cardContentVariants = cva('p-6 pt-0', {
   variants: {},
   defaultVariants: {},
 });
-export type CardContentVariants = VariantProps;
+export type CardContentVariants = VariantProps<typeof cardContentVariants>;
 
 @Directive({
   selector: '[hlmCardContent]',

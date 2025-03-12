@@ -10,7 +10,7 @@ export const cardTitleVariants = cva(
     defaultVariants: {},
   },
 );
-export type CardTitleVariants = VariantProps;
+export type CardTitleVariants = VariantProps<typeof cardTitleVariants>;
 
 @Directive({
   selector: '[hlmCardTitle]',

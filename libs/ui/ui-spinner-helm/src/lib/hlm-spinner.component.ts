@@ -21,7 +21,7 @@ export const spinnerVariants = cva('inline-block', {
     size: 'default',
   },
 });
-export type SpinnerVariants = VariantProps;
+export type SpinnerVariants = VariantProps<typeof spinnerVariants>;
 
 @Component({
   selector: 'hlm-spinner',

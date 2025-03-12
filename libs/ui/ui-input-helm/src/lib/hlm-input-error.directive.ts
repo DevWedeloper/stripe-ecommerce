@@ -7,7 +7,7 @@ export const inputErrorVariants = cva('text-destructive text-sm font-medium', {
   variants: {},
   defaultVariants: {},
 });
-export type InputErrorVariants = VariantProps;
+export type InputErrorVariants = VariantProps<typeof inputErrorVariants>;
 
 @Directive({
   selector: '[hlmInputError]',
