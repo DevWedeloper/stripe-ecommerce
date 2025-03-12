@@ -1,4 +1,3 @@
-import { AuthError } from '@supabase/supabase-js';
 import { getRequestHost, getRequestProtocol } from 'h3';
 import { deleteUser } from 'src/server/use-cases/auth/delete-user';
 import { exchangeCodeForSession } from 'src/server/use-cases/auth/exchange-code-for-session';
@@ -31,26 +30,6 @@ const passwordWithValidationSchema = z
     message: 'Password must contain at least one special character',
   });
 
-const formatError = (error: AuthError) => ({
-  ...error,
-  code: error.code,
-  status: error.status,
-  name: error.name,
-  message: error.message,
-  stack: error.stack,
-  cause: error.cause,
-});
-
-const handleResult = <T extends { error: AuthError | null }>(result: T): T => {
-  if (result.error) {
-    return {
-      ...result,
-      error: formatError(result.error),
-    };
-  }
-  return result;
-};
-
 export const authRouter = router({
   signUp: publicProcedure
     .input(
@@ -59,10 +38,10 @@ export const authRouter = router({
         password: passwordWithValidationSchema,
       }),
     )
-    .mutation(async ({ input, ctx: { event } }) => {
-      const result = await signUp(createClient(event), input);
-      return handleResult(result);
-    }),
+    .mutation(
+      async ({ input, ctx: { event } }) =>
+        await signUp(createClient(event), input),
+    ),
 
   signInWithPassword: publicProcedure
     .input(
@@ -71,24 +50,24 @@ export const authRouter = router({
         password: passwordSchema,
       }),
     )
-    .mutation(async ({ input, ctx: { event } }) => {
-      const result = await signInWithPassword(createClient(event), input);
-      return handleResult(result);
-    }),
+    .mutation(
+      async ({ input, ctx: { event } }) =>
+        await signInWithPassword(createClient(event), input),
+    ),
 
   updateEmail: protectedProcedure
     .input(z.object({ email: emailSchema }))
-    .mutation(async ({ input, ctx: { event } }) => {
-      const result = await updateEmail(createClient(event), input);
-      return handleResult(result);
-    }),
+    .mutation(
+      async ({ input, ctx: { event } }) =>
+        await updateEmail(createClient(event), input),
+    ),
 
   updatePassword: protectedProcedure
     .input(z.object({ password: passwordWithValidationSchema }))
-    .mutation(async ({ input, ctx: { event } }) => {
-      const result = await updatePassword(createClient(event), input);
-      return handleResult(result);
-    }),
+    .mutation(
+      async ({ input, ctx: { event } }) =>
+        await updatePassword(createClient(event), input),
+    ),
 
   resetPasswordForEmail: publicProcedure
     .input(z.object({ email: emailSchema }))
@@ -96,34 +75,32 @@ export const authRouter = router({
       const protocol = getRequestProtocol(event);
       const host = getRequestHost(event);
       const baseURL = `${protocol}://${host}`;
-      const result = await resetPasswordForEmail(createClient(event), {
+
+      return await resetPasswordForEmail(createClient(event), {
         email,
         url: baseURL,
       });
-      return handleResult(result);
     }),
 
   exchangeCodeForSession: publicProcedure
     .input(z.object({ code: z.string() }))
-    .mutation(async ({ input, ctx: { event } }) => {
-      const result = await exchangeCodeForSession(createClient(event), input);
-      return handleResult(result);
-    }),
+    .mutation(
+      async ({ input, ctx: { event } }) =>
+        await exchangeCodeForSession(createClient(event), input),
+    ),
 
-  getUser: publicProcedure.query(async ({ ctx: { event } }) => {
-    const result = await getUser(createClient(event));
-    return handleResult(result);
-  }),
+  getUser: publicProcedure.query(
+    async ({ ctx: { event } }) => await getUser(createClient(event)),
+  ),
 
-  signOut: publicProcedure.mutation(async ({ ctx: { event } }) => {
-    const result = await signOut(createClient(event));
-    return handleResult(result);
-  }),
+  signOut: publicProcedure.mutation(
+    async ({ ctx: { event } }) => await signOut(createClient(event)),
+  ),
 
   deleteUser: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(async ({ input, ctx: { event } }) => {
-      const result = await deleteUser(createAdminClient(event), input);
-      return handleResult(result);
-    }),
+    .mutation(
+      async ({ input, ctx: { event } }) =>
+        await deleteUser(createAdminClient(event), input),
+    ),
 });
