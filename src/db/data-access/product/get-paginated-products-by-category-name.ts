@@ -48,7 +48,7 @@ export const getPaginatedProductsByCategoryName = async (
       pi.image_path as "imagePath", 
       pi.placeholder, 
       plp.lowestPrice as "lowestPrice", 
-      count(*) over() as "fullCount"
+      count(*) over() as "totalCount"
     from products p
     inner join product_categories pc on pc.product_id = p.id
     inner join product_lowest_prices plp on plp.product_id = p.id 
