@@ -10,7 +10,9 @@ export const paginationContentVariants = cva(
     defaultVariants: {},
   },
 );
-export type PaginationContentVariants = VariantProps;
+export type PaginationContentVariants = VariantProps<
+  typeof paginationContentVariants
+>;
 
 @Directive({
   selector: '[hlmPaginationContent]',

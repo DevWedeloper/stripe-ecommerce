@@ -13,7 +13,9 @@ export const paginationLinkVariants = cva('', {
   variants: {},
   defaultVariants: {},
 });
-export type PaginationLinkVariants = VariantProps;
+export type PaginationLinkVariants = VariantProps<
+  typeof paginationLinkVariants
+>;
 
 @Directive({
   selector: '[hlmPaginationLink]',

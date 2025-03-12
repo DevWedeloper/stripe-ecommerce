@@ -8,7 +8,9 @@ export const paginationItemVariants = cva('', {
   defaultVariants: {},
 });
 
-export type PaginationItemVariants = VariantProps;
+export type PaginationItemVariants = VariantProps<
+  typeof paginationItemVariants
+>;
 
 @Directive({
   selector: '[hlmPaginationItem]',

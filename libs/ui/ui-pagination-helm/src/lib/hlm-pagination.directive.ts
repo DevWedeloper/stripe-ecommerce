@@ -7,7 +7,7 @@ export const paginationVariants = cva('mx-auto flex w-full justify-center', {
   variants: {},
   defaultVariants: {},
 });
-export type PaginationVariants = VariantProps;
+export type PaginationVariants = VariantProps<typeof paginationVariants>;
 
 @Directive({
   selector: '[hlmPagination]',

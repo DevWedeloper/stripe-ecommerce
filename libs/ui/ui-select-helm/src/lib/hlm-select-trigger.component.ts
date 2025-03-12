@@ -36,7 +36,7 @@ export const selectTriggerVariants = cva(
     },
   },
 );
-type SelectTriggerVariants = VariantProps;
+type SelectTriggerVariants = VariantProps<typeof selectTriggerVariants>;
 
 @Component({
   selector: 'hlm-select-trigger',
@@ -54,7 +54,7 @@ type SelectTriggerVariants = VariantProps;
     >
       <ng-content />
       @if (icon()) {
-        <ng-content select="hlm-icon" />
+        <ng-content select="ng-icon" />
       } @else {
         <ng-icon
           hlm

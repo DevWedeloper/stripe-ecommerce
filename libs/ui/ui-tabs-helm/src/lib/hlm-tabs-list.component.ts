@@ -18,7 +18,7 @@ export const listVariants = cva(
     },
   },
 );
-type ListVariants = VariantProps;
+type ListVariants = VariantProps<typeof listVariants>;
 
 @Component({
   selector: 'hlm-tabs-list',

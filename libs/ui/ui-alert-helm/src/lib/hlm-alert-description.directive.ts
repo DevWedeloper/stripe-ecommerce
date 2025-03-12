@@ -6,7 +6,9 @@ import type { ClassValue } from 'clsx';
 export const alertDescriptionVariants = cva('text-sm [&_p]:leading-relaxed', {
   variants: {},
 });
-export type AlertDescriptionVariants = VariantProps;
+export type AlertDescriptionVariants = VariantProps<
+  typeof alertDescriptionVariants
+>;
 
 @Directive({
   selector: '[hlmAlertDesc],[hlmAlertDescription]',

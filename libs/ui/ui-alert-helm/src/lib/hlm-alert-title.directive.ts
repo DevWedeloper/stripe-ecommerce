@@ -9,7 +9,7 @@ export const alertTitleVariants = cva(
     variants: {},
   },
 );
-export type AlertTitleVariants = VariantProps;
+export type AlertTitleVariants = VariantProps<typeof alertTitleVariants>;
 
 @Directive({
   selector: '[hlmAlertTitle]',
