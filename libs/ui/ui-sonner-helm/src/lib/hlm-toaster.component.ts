@@ -88,7 +88,10 @@ export class HlmToasterComponent {
   public readonly offset = input<ToasterProps['offset']>(null);
   public readonly dir = input<ToasterProps['dir']>('auto');
   public readonly userClass = input<ClassValue>('', { alias: 'class' });
-  public readonly userStyle = input<Record>({}, { alias: 'style' });
+  public readonly userStyle = input<Record<string, string>>(
+    {},
+    { alias: 'style' },
+  );
 
   protected readonly _computedClass = computed(() =>
     hlm('toaster group', this.userClass()),
