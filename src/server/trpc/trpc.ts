@@ -1,8 +1,11 @@
 import { initTRPC, TRPCError } from '@trpc/server';
 import { createClient } from 'src/supabase/server';
+import { SuperJSON } from 'superjson';
 import { Context } from './context';
 
-const t = initTRPC.context<Context>().create({});
+const t = initTRPC.context<Context>().create({
+  transformer: SuperJSON,
+});
 
 export const router = t.router;
 export const middleware = t.middleware;

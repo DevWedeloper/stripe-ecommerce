@@ -2,6 +2,7 @@ import { createTrpcClient } from '@analogjs/trpc';
 import { inject } from '@angular/core';
 import { TRPCLink } from '@trpc/client';
 import { observable } from '@trpc/server/observable';
+import { SuperJSON } from 'superjson';
 import { AppRouter } from './server/trpc/routers';
 
 const cache = new Map();
@@ -45,6 +46,7 @@ export const { provideTrpcClient, TrpcClient, TrpcHeaders } =
   createTrpcClient<AppRouter>({
     url: '/api/trpc',
     options: {
+      transformer: SuperJSON,
       links: [cacheLink],
     },
   });
