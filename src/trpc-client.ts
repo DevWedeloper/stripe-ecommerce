@@ -1,10 +1,52 @@
 import { createTrpcClient } from '@analogjs/trpc';
 import { inject } from '@angular/core';
+import { TRPCLink } from '@trpc/client';
+import { observable } from '@trpc/server/observable';
 import { AppRouter } from './server/trpc/routers';
+
+const cache = new Map();
+
+export const cacheLink: TRPCLink<AppRouter> = () => {
+  return ({ next, op }) => {
+    const cacheKey = op.path;
+
+    if (op.type === 'query' && cache.has(cacheKey)) {
+      return observable((observer) => {
+        observer.next(cache.get(cacheKey));
+        observer.complete();
+      });
+    }
+
+    if (op.type === 'mutation') {
+      cache.clear();
+    }
+
+    return observable((observer) => {
+      const unsubscribe = next(op).subscribe({
+        next(value) {
+          if (op.type === 'query') {
+            cache.set(cacheKey, value);
+          }
+          observer.next(value);
+        },
+        error(err) {
+          observer.error(err);
+        },
+        complete() {
+          observer.complete();
+        },
+      });
+      return unsubscribe;
+    });
+  };
+};
 
 export const { provideTrpcClient, TrpcClient, TrpcHeaders } =
   createTrpcClient<AppRouter>({
     url: '/api/trpc',
+    options: {
+      links: [cacheLink],
+    },
   });
 
 export function injectTrpcClient() {
