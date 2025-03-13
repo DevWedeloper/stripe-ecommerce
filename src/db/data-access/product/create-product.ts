@@ -1,17 +1,37 @@
 import { db } from 'src/db';
 import {
+  Categories,
   productCategories,
   productConfiguration,
   ProductConfigurationInsert,
   productImages,
+  ProductImagesInsert,
+  ProductInsert,
   productItems,
+  ProductItemsInsert,
   products,
   productTags,
+  TagsSelect,
   variationOptions,
   VariationOptionsInsert,
   variations,
+  VariationsInsert,
 } from 'src/db/schema';
-import { CreateProductSchema } from 'src/schemas/product';
+import { VariationObject } from 'src/db/types';
+
+type CreateProductData = {
+  productData: Omit<ProductInsert, 'isDeleted'>;
+  variationsData: Omit<VariationsInsert, 'productId'>[];
+  variationOptionsData: (Omit<VariationOptionsInsert, 'variationId'> & {
+    variationName: VariationsInsert['name'];
+  })[];
+  productItemsData: (Omit<ProductItemsInsert, 'productId'> & {
+    variations: VariationObject[];
+  })[];
+  categoryId: Categories['id'];
+  productImagesData: Omit<ProductImagesInsert, 'productId'>[];
+  tagIds: TagsSelect['id'][];
+};
 
 export const createProduct = async ({
   productData,
@@ -21,7 +41,7 @@ export const createProduct = async ({
   categoryId,
   productImagesData,
   tagIds,
-}: CreateProductSchema): Promise<void> => {
+}: CreateProductData): Promise<void> => {
   await db.transaction(async (trx) => {
     const productResult = await trx
       .insert(products)

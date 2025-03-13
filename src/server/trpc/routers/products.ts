@@ -13,9 +13,14 @@ import { z } from 'zod';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 export const productsRouter = router({
-  create: protectedProcedure
-    .input(createProductSchema)
-    .mutation(async ({ input }) => await createProduct(input)),
+  create: protectedProcedure.input(createProductSchema).mutation(
+    async ({
+      ctx: {
+        user: { id },
+      },
+      input,
+    }) => await createProduct(id, input),
+  ),
 
   getById: publicProcedure
     .input(positiveIntSchema)
