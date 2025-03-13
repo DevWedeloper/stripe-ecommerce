@@ -42,7 +42,7 @@
     "clsx": "^2.1.1",
     "cookie": "^1.0.1",
     "drizzle-orm": "^0.40.0",
-    "drizzle-zod": "^0.6.1",
+    "drizzle-zod": "^0.7.0",
     "embla-carousel-angular": "18.0.0",
     "eslint-config-angular": "^0.5.0",
     "eslint-config-prettier": "^9.1.0",
