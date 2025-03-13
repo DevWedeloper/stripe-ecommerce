@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { db } from 'src/db';
-import { AddressAndReceiverInsert } from 'src/db/types';
+import { CreateAddressSchema } from 'src/schemas/address';
 
 type AddressAndReceiverResult = {
   addressId: number;
@@ -8,7 +8,7 @@ type AddressAndReceiverResult = {
 };
 
 export const findOrCreateAddressWithoutUser = async (
-  data: AddressAndReceiverInsert,
+  data: CreateAddressSchema,
 ): Promise<AddressAndReceiverResult> => {
   const query = sql`
     with created_address as (

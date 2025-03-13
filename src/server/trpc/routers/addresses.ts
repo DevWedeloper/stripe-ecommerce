@@ -1,6 +1,4 @@
-import { createInsertSchema } from 'drizzle-zod';
-import { addresses, receivers } from 'src/db/schema';
-import { updateAddressSchema } from 'src/schemas/address';
+import { createAddressSchema, updateAddressSchema } from 'src/schemas/address';
 import { positiveIntSchema } from 'src/schemas/shared/numbers';
 import { createAddress } from 'src/server/use-cases/address/create-address';
 import { createAddressWithoutUser } from 'src/server/use-cases/address/create-address-without-user';
@@ -12,19 +10,17 @@ import { z } from 'zod';
 import { protectedProcedure, router } from '../trpc';
 
 export const addressRouter = router({
-  createAddress: protectedProcedure
-    .input(createInsertSchema(addresses).merge(createInsertSchema(receivers)))
-    .mutation(
-      async ({
-        ctx: {
-          user: { id },
-        },
-        input,
-      }) => await createAddress(id, input),
-    ),
+  createAddress: protectedProcedure.input(createAddressSchema).mutation(
+    async ({
+      ctx: {
+        user: { id },
+      },
+      input,
+    }) => await createAddress(id, input),
+  ),
 
   createAddressWithoutUser: protectedProcedure
-    .input(createInsertSchema(addresses).merge(createInsertSchema(receivers)))
+    .input(createAddressSchema)
     .mutation(async ({ input }) => await createAddressWithoutUser(input)),
 
   getByUserId: protectedProcedure

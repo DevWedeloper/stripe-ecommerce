@@ -1,3 +1,4 @@
+import { CreateAddressSchema } from 'src/schemas/address';
 import {
   AddressInsert,
   AddressSelect,
@@ -60,12 +61,10 @@ export type CartItemReference = {
   price: number;
 };
 
-export type AddressAndReceiverInsert = AddressInsert & ReceiverInsert;
-
 export type AddressReceiverLink = {
   addressId: AddressSelect['id'];
   receiverId: ReceiverSelect['id'];
-} & AddressAndReceiverInsert;
+} & CreateAddressSchema;
 
 export type AddressAndReceiverData = {
   isDefault: UserAddressesSelect['isDefault'];

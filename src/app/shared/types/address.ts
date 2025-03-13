@@ -1,3 +1,3 @@
-import { AddressAndReceiverInsert } from 'src/db/types';
+import { CreateAddressSchema } from 'src/schemas/address';
 
-export type Address = AddressAndReceiverInsert;
+export type Address = CreateAddressSchema;

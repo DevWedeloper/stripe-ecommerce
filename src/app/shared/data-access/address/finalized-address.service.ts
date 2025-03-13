@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AddressAndReceiverInsert } from 'src/db/types';
+import { CreateAddressSchema } from 'src/schemas/address';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FinalizedAddressService {
-  private addressTrigger$ =
-    new BehaviorSubject<AddressAndReceiverInsert | null>(null);
+  private addressTrigger$ = new BehaviorSubject<CreateAddressSchema | null>(
+    null,
+  );
 
   address$ = this.addressTrigger$.asObservable();
 
-  setAddress(data: AddressAndReceiverInsert): void {
+  setAddress(data: CreateAddressSchema): void {
     this.addressTrigger$.next(data);
   }
 }
