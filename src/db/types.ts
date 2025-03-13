@@ -80,16 +80,6 @@ export type AddressAndReceiverData = {
   fullName: ReceiverSelect['fullName'];
 };
 
-export type UpdateAddressData = {
-  userId: string;
-  addressId: number;
-  receiverId: number;
-  currentAddressData: AddressInsert;
-  currentReceiverData: ReceiverInsert;
-  newAddressData: AddressInsert;
-  newReceiverData: ReceiverInsert;
-};
-
 export type OrderItemWithVariations = OrderItemsSelect & {
   name: Products['name'];
   variations: VariationObject[];
