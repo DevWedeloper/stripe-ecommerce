@@ -1,12 +1,23 @@
 import { difference, isEqual, pick } from 'lodash-es';
 import { getUserProductById } from 'src/db/data-access/product/get-user-product-by-id';
 import { updateProductByUserId as updateProductByUserIdFromDb } from 'src/db/data-access/product/update-product-by-user-id';
-import { UpdateProductSchema } from 'src/schemas/product';
+import {
+  UpdateProductSchema,
+  UserProductFormSchema,
+} from 'src/schemas/product';
+import { mapProductToFormData } from 'src/utils/product';
+
+type Variants = UserProductFormSchema['variants'];
 
 export const updateProductByUserId = async (
   userId: string,
-  { productId, original, modified }: UpdateProductSchema,
+  { modified, modifiedImages }: UpdateProductSchema,
 ) => {
+  const productId = validateId(modified.id, 'Product');
+  const originalProduct = await getUserProductById({ userId, productId });
+  const original = mapProductToFormData(originalProduct);
+  const originalImages = originalProduct.imageObjects ?? [];
+
   const isNameAndDescriptionSame = isEqual(
     pick(original, ['name', 'description']),
     pick(modified, ['name', 'description']),
@@ -16,20 +27,22 @@ export const updateProductByUserId = async (
     ? { id: productId, userId, ...pick(modified, ['name', 'description']) }
     : undefined;
 
-  const productItemsData = modified.items.filter((modifiedItem) => {
-    const originalItem = original.items.find(
-      (item) => item.id === modifiedItem.id,
-    );
+  const productItemsData = modified.items
+    .filter((modifiedItem) => {
+      const originalItem = original.items.find(
+        (item) => item.id === modifiedItem.id,
+      );
 
-    return !isEqual(
-      pick(originalItem, ['stock', 'price']),
-      pick(modifiedItem, ['stock', 'price']),
-    );
-  });
+      return !isEqual(
+        pick(originalItem, ['stock', 'price']),
+        pick(modifiedItem, ['stock', 'price']),
+      );
+    })
+    .map((item) => ({ ...item, id: validateId(item.id, 'Item') }));
 
-  const updatedImages = modified.images.existing
+  const updatedImages = modifiedImages.existing
     .filter((modifiedImage) => {
-      const originalImage = original.images.existing.find(
+      const originalImage = originalImages.find(
         (img) => img.id === modifiedImage.id,
       );
 
@@ -43,23 +56,26 @@ export const updateProductByUserId = async (
     })
     .map(({ id, isThumbnail, order }) => ({ id, isThumbnail, order }));
 
-  const addedImages = modified.images.added.map((image) => ({
+  const addedImages = modifiedImages.added.map((image) => ({
     productId,
     ...image,
   }));
 
-  const deletedImages = original.images.existing
+  const deletedImages = originalImages
     .filter(
       (originalImage) =>
-        !modified.images.existing.some((img) => img.id === originalImage.id),
+        !modifiedImages.existing.some((img) => img.id === originalImage.id),
     )
     .map(({ id }) => ({ id }));
 
   const productImagesData = { updatedImages, addedImages, deletedImages };
 
-  const updatedVariationOptions = modified.variants.flatMap(
+  const originalVariants = mapVariants(original.variants);
+  const modifiedVariants = mapVariants(modified.variants, true);
+
+  const updatedVariationOptions = modifiedVariants.flatMap(
     (modifiedVariant) => {
-      const originalVariant = original.variants.find(
+      const originalVariant = originalVariants.find(
         (v) => v.id === modifiedVariant.id,
       );
 
@@ -74,7 +90,7 @@ export const updateProductByUserId = async (
     },
   );
 
-  const addedVariationOptions = modified.variants.flatMap((modifiedVariant) =>
+  const addedVariationOptions = modifiedVariants.flatMap((modifiedVariant) =>
     modifiedVariant.addedOptions.map((option) => ({
       value: option.value,
       variationId: modifiedVariant.id,
@@ -110,3 +126,24 @@ export const updateProductByUserId = async (
 
   return getUserProductById({ userId, productId });
 };
+
+const validateId = <T>(id: T | null, entity: string): T => {
+  if (id === null) {
+    throw new Error(`${entity} ID cannot be null`);
+  }
+
+  return id;
+};
+
+const mapVariants = (variants: Variants, includeAddedOptions = false) =>
+  variants.map((variant) => ({
+    id: validateId(variant.id, 'Variant'),
+    variation: variant.variation,
+    existingOptions: variant.options.map((option) => ({
+      id: validateId(option.id, 'Option'),
+      order: option.order,
+    })),
+    addedOptions: includeAddedOptions
+      ? variant.options.filter((option) => option.id === null)
+      : [],
+  }));

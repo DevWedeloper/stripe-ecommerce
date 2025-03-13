@@ -1,16 +1,11 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { productImages, productItems, variationOptions } from 'src/db/schema';
+import { productImages } from 'src/db/schema';
 import { z } from 'zod';
 
 const productImagesInsertWithoutProductId = createInsertSchema(
   productImages,
 ).omit({
   productId: true,
-});
-const variationOptionsInsertWithoutVariationId = createInsertSchema(
-  variationOptions,
-).omit({
-  variationId: true,
 });
 
 export const userProductSchema = z.object({
@@ -64,24 +59,9 @@ export const createProductSchema = z.object({
 
 export type CreateProductSchema = z.infer<typeof createProductSchema>;
 
-const productUpdateSchema = z.object({
-  name: z.string(),
-  description: z.string(),
-  variants: z.array(
-    z.object({
-      id: z.number(),
-      variation: z.string(),
-      existingOptions: z.array(
-        createSelectSchema(variationOptions).pick({
-          id: true,
-          order: true,
-        }),
-      ),
-      addedOptions: z.array(variationOptionsInsertWithoutVariationId),
-    }),
-  ),
-  items: z.array(createSelectSchema(productItems).omit({ productId: true })),
-  images: z.object({
+export const updateProductSchema = z.object({
+  modified: userProductSchema,
+  modifiedImages: z.object({
     existing: z.array(
       createSelectSchema(productImages).pick({
         id: true,
@@ -91,14 +71,6 @@ const productUpdateSchema = z.object({
     ),
     added: z.array(productImagesInsertWithoutProductId),
   }),
-  categoryId: z.number(),
-  tagIds: z.array(z.number()),
-});
-
-export const updateProductSchema = z.object({
-  productId: z.number(),
-  original: productUpdateSchema,
-  modified: productUpdateSchema,
 });
 
 export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
