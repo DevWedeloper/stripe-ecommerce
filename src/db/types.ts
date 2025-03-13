@@ -1,6 +1,5 @@
 import { CreateAddressSchema } from 'src/schemas/address';
 import {
-  AddressInsert,
   AddressSelect,
   CountrySelect,
   OrderItemsSelect,
@@ -8,7 +7,6 @@ import {
   ProductImages,
   ProductItems,
   Products,
-  ReceiverInsert,
   ReceiverSelect,
   UserAddressesSelect,
   VariationOptions,
