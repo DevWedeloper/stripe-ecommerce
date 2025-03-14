@@ -20,10 +20,12 @@ export type HlmDialogOptions<DialogContext = unknown> = BrnDialogOptions & {
 export class HlmDialogService {
   private readonly _brnDialogService = inject(BrnDialogService);
 
-  public open(component: ComponentType | TemplateRef, options?: Partial) {
+  public open(
+    component: ComponentType<unknown> | TemplateRef<unknown>,
+    options?: Partial<HlmDialogOptions>,
+  ) {
     const mergedOptions = {
       ...DEFAULT_BRN_DIALOG_OPTIONS,
-      closeDelay: 100,
 
       ...(options ?? {}),
       backdropClass: cssClassesToArray(
