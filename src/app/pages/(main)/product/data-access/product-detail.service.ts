@@ -72,7 +72,9 @@ export class ProductDetailService {
   private variationNames$ = this.productSuccess$.pipe(
     map((product) =>
       product
-        ? Object.keys(product.variations).map((key) => convertToURLFormat(key))
+        ? product.variations.map((variation) =>
+            convertToURLFormat(variation.variation),
+          )
         : [],
     ),
   );
