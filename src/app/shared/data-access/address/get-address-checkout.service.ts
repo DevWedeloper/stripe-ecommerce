@@ -28,7 +28,7 @@ import {
   successStream,
 } from 'src/app/shared/utils/rxjs';
 import { showError } from 'src/app/shared/utils/toast';
-import { AddressReceiverLink } from 'src/db/types';
+import { AddressAndReceiverData } from 'src/db/types';
 import { TrpcClient } from 'src/trpc-client';
 
 @Injectable({
@@ -104,7 +104,7 @@ export class GetAddressCheckoutService {
         data.addresses.find((address) => address.isDefault) ?? null;
 
       if (defaultAddress) {
-        const defaultAddressLink: AddressReceiverLink = {
+        const defaultAddressLink: AddressAndReceiverData = {
           addressId: defaultAddress.addressId,
           receiverId: defaultAddress.receiverId,
           addressLine1: defaultAddress.addressLine1,

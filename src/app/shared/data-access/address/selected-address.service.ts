@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { merge, shareReplay, Subject } from 'rxjs';
-import { AddressReceiverLink } from 'src/db/types';
+import { AddressAndReceiverData } from 'src/db/types';
 import { UpdateAddressService } from './update-address.service';
 
 @Injectable({
@@ -10,7 +10,7 @@ import { UpdateAddressService } from './update-address.service';
 export class SelectedAddressService {
   private updateAddressService = inject(UpdateAddressService);
 
-  private setSelectedAddress$ = new Subject<AddressReceiverLink>();
+  private setSelectedAddress$ = new Subject<AddressAndReceiverData>();
 
   selectedAddress$ = merge(
     this.setSelectedAddress$,
@@ -19,7 +19,7 @@ export class SelectedAddressService {
 
   selectedAddress = toSignal(this.selectedAddress$, { initialValue: null });
 
-  setSelectedAddress(data: AddressReceiverLink): void {
+  setSelectedAddress(data: AddressAndReceiverData): void {
     this.setSelectedAddress$.next(data);
   }
 }

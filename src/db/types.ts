@@ -49,10 +49,6 @@ export type CartItemReference = {
   price: number;
 };
 
-export type AddressReceiverLink = Awaited<
-  ReturnType<typeof getAddressesByUserId>
->['addresses'][number];
-
 export type AddressAndReceiverData = Awaited<
   ReturnType<typeof getPaginatedAddressesByUserId>
 >['addresses'][number];
