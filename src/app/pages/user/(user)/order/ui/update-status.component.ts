@@ -18,7 +18,7 @@ import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
   providers: [provideIcons({ lucideInfo })],
   template: `
     <brn-hover-card>
-      <button hlmBtn variant="icon" brnHoverCardTrigger>
+      <button hlmBtn size="icon" brnHoverCardTrigger>
         <ng-icon hlm hlm size="sm" name="lucideInfo" />
       </button>
       <hlm-hover-card-content *brnHoverCardContent class="w-80">
