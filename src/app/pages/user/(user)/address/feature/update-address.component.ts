@@ -11,6 +11,7 @@ import { SelectedAddressService } from 'src/app/shared/data-access/address/selec
 import { CountriesService } from 'src/app/shared/data-access/countries.service';
 import { initializeAddressForm } from 'src/app/shared/utils/form';
 import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
+import { UpdateAddressSchema } from 'src/schemas/address';
 import { UpdateAddressService } from '../../../../../shared/data-access/address/update-address.service';
 import { AddressFormComponent } from '../../../../../shared/ui/address-form.component';
 @Component({
@@ -91,9 +92,9 @@ export class UpdateAddressComponent {
 
     if (!selectedAddress) return;
 
+    const { addressId, receiverId } = selectedAddress;
+
     const {
-      addressId,
-      receiverId,
       addressLine1,
       addressLine2,
       city,
@@ -101,12 +102,13 @@ export class UpdateAddressComponent {
       postalCode,
       countryId,
       fullName,
-    } = selectedAddress;
+    } = this.form().getRawValue();
 
-    const data = {
-      addressId,
-      receiverId,
-      currentAddressData: {
+    if (!countryId) throw new Error('countryId cannot be null.');
+
+    const data: UpdateAddressSchema = {
+      address: {
+        id: addressId,
         addressLine1,
         addressLine2,
         city,
@@ -114,19 +116,9 @@ export class UpdateAddressComponent {
         postalCode,
         countryId,
       },
-      currentReceiverData: {
+      receiver: {
+        id: receiverId,
         fullName,
-      },
-      newAddressData: {
-        addressLine1: this.form().getRawValue().addressLine1,
-        addressLine2: this.form().getRawValue().addressLine2,
-        city: this.form().getRawValue().city,
-        state: this.form().getRawValue().state,
-        postalCode: this.form().getRawValue().postalCode,
-        countryId,
-      },
-      newReceiverData: {
-        fullName: this.form().getRawValue().fullName,
       },
     };
 
