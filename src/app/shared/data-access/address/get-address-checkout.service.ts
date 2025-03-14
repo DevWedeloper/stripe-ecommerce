@@ -114,6 +114,7 @@ export class GetAddressCheckoutService {
           postalCode: defaultAddress.postalCode,
           countryId: defaultAddress.countryId,
           fullName: defaultAddress.fullName,
+          isDefault: defaultAddress.isDefault,
         };
 
         return defaultAddressLink;
