@@ -1,4 +1,3 @@
-import { getAddressesByUserId } from 'src/server/use-cases/address/get-addresses-by-user-id';
 import { getProductById } from 'src/server/use-cases/product/get-product-by-id';
 import { getPaginatedAddressesByUserId } from './data-access/address/get-paginated-addresses-by-user-id';
 import { getPaginatedProductsByUserId } from './data-access/product/get-paginated-products-by-user-id';
