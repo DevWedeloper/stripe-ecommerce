@@ -18,10 +18,29 @@ export default defineConfig(({ mode }) => ({
       src: path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: [
+      '@analogjs/trpc',
+      '@angular/cdk/clipboard',
+      '@angular/cdk/drag-drop',
+      '@angular/cdk/layout',
+      '@angular/cdk/observers',
+      '@angular/common',
+      '@angular/forms',
+
+      '@spartan-ng/brain/**',
+      'ngx-scrollbar',
+      'ngx-sonner',
+      'ngx-stripe',
+      'embla-carousel-angular',
+
+      '@supabase/ssr',
+
+      'lodash-es',
+      'isomorphic-fetch',
+    ],
+  },
   ssr: {
-    optimizeDeps: {
-      include: ['isomorphic-fetch'],
-    },
     noExternal: [
       '@analogjs/trpc',
       '@trpc/server',
