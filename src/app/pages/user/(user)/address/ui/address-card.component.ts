@@ -25,7 +25,7 @@ import { AddressAndReceiverData } from 'src/db/types';
     <p class="text-base font-normal">{{ address().addressLine2 }}</p>
     <p class="text-base font-light">
       {{ address().city }}, {{ address().state }}, {{ address().postalCode }},
-      {{ address().countryCode }}
+      {{ countryCode() }}
     </p>
     <div class="absolute right-4 top-4 flex flex-col gap-2">
       <div class="flex gap-2 self-end">
@@ -65,6 +65,7 @@ import { AddressAndReceiverData } from 'src/db/types';
 })
 export class AddressCardComponent {
   address = input.required<AddressAndReceiverData>();
+  countryCode = input.required<string>();
   isSetDefaultLoading = input.required<boolean>();
   isDeleteLoading = input.required<boolean>();
   editChange = output<void>();

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HlmDialogService } from '@spartan-ng/ui-dialog-helm';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { SelectedAddressService } from 'src/app/shared/data-access/address/selected-address.service';
+import { CountriesService } from 'src/app/shared/data-access/countries.service';
 import { AddressAndReceiverData } from 'src/db/types';
 import { DeleteAddressService } from '../data-access/delete-address.service';
 import { GetAddressService } from '../data-access/get-address.service';
@@ -20,6 +21,7 @@ import { UpdateAddressComponent } from './update-address.component';
       @for (address of addresses(); track $index) {
         <app-address-card
           [address]="address"
+          [countryCode]="getCountryCode(address.countryId)"
           [isSetDefaultLoading]="
             isSelectedSetAsDefaultLoading(address.addressId, address.receiverId)
           "
@@ -49,6 +51,7 @@ export class AddressListComponent {
   private setAsDefaultAddressService = inject(SetAsDefaultAddressService);
   private deleteAddressService = inject(DeleteAddressService);
   private selectedAddressService = inject(SelectedAddressService);
+  private countryService = inject(CountriesService);
 
   protected addresses = this.getAddressService.addresses;
 
@@ -84,5 +87,12 @@ export class AddressListComponent {
     receiverId: number,
   ): boolean {
     return this.deleteAddressService.isSelectedLoading(addressId, receiverId);
+  }
+
+  protected getCountryCode(countryId: number): string {
+    return (
+      this.countryService.countries().find((c) => c.id === countryId)?.code ??
+      'N/A'
+    );
   }
 }
