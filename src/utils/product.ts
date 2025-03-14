@@ -109,7 +109,7 @@ export const hasUniqueCombinations = (
 
   return new Set(combinations).size === combinations.length;
 };
-// Variations validation types
+
 type VariantWithOptions = {
   variation: string;
   options: Array<{ value: string }>;
