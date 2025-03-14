@@ -9,7 +9,7 @@ const cache = new Map();
 
 export const cacheLink: TRPCLink<AppRouter> = () => {
   return ({ next, op }) => {
-    const cacheKey = op.path;
+    const cacheKey = `${op.path}:${JSON.stringify(op.input)}`;
 
     if (op.type === 'query' && cache.has(cacheKey)) {
       return observable((observer) => {
