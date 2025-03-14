@@ -1,4 +1,5 @@
 import { createAddressSchema, updateAddressSchema } from 'src/schemas/address';
+import { paginationSchema } from 'src/schemas/pagination';
 import { positiveIntSchema } from 'src/schemas/shared/numbers';
 import { createAddress } from 'src/server/use-cases/address/create-address';
 import { createAddressWithoutUser } from 'src/server/use-cases/address/create-address-without-user';
@@ -23,21 +24,14 @@ export const addressRouter = router({
     .input(createAddressSchema)
     .mutation(async ({ input }) => await createAddressWithoutUser(input)),
 
-  getByUserId: protectedProcedure
-    .input(
-      z.object({
-        page: positiveIntSchema,
-        pageSize: positiveIntSchema,
-      }),
-    )
-    .query(
-      async ({
-        ctx: {
-          user: { id },
-        },
-        input: { page, pageSize },
-      }) => await getAddressesByUserId(id, page, pageSize),
-    ),
+  getByUserId: protectedProcedure.input(z.object(paginationSchema)).query(
+    async ({
+      ctx: {
+        user: { id },
+      },
+      input: { page, pageSize },
+    }) => await getAddressesByUserId(id, page, pageSize),
+  ),
 
   setAsDefault: protectedProcedure
     .input(

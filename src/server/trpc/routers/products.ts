@@ -1,3 +1,4 @@
+import { paginationSchema } from 'src/schemas/pagination';
 import { createProductSchema, updateProductSchema } from 'src/schemas/product';
 import { positiveIntSchema } from 'src/schemas/shared/numbers';
 import { createProduct } from 'src/server/use-cases/product/create-product';
@@ -30,8 +31,7 @@ export const productsRouter = router({
     .input(
       z.object({
         name: z.string(),
-        page: positiveIntSchema,
-        pageSize: positiveIntSchema,
+        ...paginationSchema,
       }),
     )
     .query(
@@ -43,8 +43,7 @@ export const productsRouter = router({
     .input(
       z.object({
         keyword: z.string(),
-        page: positiveIntSchema,
-        pageSize: positiveIntSchema,
+        ...paginationSchema,
       }),
     )
     .query(
@@ -52,21 +51,14 @@ export const productsRouter = router({
         await searchProductsByKeyword(keyword, page, pageSize),
     ),
 
-  getAllByUserId: protectedProcedure
-    .input(
-      z.object({
-        page: positiveIntSchema,
-        pageSize: positiveIntSchema,
-      }),
-    )
-    .query(
-      async ({
-        ctx: {
-          user: { id },
-        },
-        input: { page, pageSize },
-      }) => await getProductsByUserId(id, page, pageSize),
-    ),
+  getAllByUserId: protectedProcedure.input(z.object(paginationSchema)).query(
+    async ({
+      ctx: {
+        user: { id },
+      },
+      input: { page, pageSize },
+    }) => await getProductsByUserId(id, page, pageSize),
+  ),
 
   getByUserId: protectedProcedure
     .input(
