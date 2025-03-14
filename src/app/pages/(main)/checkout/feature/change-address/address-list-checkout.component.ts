@@ -13,6 +13,7 @@ import {
 } from '@spartan-ng/ui-radiogroup-helm';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { SelectedAddressService } from 'src/app/shared/data-access/address/selected-address.service';
+import { CountriesService } from 'src/app/shared/data-access/countries.service';
 import { AddressAndReceiverData } from 'src/db/types';
 import { GetAddressCheckoutService } from '../../../../../shared/data-access/address/get-address-checkout.service';
 import { AddressCardCheckoutComponent } from '../../ui/address-card-checkout.component';
@@ -39,6 +40,7 @@ import { AddressCardCheckoutComponent } from '../../ui/address-card-checkout.com
               </brn-radio>
               <app-address-card-checkout
                 [address]="address"
+                [countryCode]="getCountryCode(address.countryId)"
                 (editChange)="onEdit(address)"
               />
             </div>
@@ -58,6 +60,7 @@ import { AddressCardCheckoutComponent } from '../../ui/address-card-checkout.com
 export class AddressListCheckoutComponent {
   private getAddressCheckoutService = inject(GetAddressCheckoutService);
   private selectedAddressService = inject(SelectedAddressService);
+  private countryService = inject(CountriesService);
 
   editChange = output<void>();
 
@@ -77,5 +80,12 @@ export class AddressListCheckoutComponent {
   protected onEdit(data: AddressAndReceiverData): void {
     this.selectedAddressService.setSelectedAddress(data);
     this.editChange.emit();
+  }
+
+  protected getCountryCode(countryId: number): string {
+    return (
+      this.countryService.countries().find((c) => c.id === countryId)?.code ??
+      'N/A'
+    );
   }
 }
