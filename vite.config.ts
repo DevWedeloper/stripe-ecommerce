@@ -2,7 +2,8 @@
 
 import analog from '@analogjs/platform';
 import * as path from 'path';
-import { defineConfig, splitVendorChunkPlugin } from 'vite';
+import { defineConfig } from 'vite';
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
@@ -59,7 +60,7 @@ export default defineConfig(({ mode }) => ({
       },
     }),
     tsconfigPaths(),
-    splitVendorChunkPlugin(),
+    chunkSplitPlugin(),
   ],
   test: {
     globals: true,
