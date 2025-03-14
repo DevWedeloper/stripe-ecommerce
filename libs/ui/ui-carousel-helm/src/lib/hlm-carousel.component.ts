@@ -15,6 +15,7 @@ import type { ClassValue } from 'clsx';
 import {
   EmblaCarouselDirective,
   type EmblaEventType,
+  type EmblaOptionsType,
   type EmblaPluginType,
 } from 'embla-carousel-angular';
 
@@ -51,10 +52,13 @@ export class HlmCarouselComponent {
   protected _computedClass = computed(() => hlm('relative', this._userClass()));
 
   public orientation = input<'horizontal' | 'vertical'>('horizontal');
-  public options: InputSignal = input();
-  public plugins: InputSignal = input([] as EmblaPluginType[]);
+  public options: InputSignal<Omit<EmblaOptionsType, 'axis'> | undefined> =
+    input();
+  public plugins: InputSignal<EmblaPluginType[]> = input(
+    [] as EmblaPluginType[],
+  );
 
-  protected emblaOptions: Signal = computed(() => ({
+  protected emblaOptions: Signal<EmblaOptionsType> = computed(() => ({
     ...this.options(),
     axis: this.orientation() === 'horizontal' ? 'x' : 'y',
   }));
