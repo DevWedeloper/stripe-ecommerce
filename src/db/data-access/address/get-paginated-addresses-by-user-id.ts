@@ -1,17 +1,13 @@
 import { desc, eq } from 'drizzle-orm';
 import { db } from 'src/db';
 import { addresses, countries, receivers, userAddresses } from 'src/db/schema';
-import { AddressAndReceiverData } from 'src/db/types';
 import { formatPaginatedResult, totalCount } from '../utils';
 
 export const getPaginatedAddressesByUserId = async (
   userId: string,
   offset: number,
   pageSize: number,
-): Promise<{
-  addresses: AddressAndReceiverData[];
-  totalAddresses: number;
-}> => {
+) => {
   const query = db
     .select({
       isDefault: userAddresses.isDefault,
@@ -21,7 +17,6 @@ export const getPaginatedAddressesByUserId = async (
       city: addresses.city,
       state: addresses.state,
       postalCode: addresses.postalCode,
-      countryCode: countries.code,
       countryId: countries.id,
       receiverId: receivers.id,
       fullName: receivers.fullName,

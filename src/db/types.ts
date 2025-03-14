@@ -1,16 +1,15 @@
 import { CreateAddressSchema } from 'src/schemas/address';
 import { getProductById } from 'src/server/use-cases/product/get-product-by-id';
+import { getPaginatedAddressesByUserId } from './data-access/address/get-paginated-addresses-by-user-id';
 import { getPaginatedProductsByUserId } from './data-access/product/get-paginated-products-by-user-id';
 import {
   AddressSelect,
-  CountrySelect,
   OrderItemsSelect,
   OrderSelect,
   ProductImages,
   ProductItems,
   Products,
   ReceiverSelect,
-  UserAddressesSelect,
   VariationOptions,
   Variations,
 } from './schema';
@@ -57,19 +56,9 @@ export type AddressReceiverLink = {
   receiverId: ReceiverSelect['id'];
 } & CreateAddressSchema;
 
-export type AddressAndReceiverData = {
-  isDefault: UserAddressesSelect['isDefault'];
-  addressId: AddressSelect['id'];
-  addressLine1: AddressSelect['addressLine1'];
-  addressLine2: AddressSelect['addressLine2'];
-  city: AddressSelect['city'];
-  state: AddressSelect['state'];
-  postalCode: AddressSelect['postalCode'];
-  countryId: CountrySelect['id'];
-  countryCode: CountrySelect['code'];
-  receiverId: ReceiverSelect['id'];
-  fullName: ReceiverSelect['fullName'];
-};
+export type AddressAndReceiverData = Awaited<
+  ReturnType<typeof getPaginatedAddressesByUserId>
+>['addresses'][number];
 
 export type OrderItemWithVariations = OrderItemsSelect & {
   name: Products['name'];

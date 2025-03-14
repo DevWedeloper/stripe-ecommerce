@@ -28,13 +28,8 @@ import {
   successStream,
 } from 'src/app/shared/utils/rxjs';
 import { showError } from 'src/app/shared/utils/toast';
-import { CountrySelect } from 'src/db/schema';
 import { AddressReceiverLink } from 'src/db/types';
 import { TrpcClient } from 'src/trpc-client';
-
-type AddressReceiverLinkWithCountryCode = AddressReceiverLink & {
-  countryCode: CountrySelect['code'];
-};
 
 @Injectable({
   providedIn: 'root',
@@ -109,7 +104,7 @@ export class GetAddressCheckoutService {
         data.addresses.find((address) => address.isDefault) ?? null;
 
       if (defaultAddress) {
-        const defaultAddressLink: AddressReceiverLinkWithCountryCode = {
+        const defaultAddressLink: AddressReceiverLink = {
           addressId: defaultAddress.addressId,
           receiverId: defaultAddress.receiverId,
           addressLine1: defaultAddress.addressLine1,
@@ -118,7 +113,6 @@ export class GetAddressCheckoutService {
           state: defaultAddress.state,
           postalCode: defaultAddress.postalCode,
           countryId: defaultAddress.countryId,
-          countryCode: defaultAddress.countryCode,
           fullName: defaultAddress.fullName,
         };
 
