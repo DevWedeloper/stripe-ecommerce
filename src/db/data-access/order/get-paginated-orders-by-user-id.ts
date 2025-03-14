@@ -10,11 +10,7 @@ import {
   variationOptions,
   variations,
 } from 'src/db/schema';
-import {
-  OrderItemWithVariations,
-  OrderWithItems,
-  VariationObject,
-} from 'src/db/types';
+import { OrderItemWithVariations, VariationObject } from 'src/db/types';
 import { formatPaginatedResult, totalCount } from '../utils';
 
 export const getPaginatedOrdersByUserId = async (
@@ -22,10 +18,7 @@ export const getPaginatedOrdersByUserId = async (
   offset: number,
   pageSize: number,
   status?: OrderStatusEnum,
-): Promise<{
-  orders: OrderWithItems[];
-  totalOrders: number;
-}> => {
+) => {
   const itemsQuery = db.$with('items_query').as(
     db
       .select({

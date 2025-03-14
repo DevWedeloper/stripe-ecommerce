@@ -1,9 +1,9 @@
 import { getProductById } from 'src/server/use-cases/product/get-product-by-id';
 import { getPaginatedAddressesByUserId } from './data-access/address/get-paginated-addresses-by-user-id';
+import { getPaginatedOrdersByUserId } from './data-access/order/get-paginated-orders-by-user-id';
 import { getPaginatedProductsByUserId } from './data-access/product/get-paginated-products-by-user-id';
 import {
   OrderItemsSelect,
-  OrderSelect,
   ProductImages,
   ProductItems,
   Products,
@@ -57,6 +57,6 @@ export type OrderItemWithVariations = OrderItemsSelect & {
   variations: VariationObject[];
 };
 
-export type OrderWithItems = OrderSelect & {
-  items: OrderItemWithVariations[];
-};
+export type OrderWithItems = Awaited<
+  ReturnType<typeof getPaginatedOrdersByUserId>
+>['orders'][number];
