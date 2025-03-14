@@ -1,10 +1,5 @@
 import { and, Column, eq, getTableColumns, sql } from 'drizzle-orm';
-import {
-  ImageObject,
-  ProductDetails,
-  ProductItemObject,
-  VariationObject,
-} from 'src/db/types';
+import { ImageObject, ProductItemObject, VariationObject } from 'src/db/types';
 import { db } from '../..';
 import {
   productConfiguration,
@@ -14,14 +9,9 @@ import {
   variationOptions,
   variations,
 } from '../../schema';
+import { VariationObjectWithIds } from './get-user-product-by-id';
 
-type ProductWithModifiedVariations = Omit<ProductDetails, 'variations'> & {
-  variations: VariationObject[];
-};
-
-export const getProductById = async (
-  id: number,
-): Promise<ProductWithModifiedVariations | null> => {
+export const getProductById = async (id: number) => {
   const maxQuery = (col: Column) =>
     sql<string>`
       max(case when ${productImages.isThumbnail} = true then ${col} end)
@@ -57,8 +47,10 @@ export const getProductById = async (
         sku: productItems.sku,
         stock: productItems.stock,
         price: productItems.price,
+        variationId: sql<number>`${variations.id}`.as('variation_id'),
         variationName: variations.name,
         variationValue: variationOptions.value,
+        optionsId: sql<number>`${variationOptions.id}`.as('option_id'),
         variationOptionsOrder: variationOptions.order,
       })
       .from(productItems)
@@ -128,9 +120,11 @@ export const getProductById = async (
     db
       .select({
         productId: productItemDetailsQuery.productId,
-        variations: sql<VariationObject[]>`
+        variations: sql<VariationObjectWithIds[]>`
           array_agg(
             distinct jsonb_build_object(
+              'variationId', ${productItemDetailsQuery.variationId},
+              'optionId', ${productItemDetailsQuery.optionsId},
               'name', ${productItemDetailsQuery.variationName},
               'value', ${productItemDetailsQuery.variationValue},
               'order', ${productItemDetailsQuery.variationOptionsOrder}

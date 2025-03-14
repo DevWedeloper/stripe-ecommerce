@@ -1,4 +1,6 @@
 import { CreateAddressSchema } from 'src/schemas/address';
+import { getProductById } from 'src/server/use-cases/product/get-product-by-id';
+import { getPaginatedProductsByUserId } from './data-access/product/get-paginated-products-by-user-id';
 import {
   AddressSelect,
   CountrySelect,
@@ -13,13 +15,6 @@ import {
   Variations,
 } from './schema';
 
-type Nullable<T> = T | null;
-
-type NullishImageObject = {
-  imagePath: Nullable<ProductImages['imagePath']>;
-  placeholder: Nullable<ProductImages['placeholder']>;
-};
-
 export type ImageObject = {
   id: ProductImages['id'];
   imagePath: ProductImages['imagePath'];
@@ -27,15 +22,13 @@ export type ImageObject = {
   order: ProductImages['order'];
 };
 
-export type ProductDetails = Omit<Products, 'isDeleted'> &
-  NullishImageObject & {
-    items: ProductItemObject[];
-    imageObjects: ImageObject[];
-    variations: Record<string, string[]>;
-  };
+export type ProductDetails = NonNullable<
+  Awaited<ReturnType<typeof getProductById>>
+>;
 
-export type ProductWithImageAndPricing = Omit<Products, 'isDeleted'> &
-  NullishImageObject & { lowestPrice: number };
+export type ProductWithImageAndPricing = Awaited<
+  ReturnType<typeof getPaginatedProductsByUserId>
+>['products'][number];
 
 export type ProductItemObject = {
   id: ProductItems['id'];

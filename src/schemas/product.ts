@@ -66,6 +66,8 @@ const variationSchema = z.object({
     .superRefine(uniqueValues('value')),
 });
 
+export type VariationSchema = z.infer<typeof variationSchema>;
+
 const variationItemSchema = z.object({
   name: nameSchema('Variation name'),
   value: nameSchema('Variation value'),

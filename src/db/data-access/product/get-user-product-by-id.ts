@@ -15,7 +15,8 @@ import {
 import { ImageObject, ProductItemObject, VariationObject } from 'src/db/types';
 
 export type ImageObjectWithThumbnail = ImageObject & { isThumbnail: boolean };
-type VariationObjectWithIds = VariationObject & {
+
+export type VariationObjectWithIds = VariationObject & {
   variationId: number;
   optionId: number;
 };

@@ -1,11 +1,8 @@
 import { getProductById as fetchProductById } from 'src/db/data-access/product/get-product-by-id';
-import { ProductDetails } from 'src/db/types';
-import { reduceToRecord } from '../utils/record';
+import { groupAndSortVariations } from 'src/utils/product';
 import { sortByOrder } from '../utils/sort';
 
-export const getProductById = async (
-  id: number,
-): Promise<ProductDetails | null> => {
+export const getProductById = async (id: number) => {
   const result = await fetchProductById(id);
 
   if (!result) {
@@ -17,7 +14,7 @@ export const getProductById = async (
 
   const product = {
     ...result,
-    variations: reduceToRecord(sortedVariations),
+    variations: groupAndSortVariations(sortedVariations),
     imageObjects: sortedImageObjects,
   };
 

@@ -1,12 +1,12 @@
-import { UserProductData } from 'src/db/data-access/product/get-user-product-by-id';
-import { VariantsWithIds } from '../app/pages/user/(user)/product/types/variant';
-import { UserProductFormData } from '../app/pages/user/(user)/product/utils/form';
+import {
+  UserProductData,
+  VariationObjectWithIds,
+} from 'src/db/data-access/product/get-user-product-by-id';
+import { UserProductFormSchema } from 'src/schemas/product';
 
-export const mapProductToFormData = (
-  product: UserProductData,
-): UserProductFormData => {
-  const { id, name, description, variations, items, category, tags } = product;
-
+export const groupAndSortVariations = (
+  variations: VariationObjectWithIds[],
+) => {
   const grouped = variations.reduce(
     (acc, { variationId, optionId, name, value, order }) => ({
       ...acc,
@@ -22,12 +22,12 @@ export const mapProductToFormData = (
       string,
       {
         id: number;
-        options: { id: number; value: string; order: number | null }[];
+        options: { id: number; value: string; order: number }[];
       }
     >,
   );
 
-  const variants = Object.keys(grouped).map((name) => {
+  return Object.keys(grouped).map((name) => {
     const sortedOptions = grouped[name].options.sort(
       (a, b) => (a.order ?? 0) - (b.order ?? 0),
     );
@@ -37,7 +37,15 @@ export const mapProductToFormData = (
       variation: name,
       options: sortedOptions,
     };
-  }) as VariantsWithIds[];
+  });
+};
+
+export const mapProductToFormData = (
+  product: UserProductData,
+): UserProductFormSchema => {
+  const { id, name, description, variations, items, category, tags } = product;
+
+  const variants = groupAndSortVariations(variations);
 
   const tagIds = tags ? tags.map((tag) => tag.id) : [];
 

@@ -1,17 +1,13 @@
 import { and, eq, sql } from 'drizzle-orm';
 import { db } from 'src/db';
 import { productImages, productItems, products } from 'src/db/schema';
-import { ProductWithImageAndPricing } from 'src/db/types';
 import { formatPaginatedResult, totalCount } from '../utils';
 
 export const getPaginatedProductsByUserId = async (
   userId: string,
   offset: number,
   pageSize: number,
-): Promise<{
-  products: ProductWithImageAndPricing[];
-  totalProducts: number;
-}> => {
+) => {
   const thumbnailQuery = db.$with('thumbnail_query').as(
     db
       .select({
