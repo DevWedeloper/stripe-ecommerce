@@ -47,7 +47,7 @@ export const { provideTrpcClient, TrpcClient, TrpcHeaders } =
     url: '/api/trpc',
     options: {
       transformer: SuperJSON,
-      links: [cacheLink],
+      links: [],
     },
   });
 
