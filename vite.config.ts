@@ -4,7 +4,6 @@ import analog from '@analogjs/platform';
 import * as path from 'path';
 import { defineConfig } from 'vite';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
@@ -15,7 +14,7 @@ export default defineConfig(({ mode }) => ({
     target: ['es2020'],
   },
   resolve: {
-    mainFields: ['module'],
+    mainFields: ['module', 'browser'],
     alias: {
       src: path.resolve(__dirname, './src'),
     },
@@ -35,13 +34,13 @@ export default defineConfig(({ mode }) => ({
       'ngx-sonner',
       'ngx-stripe',
       'embla-carousel-angular',
+      'ngx-image-cropper',
 
       '@supabase/ssr',
 
       'lodash-es',
       'isomorphic-fetch',
     ],
-    exclude: ['canvas'],
   },
   ssr: {
     noExternal: [
@@ -63,9 +62,6 @@ export default defineConfig(({ mode }) => ({
     }),
     tsconfigPaths(),
     chunkSplitPlugin(),
-    nodePolyfills({
-      include: ['stream', 'http'],
-    }),
   ],
   test: {
     globals: true,
