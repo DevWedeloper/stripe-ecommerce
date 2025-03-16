@@ -1,6 +1,6 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { merge, scan, startWith, Subject, switchMap } from 'rxjs';
+import { merge, scan, shareReplay, startWith, Subject, switchMap } from 'rxjs';
 import { CreateAddressService } from 'src/app/shared/data-access/address/create-address.service';
 import { UpdateAddressService } from 'src/app/shared/data-access/address/update-address.service';
 import {
@@ -28,15 +28,13 @@ export class GetAddressService {
   private pageSize = 10;
 
   private nextBatch$ = new Subject<void>();
-  private initialFetch$ = new Subject<void>();
 
   private trigger$ = merge(
-    this.initialFetch$,
     this.createAddressService.createAddressSuccess$,
     this.updateAddressService.updateAddressSuccess$,
     this.setAsDefaultAddressService.setAsDefaultSuccess$,
     this.deleteAddressService.deleteAddressSuccess$,
-  );
+  ).pipe(startWith(undefined));
 
   private addresses$ = this.trigger$.pipe(
     materializeAndShare(() =>
@@ -60,7 +58,10 @@ export class GetAddressService {
     ),
   );
 
-  private addressesSuccess$ = this.addresses$.pipe(successStream());
+  private addressesSuccess$ = this.addresses$.pipe(
+    successStream(),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
 
   private addressesError$ = this.addresses$.pipe(errorStream());
 
@@ -91,8 +92,6 @@ export class GetAddressService {
   isInitialLoading = toSignal(this.initialLoading$, { initialValue: true });
 
   constructor() {
-    this.initialFetch$.next();
-
     this.addressesError$
       .pipe(takeUntilDestroyed())
       .subscribe((error) => showError(error.message));
