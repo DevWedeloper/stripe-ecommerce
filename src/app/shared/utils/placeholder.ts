@@ -1,4 +1,5 @@
 import { encode } from 'blurhash';
+import { loadImage } from './image';
 
 const fileToBase64 = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -6,14 +7,6 @@ const fileToBase64 = (file: File): Promise<string> =>
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
-  });
-
-const loadImage = async (src: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = (...args) => reject(args);
-    img.src = src;
   });
 
 const getImageData = (image: HTMLImageElement): ImageData => {

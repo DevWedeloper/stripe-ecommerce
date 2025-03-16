@@ -31,6 +31,7 @@ export const users = pgTable('users', {
     .references(() => authUsers.id, { onDelete: 'cascade' })
     .notNull(),
   email: varchar('email', { length: 256 }).notNull(),
+  avatarPath: text('avatar_path'),
 });
 
 export const countries = pgTable('countries', {

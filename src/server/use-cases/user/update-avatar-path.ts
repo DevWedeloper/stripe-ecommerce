@@ -1,28 +1,32 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { getAvatarPath as getAvatarPathFromDb } from 'src/db/data-access/user/get-avatar-path';
+import { updateAvatarPath as updateAvatarPathFromDb } from 'src/db/data-access/user/update-avatar-path';
 import { getEnvVar } from 'src/env';
 import { AVATAR_SIZES, getAvatarPath } from 'src/utils/image';
 import { typedObjectKeys } from 'src/utils/object';
 
 const SUPABASE_AVATARS_S3_BUCKET = getEnvVar('VITE_AVATARS_S3_BUCKET');
 
-export const deleteUser = async (
+export const updateAvatarPath = async (
   supabase: SupabaseClient,
-  { id }: { id: string },
+  userId: string,
+  avatarPath: string | null,
 ) => {
-  const { avatarPath } = await getAvatarPathFromDb(id);
+  const { avatarPath: currentAvatarPath } = await getAvatarPathFromDb(userId);
 
-  if (avatarPath) {
+  if (currentAvatarPath) {
     const deletePaths = typedObjectKeys(AVATAR_SIZES).map((size) =>
-      getAvatarPath(avatarPath, size),
+      getAvatarPath(currentAvatarPath, size),
     );
 
-    const { error } = await supabase.storage
+    const { data, error } = await supabase.storage
       .from(SUPABASE_AVATARS_S3_BUCKET)
       .remove(deletePaths);
 
-    if (error) console.error('Failed to delete avatar images:', error);
+    if (error) return { data, error };
   }
 
-  return supabase.auth.admin.deleteUser(id);
+  const data = await updateAvatarPathFromDb(userId, avatarPath);
+
+  return { data, error: null };
 };

@@ -17,6 +17,7 @@ import {
   HlmMenuItemIconDirective,
   HlmMenuSeparatorComponent,
 } from '@spartan-ng/ui-menu-helm';
+import { GetAvatarService } from 'src/app/shared/data-access/avatar/get-avatar.service';
 import { AuthService } from '../../../data-access/auth.service';
 import { SignOutService } from './sign-out.service';
 
@@ -51,7 +52,15 @@ import { SignOutService } from './sign-out.service';
       [brnMenuTriggerFor]="accountTpl"
       hlmBtn
     >
-      <ng-icon hlm size="sm" name="lucideCircleUser" />
+      @if (user()) {
+        <img
+          [src]="avatarPath() ?? '/avatar-placeholder.svg'"
+          alt="Avatar"
+          class="h-4 w-4 rounded-full object-cover"
+        />
+      } @else {
+        <ng-icon hlm size="sm" name="lucideCircleUser" />
+      }
       <span class="sr-only">Open account menu</span>
     </button>
     <ng-template #accountTpl>
@@ -89,8 +98,10 @@ import { SignOutService } from './sign-out.service';
 export class AccountComponent {
   private authService = inject(AuthService);
   private signOutService = inject(SignOutService);
+  private getAvatarService = inject(GetAvatarService);
 
   protected user = this.authService.user;
+  protected avatarPath = this.getAvatarService.avatarIconPath;
 
   protected signOut(): void {
     this.signOutService.signOut();

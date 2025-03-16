@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => ({
       '@supabase/ssr',
 
       'lodash-es',
+      'pica',
       'isomorphic-fetch',
     ],
   },
