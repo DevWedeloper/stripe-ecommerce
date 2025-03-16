@@ -11,6 +11,7 @@ import {
   shareReplay,
   withLatestFrom,
 } from 'rxjs';
+import { AuthService } from 'src/app/shared/data-access/auth.service';
 import {
   errorStream,
   finalizedStatusStream,
@@ -26,6 +27,7 @@ import { UpdateOrderStatusService } from './update-order-status.service';
 export class BaseGetOrder {
   private PLATFORM_ID = inject(PLATFORM_ID);
   private _trpc = inject(TrpcClient);
+  private authService = inject(AuthService);
   private updateOrderStatusService = inject(UpdateOrderStatusService);
 
   private PAGE_SIZE = 10;
@@ -46,6 +48,7 @@ export class BaseGetOrder {
 
   private trigger$ = merge(
     this.filter$,
+    this.authService.user$.pipe(filter(Boolean)),
     this.updateOrderStatusService.updateOrderStatusSuccess$,
   );
 
