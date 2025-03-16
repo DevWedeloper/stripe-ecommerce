@@ -1,8 +1,17 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { merge, scan, shareReplay, startWith, Subject, switchMap } from 'rxjs';
+import {
+  filter,
+  merge,
+  scan,
+  shareReplay,
+  startWith,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { CreateAddressService } from 'src/app/shared/data-access/address/create-address.service';
 import { UpdateAddressService } from 'src/app/shared/data-access/address/update-address.service';
+import { AuthService } from 'src/app/shared/data-access/auth.service';
 import {
   errorStream,
   finalizedStatusStream,
@@ -20,6 +29,7 @@ import { SetAsDefaultAddressService } from './set-as-default-address.service';
 })
 export class GetAddressService {
   private _trpc = inject(TrpcClient);
+  private authService = inject(AuthService);
   private createAddressService = inject(CreateAddressService);
   private updateAddressService = inject(UpdateAddressService);
   private setAsDefaultAddressService = inject(SetAsDefaultAddressService);
@@ -30,11 +40,12 @@ export class GetAddressService {
   private nextBatch$ = new Subject<void>();
 
   private trigger$ = merge(
+    this.authService.user$.pipe(filter(Boolean)),
     this.createAddressService.createAddressSuccess$,
     this.updateAddressService.updateAddressSuccess$,
     this.setAsDefaultAddressService.setAsDefaultSuccess$,
     this.deleteAddressService.deleteAddressSuccess$,
-  ).pipe(startWith(undefined));
+  );
 
   private addresses$ = this.trigger$.pipe(
     materializeAndShare(() =>
