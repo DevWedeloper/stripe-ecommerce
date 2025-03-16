@@ -19,9 +19,7 @@ import { showError } from 'src/app/shared/utils/toast';
 import { convertToURLFormat } from 'src/app/shared/utils/url';
 import { TrpcClient } from 'src/trpc-client';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ProductDetailService {
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);

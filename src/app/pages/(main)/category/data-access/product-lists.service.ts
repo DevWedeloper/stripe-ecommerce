@@ -27,9 +27,7 @@ import { showError } from 'src/app/shared/utils/toast';
 import { TrpcClient } from 'src/trpc-client';
 import { toTitleCase } from 'src/utils/string-format';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ProductListsService {
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
