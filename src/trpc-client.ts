@@ -5,9 +5,9 @@ import { observable } from '@trpc/server/observable';
 import { SuperJSON } from 'superjson';
 import { AppRouter } from './server/trpc/routers';
 
-const cache = new Map();
-
 export const cacheLink: TRPCLink<AppRouter> = () => {
+  const cache = new Map();
+
   return ({ next, op }) => {
     const cacheKey = `${op.path}:${JSON.stringify(op.input)}`;
 
@@ -47,7 +47,7 @@ export const { provideTrpcClient, TrpcClient, TrpcHeaders } =
     url: '/api/trpc',
     options: {
       transformer: SuperJSON,
-      links: [],
+      links: [cacheLink],
     },
   });
 
