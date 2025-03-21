@@ -1,3 +1,4 @@
+import { RouteMeta } from '@analogjs/router';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HlmNumberedPaginationComponent } from '@spartan-ng/ui-pagination-helm';
 import { hlmH1 } from '@spartan-ng/ui-typography-helm';
@@ -6,6 +7,10 @@ import { EmptyProductListsComponent } from 'src/app/shared/ui/fallback/empty-pro
 import { ProductCardComponent } from 'src/app/shared/ui/product-card/product-card.component';
 import { ProductCardListSkeletonComponent } from 'src/app/shared/ui/product-card/skeleton/product-card-list-skeleton.component';
 import { SearchService } from './data-access/search.service';
+
+export const routeMeta: RouteMeta = {
+  providers: [SearchService],
+};
 
 @Component({
   selector: 'app-search',
