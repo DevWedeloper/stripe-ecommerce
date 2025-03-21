@@ -312,6 +312,28 @@ export const productTags = pgTable(
   (t) => [primaryKey({ columns: [t.productId, t.tagId] })],
 );
 
+export const userReviews = pgTable(
+  'user_reviews',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    userId: uuid('user_id')
+      .references(() => users.id)
+      .notNull(),
+    orderItemId: integer('order_item_id')
+      .references(() => orderItems.id)
+      .notNull(),
+    rating: integer('rating').notNull(),
+    comment: text('comment'),
+    createdAt: timestamp('created_at').defaultNow(),
+    isDeleted: boolean('is_deleted').default(false).notNull(),
+  },
+  (t) => [
+    index('user_reviews_user_id_idx').on(t.userId),
+    index('user_reviews_order_item_id_idx').on(t.orderItemId),
+    check('user_reviews_rating_check', sql`${t.rating} between 1 and 5`),
+  ],
+);
+
 export type CountrySelect = InferSelectModel<typeof countries>;
 export type AddressSelect = InferSelectModel<typeof addresses>;
 export type AddressInsert = InferInsertModel<typeof addresses>;
@@ -337,3 +359,5 @@ export type ProductConfigurationInsert = InferInsertModel<
 >;
 export type TagsSelect = InferSelectModel<typeof tags>;
 export type ProductTagsInsert = InferInsertModel<typeof productTags>;
+export type UserReviewsSelect = InferSelectModel<typeof userReviews>;
+export type UserReviewsInsert = InferInsertModel<typeof userReviews>;
