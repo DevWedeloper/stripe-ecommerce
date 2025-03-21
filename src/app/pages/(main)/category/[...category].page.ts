@@ -1,9 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-} from '@angular/core';
+import { RouteMeta } from '@analogjs/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   HlmBreadcrumbDirective,
   HlmBreadcrumbLinkDirective,
@@ -19,8 +15,12 @@ import { ProductCardComponent } from 'src/app/shared/ui/product-card/product-car
 import { ProductCardListSkeletonComponent } from 'src/app/shared/ui/product-card/skeleton/product-card-list-skeleton.component';
 import { ProductListsService } from './data-access/product-lists.service';
 
+export const routeMeta: RouteMeta = {
+  providers: [ProductListsService],
+};
+
 @Component({
-  selector: 'app-product-lists',
+  selector: 'app-category-page',
   standalone: true,
   imports: [
     HlmBreadcrumbDirective,
@@ -33,7 +33,6 @@ import { ProductListsService } from './data-access/product-lists.service';
     ProductCardListSkeletonComponent,
     EmptyProductListsComponent,
   ],
-  providers: [ProductListsService],
   template: `
     <h1 class="${hlmH1} mb-4 text-center">
       Products from "{{ categoryName() }}"
@@ -86,11 +85,11 @@ import { ProductListsService } from './data-access/product-lists.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductListsComponent {
+export default class CategoryPageComponent {
   private productListsService = inject(ProductListsService);
   private navigationService = inject(NavigationService);
 
-  categoryName = input.required<string>();
+  protected categoryName = this.productListsService.categoryName;
 
   protected page = this.productListsService.page;
   protected pageSize = this.productListsService.pageSize;

@@ -5,7 +5,7 @@ import {
   takeUntilDestroyed,
   toSignal,
 } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {
   combineLatest,
   distinctUntilChanged,
@@ -13,6 +13,7 @@ import {
   map,
   share,
   shareReplay,
+  startWith,
 } from 'rxjs';
 import { transformProductImagePathsAndPlaceholders } from 'src/app/shared/utils/image-object';
 import {
@@ -30,20 +31,29 @@ import { toTitleCase } from 'src/utils/string-format';
 @Injectable()
 export class ProductListsService {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private _trpc = inject(TrpcClient);
   private PLATFORM_ID = inject(PLATFORM_ID);
 
-  private breadcrumbPaths$ = this.route.params.pipe(
-    map((params) => {
-      const { path } = params;
-      const pathArray = path.split('/') as string[];
+  private urlSegments$ = this.router.events.pipe(
+    filter((event) => event instanceof NavigationEnd),
+    startWith(undefined),
+    map(() =>
+      this.router.url.split('/').filter((segment) => segment.trim() !== ''),
+    ),
+    filter((urlSegments) => urlSegments.length > 0),
+    distinctUntilChanged(
+      (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr),
+    ),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
 
+  private breadcrumbPaths$ = this.urlSegments$.pipe(
+    map((pathArray) => {
       const generatePaths = (arr: string[]): string[] =>
         arr.reduce((paths, current, index) => {
           const path =
-            index === 0
-              ? `/category/${current}`
-              : `${paths[index - 1]}/${current}`;
+            index === 0 ? `/${current}` : `${paths[index - 1]}/${current}`;
           paths.push(path);
           return paths;
         }, [] as string[]);
@@ -61,17 +71,20 @@ export class ProductListsService {
     }),
   );
 
+  private categoryName$ = this.urlSegments$.pipe(
+    map((segments) => segments.at(-1) || ''),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
+
   private filter$ = combineLatest([
-    this.route.params,
     this.route.queryParams,
+    this.categoryName$,
   ]).pipe(
-    map(([params, queryParams]) => {
-      const { categoryName } = params;
+    map(([queryParams, name]) => {
       const { page, pageSize } = queryParams;
 
       const pageValue = parseToPositiveInt(page, 1);
       const pageSizeValue = parseToPositiveInt(pageSize, 10);
-      const name = String(categoryName) || '';
 
       return { name, page: pageValue, pageSize: pageSizeValue };
     }),
@@ -110,6 +123,10 @@ export class ProductListsService {
       totalProducts: 0,
       products: [],
     },
+  });
+
+  categoryName = toSignal(this.categoryName$, {
+    initialValue: '',
   });
 
   page = computed(() => this.productData().page);
