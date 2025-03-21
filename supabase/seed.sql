@@ -1,4 +1,4 @@
-TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images, product_items, variations, variation_options, product_configuration, public.users, auth.users, addresses, countries, user_addresses, orders, order_items, receivers RESTART IDENTITY CASCADE;
+TRUNCATE TABLE categories, products, product_categories, tags, product_tags, product_images, product_items, variations, variation_options, product_configuration, public.users, auth.users, addresses, countries, user_addresses, orders, order_items, receivers, user_reviews RESTART IDENTITY CASCADE;
 
 WITH inserted_categories AS (
     INSERT INTO categories (name)
