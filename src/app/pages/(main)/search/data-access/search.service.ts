@@ -19,9 +19,7 @@ import { parseToPositiveInt } from 'src/app/shared/utils/schema';
 import { showError } from 'src/app/shared/utils/toast';
 import { TrpcClient } from 'src/trpc-client';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SearchService {
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
