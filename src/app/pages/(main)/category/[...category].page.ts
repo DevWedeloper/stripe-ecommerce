@@ -1,5 +1,7 @@
 import { RouteMeta } from '@analogjs/router';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {
   HlmBreadcrumbDirective,
   HlmBreadcrumbLinkDirective,
@@ -9,10 +11,12 @@ import {
 } from '@spartan-ng/ui-breadcrumb-helm';
 import { HlmNumberedPaginationComponent } from '@spartan-ng/ui-pagination-helm';
 import { hlmH1 } from '@spartan-ng/ui-typography-helm';
+import { filter, startWith } from 'rxjs';
 import { NavigationService } from 'src/app/shared/data-access/navigation.service';
 import { EmptyProductListsComponent } from 'src/app/shared/ui/fallback/empty-product-lists.component';
 import { ProductCardComponent } from 'src/app/shared/ui/product-card/product-card.component';
 import { ProductCardListSkeletonComponent } from 'src/app/shared/ui/product-card/skeleton/product-card-list-skeleton.component';
+import { parseToPositiveInt } from 'src/app/shared/utils/schema';
 import { ProductListsService } from './data-access/product-lists.service';
 
 export const routeMeta: RouteMeta = {
@@ -86,6 +90,8 @@ export const routeMeta: RouteMeta = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CategoryPageComponent {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private productListsService = inject(ProductListsService);
   private navigationService = inject(NavigationService);
 
@@ -97,6 +103,33 @@ export default class CategoryPageComponent {
   protected products = this.productListsService.products;
   protected breadcrumbPaths = this.productListsService.breadcrumbPaths;
   protected isInitialLoading = this.productListsService.isInitialLoading;
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        startWith(undefined),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        const urlSegment = this.router.url
+          .split('?')[0]
+          .split('/')
+          .filter((segment) => segment.trim() !== '');
+
+        this.productListsService.setUrlSegments(urlSegment);
+      });
+
+    this.route.queryParams
+      .pipe(takeUntilDestroyed())
+      .subscribe((queryParams) => {
+        const { page, pageSize } = queryParams;
+        const pageValue = parseToPositiveInt(page, 1);
+        const pageSizeValue = parseToPositiveInt(pageSize, 10);
+
+        this.productListsService.setPagination(pageValue, pageSizeValue);
+      });
+  }
 
   protected setPage(page: number): void {
     this.navigationService.setPage(page);
