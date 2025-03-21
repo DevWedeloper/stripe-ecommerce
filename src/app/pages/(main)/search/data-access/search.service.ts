@@ -39,6 +39,7 @@ export class SearchService {
         pageSize: pageSizeValue,
       };
     }),
+    filter((filter) => filter.keyword !== ''),
     distinctUntilChanged(
       (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr),
     ),
