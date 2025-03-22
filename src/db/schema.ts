@@ -323,8 +323,8 @@ export const userReviews = pgTable(
       .references(() => orderItems.id)
       .notNull(),
     rating: integer('rating').notNull(),
-    comment: text('comment'),
-    createdAt: timestamp('created_at').defaultNow(),
+    comment: text('comment').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
     isDeleted: boolean('is_deleted').default(false).notNull(),
   },
   (t) => [
