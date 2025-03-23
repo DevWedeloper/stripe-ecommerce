@@ -108,6 +108,7 @@ export const orders = pgTable(
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     userId: uuid('user_id').references(() => users.id),
     orderDate: timestamp('order_date').notNull(),
+    deliveredDate: timestamp('delivered_date'),
     shippingAddressId: integer('shipping_address_id')
       .references(() => addresses.id)
       .notNull(),
@@ -331,6 +332,7 @@ export const userReviews = pgTable(
     index('user_reviews_user_id_idx').on(t.userId),
     index('user_reviews_order_item_id_idx').on(t.orderItemId),
     check('user_reviews_rating_check', sql`${t.rating} between 1 and 5`),
+    unique('unique_user_order_item').on(t.userId, t.orderItemId),
   ],
 );
 
