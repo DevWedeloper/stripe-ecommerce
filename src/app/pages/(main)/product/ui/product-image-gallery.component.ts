@@ -11,7 +11,7 @@ import { ImageObject } from 'src/db/types';
     class: 'block h-full',
   },
   template: `
-    <div class="flex w-full items-center justify-center p-8">
+    <div class="flex w-full items-center justify-center px-8">
       <hlm-carousel class="w-full">
         <hlm-carousel-content>
           @for (imageObject of imageObjects(); track $index) {
