@@ -16,13 +16,13 @@ export class NavigationService {
     this.setQueryParams({ pageSize });
   }
 
-  setCustomParam(key: string, value: string | number): void {
+  setCustomParam(key: string, value: string | number | undefined): void {
     const param = { [key]: value };
     this.setQueryParams(param);
   }
 
   private setQueryParams = (queryParams: {
-    [key: string]: string | number;
+    [key: string]: string | number | undefined;
   }): void => {
     this.router.navigate([], {
       relativeTo: this.route,
