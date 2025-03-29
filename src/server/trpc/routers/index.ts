@@ -5,6 +5,7 @@ import { categoriesRouter } from './categories';
 import { countriesRouter } from './countries';
 import { ordersRouter } from './orders';
 import { productsRouter } from './products';
+import { reviewsRouter } from './reviews';
 import { storageRouter } from './storage';
 import { stripeRouter } from './stripe';
 import { tagsRouter } from './tags';
@@ -15,6 +16,7 @@ export const appRouter = router({
   addresses: addressRouter,
   orders: ordersRouter,
   products: productsRouter,
+  reviews: reviewsRouter,
   categories: categoriesRouter,
   tags: tagsRouter,
   users: usersRouter,

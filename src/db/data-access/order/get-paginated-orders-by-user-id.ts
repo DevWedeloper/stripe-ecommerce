@@ -7,6 +7,7 @@ import {
   productConfiguration,
   productItems,
   products,
+  userReviews,
   variationOptions,
   variations,
 } from 'src/db/schema';
@@ -26,6 +27,31 @@ export const getPaginatedOrdersByUserId = async (
         name: sql<string>`${products.name}`.as('product_name'),
         variationName: sql<string>`${variations.name}`.as('variation_name'),
         variationValue: variationOptions.value,
+        canReview: sql<boolean>`
+          case 
+            when ${orders.status} = 'Delivered'
+              and ${orders.deliveredDate} >= (now() - interval '7 days')
+              and ${userReviews.id} is null
+            then true
+            else false
+          end
+        `.as('can_review'),
+        canEdit: sql<boolean>`
+          case 
+            when ${orders.status} = 'Delivered'
+              and ${orders.deliveredDate} >= (now() - interval '1 day')
+            then true
+            else false
+          end
+        `.as('can_edit'),
+        canDelete: sql<boolean>`
+          case
+            when ${orders.status} = 'Delivered'
+              and ${userReviews.createdAt} >= (now() - interval '1 day')
+            then true
+            else false
+          end
+        `.as('can_delete'),
       })
       .from(orderItems)
       .innerJoin(productItems, eq(orderItems.productItemId, productItems.id))
@@ -40,6 +66,13 @@ export const getPaginatedOrdersByUserId = async (
         eq(productConfiguration.variationOptionId, variationOptions.id),
       )
       .leftJoin(variations, eq(variationOptions.variationId, variations.id))
+      .leftJoin(
+        userReviews,
+        and(
+          eq(userReviews.orderItemId, orderItems.id),
+          eq(userReviews.userId, userId),
+        ),
+      )
       .where(and(eq(orderItems.orderId, orders.id), eq(orders.userId, userId))),
   );
 
@@ -61,6 +94,9 @@ export const getPaginatedOrdersByUserId = async (
             )
           )
         `.as('variations'),
+        canReview: itemsQuery.canReview,
+        canEdit: itemsQuery.canEdit,
+        canDelete: itemsQuery.canDelete,
       })
       .from(itemsQuery)
       .groupBy(
@@ -86,7 +122,10 @@ export const getPaginatedOrdersByUserId = async (
             'quantity', ${itemsVariationsQuery.quantity},
             'price', ${itemsVariationsQuery.price},
             'name', ${itemsVariationsQuery.name},
-            'variations', ${itemsVariationsQuery.variations}
+            'variations', ${itemsVariationsQuery.variations},
+            'canReview', ${itemsVariationsQuery.canReview},
+            'canEdit', ${itemsVariationsQuery.canEdit},
+            'canDelete', ${itemsVariationsQuery.canDelete}
           )
         )
       `.as('order_items'),

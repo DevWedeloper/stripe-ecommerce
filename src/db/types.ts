@@ -55,6 +55,9 @@ export type AddressAndReceiverData = Awaited<
 export type OrderItemWithVariations = OrderItemsSelect & {
   name: Products['name'];
   variations: VariationObject[];
+  canReview: boolean;
+  canEdit: boolean;
+  canDelete: boolean;
 };
 
 export type OrderWithItems = Awaited<
