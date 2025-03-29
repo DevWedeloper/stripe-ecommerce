@@ -28,14 +28,14 @@ export class BaseGetOrder {
   private PLATFORM_ID = inject(PLATFORM_ID);
   private _trpc = inject(TrpcClient);
   private authService = inject(AuthService);
-  private updateOrderStatusService = inject(UpdateOrderStatusService);
+  protected updateOrderStatusService = inject(UpdateOrderStatusService);
 
   private PAGE_SIZE = 10;
   protected ORDER_STATUS: OrderStatusEnum | undefined = undefined;
 
   private page$ = new BehaviorSubject<number>(1);
 
-  private filter$ = this.page$.pipe(
+  protected filter$ = this.page$.pipe(
     map((page) => ({
       page,
       pageSize: this.PAGE_SIZE,
@@ -46,7 +46,7 @@ export class BaseGetOrder {
     ),
   );
 
-  private trigger$ = merge(
+  protected trigger$ = merge(
     this.filter$,
     this.authService.user$.pipe(filter(Boolean)),
     this.updateOrderStatusService.updateOrderStatusSuccess$,
@@ -55,21 +55,7 @@ export class BaseGetOrder {
   private orders$ = this.trigger$.pipe(
     withLatestFrom(this.filter$),
     materializeAndShare(([_, { page, pageSize, status }]) =>
-      this._trpc.orders.getByUserId
-        .query({
-          page,
-          pageSize,
-          status,
-        })
-        .pipe(
-          map((data) => ({
-            ...data,
-            orders: data.orders.map((order) => ({
-              ...order,
-              orderDate: new Date(order.orderDate),
-            })),
-          })),
-        ),
+      this._trpc.orders.getByUserId.query({ page, pageSize, status }),
     ),
   );
 

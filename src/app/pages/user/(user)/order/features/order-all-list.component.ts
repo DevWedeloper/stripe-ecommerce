@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { HlmDialogService } from '@spartan-ng/ui-dialog-helm';
 import { HlmNumberedPaginationComponent } from '@spartan-ng/ui-pagination-helm';
 import { GetOrderAllStatusListService } from '../data-access/get-order-all-status-list.service';
 import { UpdateOrderStatusService } from '../data-access/update-order-status.service';
@@ -8,6 +9,9 @@ import { OrderCompletedCardComponent } from '../ui/order-completed-card.componen
 import { OrderPendingCardComponent } from '../ui/order-pending-card.component';
 import { OrderToReceiveCardComponent } from '../ui/order-to-receive-card.component';
 import { OrderToShipCardComponent } from '../ui/order-to-ship-card.component';
+import { ConfirmDeleteReviewDialogComponent } from './review/confirm-delete-review-dialog.component';
+import { EditReviewDialogComponent } from './review/edit-review-dialog.component';
+import { WriteReviewDialogComponent } from './review/write-review-dialog.component';
 
 @Component({
   selector: 'app-order-all-list',
@@ -44,7 +48,12 @@ import { OrderToShipCardComponent } from '../ui/order-to-ship-card.component';
             />
           }
           @case ('Delivered') {
-            <app-order-completed-card [order]="order" />
+            <app-order-completed-card
+              [order]="order"
+              (writeReview)="writeReview($event)"
+              (editReview)="editReview($event)"
+              (deleteReview)="deleteReview($event)"
+            />
           }
           @case ('Cancelled') {
             <app-order-cancelled-card [order]="order" />
@@ -68,6 +77,7 @@ import { OrderToShipCardComponent } from '../ui/order-to-ship-card.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderAllListComponent {
+  private _hlmDialogService = inject(HlmDialogService);
   private getOrderService = inject(GetOrderAllStatusListService);
   private updateOrderStatusService = inject(UpdateOrderStatusService);
 
@@ -106,6 +116,27 @@ export class OrderAllListComponent {
     this.updateOrderStatusService.updateOrderStatus({
       orderId,
       status: 'Cancelled',
+    });
+  }
+
+  protected writeReview(orderItemId: number): void {
+    this._hlmDialogService.open(WriteReviewDialogComponent, {
+      contentClass: 'flex',
+      context: { orderItemId },
+    });
+  }
+
+  protected editReview(orderItemId: number): void {
+    this._hlmDialogService.open(EditReviewDialogComponent, {
+      contentClass: 'flex',
+      context: { orderItemId },
+    });
+  }
+
+  protected deleteReview(orderItemId: number): void {
+    this._hlmDialogService.open(ConfirmDeleteReviewDialogComponent, {
+      contentClass: 'flex',
+      context: { orderItemId },
     });
   }
 }

@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { OrderWithItems } from 'src/db/types';
 import { BaseOrderCard } from '../types/base-order-card';
@@ -12,10 +17,19 @@ import { OrderCardBodyComponent } from './order-card-body.component';
   },
   hostDirectives: [{ directive: HlmCardDirective }],
   template: `
-    <app-order-card-body [items]="order().items" [total]="order().total" />
+    <app-order-card-body
+      [items]="order().items"
+      [total]="order().total"
+      (writeReview)="writeReview.emit($event)"
+      (editReview)="editReview.emit($event)"
+      (deleteReview)="deleteReview.emit($event)"
+    />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderCompletedCardComponent implements BaseOrderCard {
   order = input.required<OrderWithItems>();
+  writeReview = output<number>();
+  editReview = output<number>();
+  deleteReview = output<number>();
 }
