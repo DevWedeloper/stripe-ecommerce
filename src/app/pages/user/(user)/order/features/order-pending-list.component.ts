@@ -12,6 +12,7 @@ import { OrderPendingCardComponent } from '../ui/order-pending-card.component';
     OrderPendingCardComponent,
     EmptyOrderListsComponent,
   ],
+  providers: [GetOrderPendingListService],
   template: `
     <div class="flex flex-col gap-4">
       @for (order of orders(); track order.id) {

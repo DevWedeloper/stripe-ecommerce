@@ -11,6 +11,7 @@ import { OrderCancelledCardComponent } from '../ui/order-cancelled-card.componen
     OrderCancelledCardComponent,
     EmptyOrderListsComponent,
   ],
+  providers: [GetOrderCancelledListService],
   template: `
     <div class="flex flex-col gap-4">
       @for (order of orders(); track order.id) {

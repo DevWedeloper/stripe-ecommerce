@@ -12,6 +12,7 @@ import { OrderToShipCardComponent } from '../ui/order-to-ship-card.component';
     OrderToShipCardComponent,
     EmptyOrderListsComponent,
   ],
+  providers: [GetOrderToShipListService],
   template: `
     <div class="flex flex-col gap-4">
       @for (order of orders(); track order.id) {

@@ -12,6 +12,7 @@ import { OrderToReceiveCardComponent } from '../ui/order-to-receive-card.compone
     OrderToReceiveCardComponent,
     EmptyOrderListsComponent,
   ],
+  providers: [GetOrderToReceiveListService],
   template: `
     <div class="flex flex-col gap-4">
       @for (order of orders(); track order.id) {

@@ -5,9 +5,7 @@ import { CreateReviewService } from './review/create-review.service';
 import { DeleteReviewService } from './review/delete-review.service';
 import { UpdateReviewService } from './review/update-review.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class GetOrderCompletedListService extends BaseGetOrder {
   private createReviewService = inject(CreateReviewService);
   private updateReviewService = inject(UpdateReviewService);

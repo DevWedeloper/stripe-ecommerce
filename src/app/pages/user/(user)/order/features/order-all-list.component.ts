@@ -24,6 +24,7 @@ import { WriteReviewDialogComponent } from './review/write-review-dialog.compone
     OrderCancelledCardComponent,
     EmptyOrderListsComponent,
   ],
+  providers: [GetOrderAllStatusListService],
   template: `
     <div class="flex flex-col gap-4">
       @for (order of orders(); track order.id) {
