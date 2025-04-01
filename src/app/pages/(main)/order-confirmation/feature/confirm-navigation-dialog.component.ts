@@ -9,7 +9,7 @@ import {
 } from '@spartan-ng/ui-dialog-helm';
 
 @Component({
-  selector: 'app-confirm-navigation',
+  selector: 'app-confirm-navigation-dialog',
   standalone: true,
   imports: [
     HlmButtonDirective,
@@ -35,7 +35,7 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmNavigationComponent {
+export class ConfirmNavigationDialogComponent {
   private _dialogRef = inject(BrnDialogRef);
 
   protected cancel(): void {

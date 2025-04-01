@@ -15,7 +15,7 @@ import { StripeConfirmationTokenService } from 'src/app/shared/data-access/strip
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
 import { HlmButtonWithLoadingComponent } from 'src/app/shared/ui/hlm-button-with-loading.component';
 import { ViewCartComponent } from 'src/app/shared/ui/view-cart.component';
-import { ConfirmNavigationComponent } from './feature/confirm-navigation.component';
+import { ConfirmNavigationDialogComponent } from './feature/confirm-navigation-dialog.component';
 import { ViewShippingDetailsComponent } from './feature/view-shipping-details.component';
 
 export const routeMeta: RouteMeta = {
@@ -30,7 +30,7 @@ export const routeMeta: RouteMeta = {
 
       if (!allowedUrls.includes(nextState.url)) {
         const _hlmDialogService = inject(HlmDialogService);
-        const dialogRef = _hlmDialogService.open(ConfirmNavigationComponent, {
+        const dialogRef = _hlmDialogService.open(ConfirmNavigationDialogComponent, {
           contentClass: 'flex',
           closeOnBackdropClick: false,
         });

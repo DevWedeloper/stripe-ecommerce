@@ -18,7 +18,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { CropperData, CropperResult } from '../../../../../shared/types/cropper';
 
 @Component({
-  selector: 'app-cropper',
+  selector: 'app-cropper-dialog',
   imports: [
     ImageCropperComponent,
     HlmButtonDirective,
@@ -62,7 +62,7 @@ import { CropperData, CropperResult } from '../../../../../shared/types/cropper'
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CropperComponent {
+export class CropperDialogComponent {
   private _dialogRef = inject(BrnDialogRef);
   private _dialogContext = injectBrnDialogContext<{ data: CropperData }>();
 

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmCardImports } from '@spartan-ng/ui-card-helm';
 import { HlmDialogService } from '@spartan-ng/ui-dialog-helm';
-import { ConfirmDeleteAccountComponent } from './confirm-delete-account.component';
+import { ConfirmDeleteAccountDialogComponent } from './confirm-delete-account-dialog.component';
 
 @Component({
   selector: 'app-delete-user',
@@ -30,7 +30,7 @@ export class DeleteUserComponent {
   private _hlmDialogService = inject(HlmDialogService);
 
   protected onClick(): void {
-    this._hlmDialogService.open(ConfirmDeleteAccountComponent, {
+    this._hlmDialogService.open(ConfirmDeleteAccountDialogComponent, {
       contentClass: 'flex',
     });
   }

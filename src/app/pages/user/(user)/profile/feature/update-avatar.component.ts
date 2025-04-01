@@ -10,7 +10,7 @@ import {
   CropperResult,
 } from '../../../../../shared/types/cropper';
 import { UserAvatarComponent } from '../ui/user-avatar.component';
-import { CropperComponent } from './cropper.component';
+import { CropperDialogComponent } from './cropper-dialog.component';
 
 @Component({
   selector: 'app-update-avatar',
@@ -57,7 +57,7 @@ export class UpdateAvatarComponent {
 
     input.value = '';
 
-    const dialogRef = this._hlmDialogService.open(CropperComponent, {
+    const dialogRef = this._hlmDialogService.open(CropperDialogComponent, {
       contentClass: 'flex',
       context: {
         data: {

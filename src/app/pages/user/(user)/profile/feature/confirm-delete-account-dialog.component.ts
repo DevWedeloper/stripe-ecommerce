@@ -7,7 +7,7 @@ import { DeleteUserService } from '../data-access/delete-user.service';
 import { ConfirmDeleteFormComponent } from '../ui/confirm-delete-form.component';
 
 @Component({
-  selector: 'app-confirm-delete-account',
+  selector: 'app-confirm-delete-account-dialog',
   standalone: true,
   imports: [ConfirmDeleteFormComponent],
   host: {
@@ -23,7 +23,7 @@ import { ConfirmDeleteFormComponent } from '../ui/confirm-delete-form.component'
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmDeleteAccountComponent {
+export class ConfirmDeleteAccountDialogComponent {
   private fb = inject(FormBuilder);
   private _dialogRef = inject(BrnDialogRef);
   private deleteUserService = inject(DeleteUserService);
