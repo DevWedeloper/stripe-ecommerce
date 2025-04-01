@@ -53,7 +53,7 @@ import { ReviewCardComponent } from '../ui/review/review-card.component';
                 <hlm-option [value]="3">3 stars</hlm-option>
                 <hlm-option [value]="2">2 stars</hlm-option>
                 <hlm-option [value]="1">1 star</hlm-option>
-                <hlm-option [value]="undefined">No filter</hlm-option>
+                <hlm-option>None</hlm-option>
               </hlm-select-content>
             </brn-select>
           </div>
