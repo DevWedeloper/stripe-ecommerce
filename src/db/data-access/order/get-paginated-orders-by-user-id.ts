@@ -106,6 +106,9 @@ export const getPaginatedOrdersByUserId = async (
         itemsQuery.quantity,
         itemsQuery.price,
         itemsQuery.name,
+        itemsQuery.canReview,
+        itemsQuery.canEdit,
+        itemsQuery.canDelete,
       ),
   );
 
