@@ -5,14 +5,8 @@ import {
   takeUntilDestroyed,
   toSignal,
 } from '@angular/core/rxjs-interop';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-  share,
-  shareReplay,
-  Subject,
-} from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { distinctUntilChanged, filter, map, share, shareReplay } from 'rxjs';
 import { transformProductImagePathsAndPlaceholders } from 'src/app/shared/utils/image-object';
 import {
   errorStream,
@@ -27,16 +21,11 @@ import { TrpcClient } from 'src/trpc-client';
 
 @Injectable()
 export class SearchService {
+  private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
   private PLATFORM_ID = inject(PLATFORM_ID);
 
-  private pagination$ = new Subject<{
-    keyword: string;
-    page: number;
-    pageSize: number;
-  }>();
-
-  private filter$ = this.pagination$.pipe(
+  private filter$ = this.route.queryParams.pipe(
     map((queryParams) => {
       const { keyword, page, pageSize } = queryParams;
 
@@ -107,9 +96,5 @@ export class SearchService {
         takeUntilDestroyed(),
       )
       .subscribe((error) => showError(error.message));
-  }
-
-  setPagination(keyword: string, page: number, pageSize: number): void {
-    this.pagination$.next({ keyword, page, pageSize });
   }
 }

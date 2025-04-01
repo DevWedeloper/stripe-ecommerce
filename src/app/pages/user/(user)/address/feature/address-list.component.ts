@@ -13,6 +13,7 @@ import { UpdateAddressComponent } from './update-address.component';
 @Component({
   selector: 'app-address-list',
   imports: [AddressCardComponent, HlmSpinnerComponent],
+  providers: [GetAddressService],
   host: {
     class: 'flex flex-col gap-4',
   },

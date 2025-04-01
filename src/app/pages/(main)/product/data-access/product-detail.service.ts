@@ -6,15 +6,7 @@ import {
   toSignal,
 } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import {
-  combineLatest,
-  distinctUntilChanged,
-  filter,
-  map,
-  share,
-  shareReplay,
-  Subject,
-} from 'rxjs';
+import { combineLatest, filter, map, share, shareReplay } from 'rxjs';
 import { NavigationService } from 'src/app/shared/data-access/navigation.service';
 import { transformProductImageObjects } from 'src/app/shared/utils/image-object';
 import {
@@ -27,20 +19,26 @@ import { showError } from 'src/app/shared/utils/toast';
 import { convertToURLFormat } from 'src/app/shared/utils/url';
 import { TrpcClient } from 'src/trpc-client';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ProductDetailService {
   private route = inject(ActivatedRoute);
   private _trpc = inject(TrpcClient);
   private PLATFORM_ID = inject(PLATFORM_ID);
   private navigationService = inject(NavigationService);
 
-  private productIdTrigger$ = new Subject<number>();
+  private productId$ = this.route.params.pipe(
+    map((params) => {
+      const { productId } = params;
+      const id = Number(productId);
 
-  private productId$ = this.productIdTrigger$
-    .asObservable()
-    .pipe(distinctUntilChanged());
+      if (isNaN(id)) {
+        throw new Error('Not a valid ID');
+      }
+
+      return id;
+    }),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
 
   private queryParams$ = this.route.queryParams.pipe(
     shareReplay({ bufferSize: 1, refCount: true }),
@@ -131,10 +129,6 @@ export class ProductDetailService {
         takeUntilDestroyed(),
       )
       .subscribe((error) => showError(error.message));
-  }
-
-  setProductId(id: number): void {
-    this.productIdTrigger$.next(id);
   }
 
   updateProductVariation(key: string, value: string): void {

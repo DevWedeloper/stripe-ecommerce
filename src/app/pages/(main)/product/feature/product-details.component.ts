@@ -25,6 +25,7 @@ import { ProductVariationsComponent } from '../ui/product-variations.component';
     ProductVariationsComponent,
     ProductPricingDetailsComponent,
   ],
+  providers: [ProductDetailService],
   template: `
     @if (!isLoading()) {
       @if (product()) {
@@ -71,7 +72,6 @@ import { ProductVariationsComponent } from '../ui/product-variations.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailsComponent {
-  private route = inject(ActivatedRoute);
   private productDetailService = inject(ProductDetailService);
   private shoppingCartService = inject(ShoppingCartService);
 
@@ -84,19 +84,6 @@ export class ProductDetailsComponent {
     computation: (currentItem) =>
       currentItem && currentItem.stock > 0 ? 1 : 0,
   });
-
-  constructor() {
-    this.route.params.pipe(take(1)).subscribe((params) => {
-      const { productId } = params;
-      const id = Number(productId);
-
-      if (isNaN(id)) {
-        throw new Error('Not a valid ID');
-      }
-
-      this.productDetailService.setProductId(id);
-    });
-  }
 
   protected addToCart(): void {
     const product = this.product()!;

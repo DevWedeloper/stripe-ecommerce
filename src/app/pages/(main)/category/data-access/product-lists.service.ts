@@ -5,6 +5,7 @@ import {
   takeUntilDestroyed,
   toSignal,
 } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {
   combineLatest,
   distinctUntilChanged,
@@ -12,7 +13,7 @@ import {
   map,
   share,
   shareReplay,
-  Subject,
+  startWith,
 } from 'rxjs';
 import { transformProductImagePathsAndPlaceholders } from 'src/app/shared/utils/image-object';
 import {
@@ -29,17 +30,17 @@ import { toTitleCase } from 'src/utils/string-format';
 
 @Injectable()
 export class ProductListsService {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private _trpc = inject(TrpcClient);
   private PLATFORM_ID = inject(PLATFORM_ID);
 
-  private urlSegmentsTrigger$ = new Subject<string[]>();
-
-  private pagination$ = new Subject<{
-    page: number;
-    pageSize: number;
-  }>();
-
-  private urlSegments$ = this.urlSegmentsTrigger$.pipe(
+  private urlSegments$ = this.router.events.pipe(
+    filter((event) => event instanceof NavigationEnd),
+    startWith(undefined),
+    map(() =>
+      this.router.url.split('/').filter((segment) => segment.trim() !== ''),
+    ),
     filter((urlSegments) => urlSegments.length > 0),
     distinctUntilChanged(
       (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr),
@@ -75,7 +76,10 @@ export class ProductListsService {
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  private filter$ = combineLatest([this.pagination$, this.categoryName$]).pipe(
+  private filter$ = combineLatest([
+    this.route.queryParams,
+    this.categoryName$,
+  ]).pipe(
     map(([queryParams, name]) => {
       const { page, pageSize } = queryParams;
 
@@ -141,13 +145,5 @@ export class ProductListsService {
         takeUntilDestroyed(),
       )
       .subscribe((error) => showError(error.message));
-  }
-
-  setUrlSegments(urlSegments: string[]): void {
-    this.urlSegmentsTrigger$.next(urlSegments);
-  }
-
-  setPagination(page: number, pageSize: number): void {
-    this.pagination$.next({ page, pageSize });
   }
 }
