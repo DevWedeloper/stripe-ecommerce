@@ -25,14 +25,23 @@ const authUsers = authSchema.table('users', {
   id: uuid('id').primaryKey(),
 });
 
-export const users = pgTable('users', {
-  id: uuid('id')
-    .primaryKey()
-    .references(() => authUsers.id)
-    .notNull(),
-  email: varchar('email', { length: 256 }).notNull(),
-  avatarPath: text('avatar_path'),
-}).enableRLS();
+export const users = pgTable(
+  'users',
+  {
+    id: uuid('id')
+      .primaryKey()
+      .references(() => authUsers.id)
+      .notNull(),
+    email: varchar('email', { length: 256 }).notNull(),
+    avatarPath: text('avatar_path'),
+    isDeleted: boolean('is_deleted').notNull().default(false),
+  },
+  (t) => [
+    uniqueIndex('unique_active_email')
+      .on(t.email)
+      .where(sql`${t.isDeleted} = false`),
+  ],
+).enableRLS();
 
 export const countries = pgTable('countries', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
