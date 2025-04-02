@@ -1,4 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { deleteUser as deleteUserFromDb } from 'src/db/data-access/user/delete-user';
 import { getAvatarPath as getAvatarPathFromDb } from 'src/db/data-access/user/get-avatar-path';
 import { getEnvVar } from 'src/env';
 import { AVATAR_SIZES, getAvatarPath } from 'src/utils/image';
@@ -24,5 +25,12 @@ export const deleteUser = async (
     if (error) console.error('Failed to delete avatar images:', error);
   }
 
-  return supabase.auth.admin.deleteUser(id);
+  const { error } = await supabase.auth.admin.deleteUser(id);
+
+  if (error) {
+    console.error('Failed to delete user:', error);
+    return { error };
+  }
+
+  return deleteUserFromDb(id);
 };
