@@ -32,12 +32,12 @@ export const users = pgTable('users', {
     .notNull(),
   email: varchar('email', { length: 256 }).notNull(),
   avatarPath: text('avatar_path'),
-});
+}).enableRLS();
 
 export const countries = pgTable('countries', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   code: char('code', { length: 2 }).notNull().unique(),
-});
+}).enableRLS();
 
 export const addresses = pgTable(
   'addresses',
@@ -62,12 +62,12 @@ export const addresses = pgTable(
       t.countryId,
     ),
   ],
-);
+).enableRLS();
 
 export const receivers = pgTable('receivers', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   fullName: varchar('full_name', { length: 256 }).notNull(),
-});
+}).enableRLS();
 
 export const userAddresses = pgTable(
   'user_addresses',
@@ -92,7 +92,7 @@ export const userAddresses = pgTable(
     index('user_addresses_user_id_idx').on(t.userId),
     index('user_addresses_address_id_idx').on(t.addressId),
   ],
-);
+).enableRLS();
 
 export const orderStatusEnum = pgEnum('order_status', [
   'Pending',
@@ -119,7 +119,7 @@ export const orders = pgTable(
     status: orderStatusEnum('status').notNull().default('Pending'),
   },
   (t) => [index('orders_user_id_idx').on(t.userId)],
-);
+).enableRLS();
 
 export const orderItems = pgTable(
   'order_items',
@@ -138,7 +138,7 @@ export const orderItems = pgTable(
     index('order_items_order_id_idx').on(t.orderId),
     index('order_items_product_item_id_idx').on(t.productItemId),
   ],
-);
+).enableRLS();
 
 export const products = pgTable(
   'products',
@@ -160,7 +160,7 @@ export const products = pgTable(
       )`,
     ),
   ],
-);
+).enableRLS();
 
 export const productItems = pgTable(
   'product_items',
@@ -178,7 +178,7 @@ export const productItems = pgTable(
     index('product_items_product_id_idx').on(t.productId),
     check('stock_check', sql`${t.stock} >= 0`),
   ],
-);
+).enableRLS();
 
 export const productImages = pgTable(
   'product_images',
@@ -198,7 +198,7 @@ export const productImages = pgTable(
       .where(sql`(${t.isThumbnail} = true)`),
     index('product_images_product_id_idx').on(t.productId),
   ],
-);
+).enableRLS();
 
 export const categories = pgTable(
   'categories',
@@ -214,7 +214,7 @@ export const categories = pgTable(
     uniqueIndex('categories_name_idx').on(t.name),
     index('categories_parent_category_id_idx').on(t.parentCategoryId),
   ],
-);
+).enableRLS();
 
 export const productCategories = pgTable(
   'product_categories',
@@ -227,7 +227,7 @@ export const productCategories = pgTable(
       .references(() => categories.id),
   },
   (t) => [primaryKey({ columns: [t.productId, t.categoryId] })],
-);
+).enableRLS();
 
 export const variations = pgTable(
   'variations',
@@ -239,7 +239,7 @@ export const variations = pgTable(
     name: text('name').notNull(),
   },
   (t) => [unique().on(t.productId, t.name)],
-);
+).enableRLS();
 
 export const variationOptions = pgTable(
   'variation_options',
@@ -255,7 +255,7 @@ export const variationOptions = pgTable(
     index('variation_id_idx').on(t.variationId),
     unique().on(t.variationId, t.value),
   ],
-);
+).enableRLS();
 
 export const productConfiguration = pgTable(
   'product_configuration',
@@ -284,7 +284,7 @@ export const productConfiguration = pgTable(
       sql`${t.productId} = ${t.variationProductId}`,
     ),
   ],
-);
+).enableRLS();
 
 export const tags = pgTable(
   'tags',
@@ -298,7 +298,7 @@ export const tags = pgTable(
       sql`to_tsvector('english', ${t.name})`,
     ),
   ],
-);
+).enableRLS();
 
 export const productTags = pgTable(
   'product_tags',
@@ -311,7 +311,7 @@ export const productTags = pgTable(
       .references(() => tags.id, { onDelete: 'cascade' }),
   },
   (t) => [primaryKey({ columns: [t.productId, t.tagId] })],
-);
+).enableRLS();
 
 export const userReviews = pgTable(
   'user_reviews',
@@ -334,7 +334,7 @@ export const userReviews = pgTable(
     check('user_reviews_rating_check', sql`${t.rating} between 1 and 5`),
     unique('unique_user_order_item').on(t.userId, t.orderItemId),
   ],
-);
+).enableRLS();
 
 export type CountrySelect = InferSelectModel<typeof countries>;
 export type AddressSelect = InferSelectModel<typeof addresses>;
