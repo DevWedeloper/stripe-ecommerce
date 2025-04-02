@@ -28,7 +28,7 @@ const authUsers = authSchema.table('users', {
 export const users = pgTable('users', {
   id: uuid('id')
     .primaryKey()
-    .references(() => authUsers.id, { onDelete: 'cascade' })
+    .references(() => authUsers.id)
     .notNull(),
   email: varchar('email', { length: 256 }).notNull(),
   avatarPath: text('avatar_path'),
@@ -247,7 +247,7 @@ export const variationOptions = pgTable(
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     variationId: integer('variation_id')
       .notNull()
-      .references(() => variations.id, { onDelete: 'cascade' }),
+      .references(() => variations.id),
     value: text('value').notNull(),
     order: smallint('order').notNull(),
   },
@@ -305,10 +305,10 @@ export const productTags = pgTable(
   {
     productId: integer('product_id')
       .notNull()
-      .references(() => products.id, { onDelete: 'cascade' }),
+      .references(() => products.id),
     tagId: integer('tag_id')
       .notNull()
-      .references(() => tags.id, { onDelete: 'cascade' }),
+      .references(() => tags.id),
   },
   (t) => [primaryKey({ columns: [t.productId, t.tagId] })],
 ).enableRLS();
