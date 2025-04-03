@@ -15,10 +15,16 @@ import { StripeConfirmationTokenService } from 'src/app/shared/data-access/strip
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
 import { HlmButtonWithLoadingComponent } from 'src/app/shared/ui/hlm-button-with-loading.component';
 import { ViewCartComponent } from 'src/app/shared/ui/view-cart.component';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { ConfirmNavigationDialogComponent } from './feature/confirm-navigation-dialog.component';
 import { ViewShippingDetailsComponent } from './feature/view-shipping-details.component';
 
 export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Order Confirmation',
+    'Review your order details and confirm everything is correct before completing your purchase.',
+  ),
+  title: 'Stripe Ecommerce | Order Confirmation',
   canActivate: [() => inject(StripeConfirmationTokenService).isSuccessful()],
   canDeactivate: [
     (_component, _currentRoute, _currentState, nextState) => {
@@ -30,10 +36,13 @@ export const routeMeta: RouteMeta = {
 
       if (!allowedUrls.includes(nextState.url)) {
         const _hlmDialogService = inject(HlmDialogService);
-        const dialogRef = _hlmDialogService.open(ConfirmNavigationDialogComponent, {
-          contentClass: 'flex',
-          closeOnBackdropClick: false,
-        });
+        const dialogRef = _hlmDialogService.open(
+          ConfirmNavigationDialogComponent,
+          {
+            contentClass: 'flex',
+            closeOnBackdropClick: false,
+          },
+        );
 
         return dialogRef.closed$;
       }

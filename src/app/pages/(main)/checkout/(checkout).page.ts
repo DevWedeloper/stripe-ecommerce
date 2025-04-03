@@ -8,11 +8,17 @@ import {
 } from '@angular/core';
 import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { CartDetailsComponent } from './feature/cart-details.component';
 import { ShippingDetailsComponent } from './feature/shipping-details.component';
 import { TestCardsComponent } from './feature/test-cards/test-cards.component';
 
 export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Checkout',
+    'Provide your shipping details and payment information to complete your order.',
+  ),
+  title: 'Stripe Ecommerce | Checkout',
   canActivate: [() => inject(ShoppingCartService).getCart().length > 0],
 };
 

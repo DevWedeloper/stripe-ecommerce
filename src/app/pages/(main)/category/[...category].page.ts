@@ -13,9 +13,15 @@ import { NavigationService } from 'src/app/shared/data-access/navigation.service
 import { EmptyProductListsComponent } from 'src/app/shared/ui/fallback/empty-product-lists.component';
 import { ProductCardComponent } from 'src/app/shared/ui/product-card/product-card.component';
 import { ProductCardListSkeletonComponent } from 'src/app/shared/ui/product-card/skeleton/product-card-list-skeleton.component';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { ProductListsService } from './data-access/product-lists.service';
 
 export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Category',
+    'Browse through a wide range of products in this category.',
+  ),
+  title: 'Stripe Ecommerce | Category',
   providers: [ProductListsService],
 };
 

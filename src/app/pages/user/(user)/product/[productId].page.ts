@@ -1,3 +1,4 @@
+import { RouteMeta } from '@analogjs/router';
 import { Component, computed, inject } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ValueChangeEvent } from '@angular/forms';
@@ -7,6 +8,7 @@ import { LeafCategoriesService } from 'src/app/shared/data-access/leaf-categorie
 import { TagsService } from 'src/app/shared/data-access/tags.service';
 import { EmptyProductDetailsComponent } from 'src/app/shared/ui/fallback/empty-product-details.component';
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { ProductDetailsSyncService } from './data-access/product-details-sync.service';
 import { UpdateProductService } from './data-access/update-product.service';
@@ -24,6 +26,14 @@ import {
   sortVariantOptions,
 } from './utils/form';
 import { extractVariantsWithIds, mapToVariants } from './utils/rxjs';
+
+export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Product Management',
+    'Edit or remove your product details.',
+  ),
+  title: 'Stripe Ecommerce | Product Management',
+};
 
 @Component({
   selector: 'app-user-product-detail',

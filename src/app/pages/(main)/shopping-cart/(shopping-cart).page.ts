@@ -1,10 +1,20 @@
+import { RouteMeta } from '@analogjs/router';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ShoppingCartService } from 'src/app/shared/data-access/shopping-cart.service';
 import { EmptyCartComponent } from 'src/app/shared/ui/fallback/empty-cart.component';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { CartPageItemsMobileComponent } from './ui/cart-page-items-mobile.component';
 import { CartPageItemsComponent } from './ui/cart-page-items.component';
 import { CartSummaryComponent } from './ui/cart-summary.component';
+
+export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Shopping Cart',
+    'Review the items in your cart and proceed to checkout.',
+  ),
+  title: 'Stripe Ecommerce | Shopping Cart',
+};
 
 @Component({
   selector: 'app-shopping-cart',

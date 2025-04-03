@@ -1,3 +1,4 @@
+import { RouteMeta } from '@analogjs/router';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,6 +13,15 @@ import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { AppService } from '../shared/data-access/app.service';
 import { FooterComponent } from '../shared/layout/footer/footer.component';
 import { HeaderComponent } from '../shared/layout/header/header.component';
+import { metaWith } from '../shared/utils/meta';
+
+export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce',
+    'A modern eCommerce platform powered by Stripe—buy and sell products with ease, enjoy a seamless checkout experience, and manage orders effortlessly.',
+  ),
+  title: 'Stripe Ecommerce',
+};
 
 @Component({
   selector: 'app-home',

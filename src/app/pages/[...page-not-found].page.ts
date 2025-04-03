@@ -1,6 +1,13 @@
+import { RouteMeta } from '@analogjs/router';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { metaWith } from '../shared/utils/meta';
+
+export const routeMeta: RouteMeta = {
+  meta: metaWith('Stripe Ecommerce - Not Found', 'Page not found.'),
+  title: 'Stripe Ecommerce | Not Found',
+};
 
 @Component({
   selector: 'app-not-found',

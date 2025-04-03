@@ -6,10 +6,15 @@ import { NavigationService } from 'src/app/shared/data-access/navigation.service
 import { EmptyProductListsComponent } from 'src/app/shared/ui/fallback/empty-product-lists.component';
 import { ProductCardComponent } from 'src/app/shared/ui/product-card/product-card.component';
 import { ProductCardListSkeletonComponent } from 'src/app/shared/ui/product-card/skeleton/product-card-list-skeleton.component';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { SearchService } from './data-access/search.service';
 
 export const routeMeta: RouteMeta = {
-  providers: [SearchService],
+  meta: metaWith(
+    'Stripe Ecommerce - Search',
+    'Browse through a wide range of products based on your search.',
+  ),
+  title: 'Stripe Ecommerce | Search',
 };
 
 @Component({

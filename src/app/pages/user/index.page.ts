@@ -2,6 +2,7 @@ import { RouteMeta } from '@analogjs/router';
 import { Component } from '@angular/core';
 import { isAuthenticatedGuard } from 'src/app/shared/guards/is-authenticated.guard';
 import { SideNavComponent } from 'src/app/shared/layout/side-nav/side-nav.component';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { DeleteUserComponent } from './(user)/profile/feature/delete-user.component';
 import { UpdateAvatarComponent } from './(user)/profile/feature/update-avatar.component';
 import { UpdateEmailComponent } from './(user)/profile/feature/update-email.component';
@@ -9,6 +10,11 @@ import { UpdatePasswordComponent } from './(user)/profile/feature/update-passwor
 import { CloseButtonComponent } from './ui/close-button.component';
 
 export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Account',
+    'Manage your account details and preferences.',
+  ),
+  title: 'Stripe Ecommerce | Account',
   canActivate: [isAuthenticatedGuard],
 };
 

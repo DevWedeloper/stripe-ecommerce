@@ -1,8 +1,18 @@
+import { RouteMeta } from '@analogjs/router';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { ProductDetailsComponent } from './feature/product-details.component';
 import { RatingSummaryComponent } from './feature/rating-summary.component';
 import { ReviewListComponent } from './feature/review-list.component';
+
+export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Product',
+    'View product details and make your purchase with ease.',
+  ),
+  title: 'Stripe Ecommerce | Product',
+};
 
 @Component({
   selector: 'app-product-detail',

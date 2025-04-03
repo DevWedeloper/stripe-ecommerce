@@ -7,12 +7,18 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { filter } from 'rxjs';
 import { emailField, passwordField } from 'src/app/shared/utils/form';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { isNotAuthenticatedGuard } from '../../../shared/guards/is-not-authenticated.guard';
 import { LoginService } from './data-access/login.service';
 import { LoginFormComponent } from './ui/login-form.component';
 
 export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Login',
+    'Log in to access your account and manage your activities.',
+  ),
+  title: 'Stripe Ecommerce | Login',
   canActivate: [isNotAuthenticatedGuard],
 };
 

@@ -10,6 +10,7 @@ import {
   confirmPasswordField,
   passwordWithValidationField,
 } from 'src/app/shared/utils/form';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { passwordShouldMatch } from 'src/app/shared/validators';
 import { isAuthenticatedGuard } from '../../../shared/guards/is-authenticated.guard';
@@ -17,6 +18,11 @@ import { ResetPasswordService } from './data-access/reset-password.service';
 import { ResetPasswordFormComponent } from './ui/reset-password-form-component';
 
 export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Reset Password',
+    'Create a new password to secure your account.',
+  ),
+  title: 'Stripe Ecommerce | Reset Password',
   canActivate: [isAuthenticatedGuard],
 };
 

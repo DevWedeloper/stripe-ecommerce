@@ -16,6 +16,7 @@ import {
   emailField,
   passwordWithValidationField,
 } from 'src/app/shared/utils/form';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { passwordShouldMatch } from 'src/app/shared/validators';
 import { isNotAuthenticatedGuard } from '../../../shared/guards/is-not-authenticated.guard';
@@ -23,6 +24,11 @@ import { SignUpService } from './data-access/sign-up.service';
 import { SignUpFormComponent } from './ui/sign-up-form.component';
 
 export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Sign Up',
+    'Create an account to get started.',
+  ),
+  title: 'Stripe Ecommerce | Sign Up',
   canActivate: [isNotAuthenticatedGuard],
 };
 

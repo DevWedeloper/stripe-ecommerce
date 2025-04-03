@@ -7,12 +7,18 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { filter } from 'rxjs';
 import { emailField } from 'src/app/shared/utils/form';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { isNotAuthenticatedGuard } from '../../../shared/guards/is-not-authenticated.guard';
 import { ForgotPasswordService } from './data-access/forgot-password.service';
 import { ForgotPasswordFormComponent } from './ui/forgot-password-form.component';
 
 export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Forgot Password',
+    'Enter your email to reset your password and regain access to your account.',
+  ),
+  title: 'Stripe Ecommerce | Forgot Password',
   canActivate: [isNotAuthenticatedGuard],
 };
 

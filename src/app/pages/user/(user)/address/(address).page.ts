@@ -1,7 +1,17 @@
+import { RouteMeta } from '@analogjs/router';
 import { Component } from '@angular/core';
+import { metaWith } from 'src/app/shared/utils/meta';
 import { AddressListComponent } from './feature/address-list.component';
 import { CreateAddressButtonComponent } from './feature/create-address-button.component';
 import { LoadMoreAddressComponent } from './feature/load-more-address.component';
+
+export const routeMeta: RouteMeta = {
+  meta: metaWith(
+    'Stripe Ecommerce - Address',
+    'Add or update your shipping address for future orders.',
+  ),
+  title: 'Stripe Ecommerce | Address',
+};
 
 @Component({
   selector: 'app-address',
