@@ -250,7 +250,7 @@ inserted_images AS (
             image_path,
             placeholder,
             is_thumbnail,
-            order
+            "order"
         )
     SELECT
         ip.id,
@@ -341,7 +341,7 @@ inserted_images AS (
             image_path,
             placeholder,
             is_thumbnail,
-            order
+            "order"
         ) ON v.product_name = ip.name
 )
 INSERT INTO
