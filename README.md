@@ -1,26 +1,55 @@
-# Analog App
+# 🛒 Stripe eCommerce Platform
 
-This project was generated with [Analog](https://analogjs.org), the fullstack meta-framework for Angular.
+This project is a generic, full-stack eCommerce web application inspired by platforms like Amazon, Lazada, and Shopee. Designed primarily for retail use, it enables authenticated users to seamlessly buy and sell products with integrated **Stripe Payments**.
 
-## Setup
+## 🚀 Features
 
-Run `npm install` to install the application dependencies.
+- **User Authentication:** Secure login and registration via **Supabase Auth**.
+- **Product Management:** Browse products with variation selection.
+- **Shopping Cart:** Add items to the cart and manage quantities.
+- **Order History:** View past purchases from the buyer's perspective.
+- **Checkout Process:** Confirm address and payment details during checkout.
+- **Payment Integration:** Secure payment processing using **Stripe Elements**.
 
-## Development
+## 🧰 Tech Stack
 
-Run `npm start` for a dev server. Navigate to `http://localhost:5173/`. The application automatically reloads if you change any of the source files.
+- **Frontend:**
+  - AnalogJS
+  - Angular
+  - Tailwind CSS
+  - Spartan UI
+- **Backend:**
+  - Supabase (Auth)
+  - tRPC
+  - Nitro
+  - h3
+- **Database:**
+  - PostgreSQL
+  - Drizzle ORM
+- **Payments:**
+  - Stripe (Payments API + Elements)
+- **Tools:**
+  - Vite
+- **Deployment:**
+  - Vercel
 
-## Build
+## 🧾 Order Flow
 
-Run `npm run build` to build the client/server project. The client build artifacts are located in the `dist/analog/public` directory. The server for the API build artifacts are located in the `dist/analog/server` directory.
+1. **Product Selection:** Users browse products and select variations.
+2. **Cart Management:** Add selected items to the shopping cart and review them.
+3. **Checkout:** Confirm shipping address and payment details.
+4. **Payment Processing:** Payments are securely handled by **Stripe**.
+5. **Order Confirmation:** Users receive confirmation of successful or failed transactions.
 
-## Test
+## 🔐 Security
 
-Run `npm run test` to run unit tests with [Vitest](https://vitest.dev).
+- **Payment Data:** All sensitive payment information is securely processed by **Stripe**; the application does not handle raw payment data.
+- **User Data:** Authentication and session management are managed by **Supabase Auth**.
 
-## Community
+## 📦 Deployment
 
-- Visit and Star the [GitHub Repo](https://github.com/analogjs/analog)
-- Join the [Discord](https://chat.analogjs.org)
-- Follow us on [Twitter](https://twitter.com/analogjs)
-- Become a [Sponsor](https://github.com/sponsors/brandonroberts)
+The application is deployed on **Vercel**, ensuring scalability and ease of deployment.
+
+---
+
+_Note: This project is a side project and may not yet be optimized for large-scale production use._
