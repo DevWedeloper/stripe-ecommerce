@@ -26,7 +26,6 @@ export class DeleteUserService {
 
   deleteUserSuccessWithData$ = this.deleteUserSucces$.pipe(
     filter((data) => data.error === null),
-    map((data) => data.data),
   );
 
   private deleteUserSuccessWithError$ = this.deleteUserSucces$.pipe(

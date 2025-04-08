@@ -32,5 +32,7 @@ export const deleteUser = async (
     return { error };
   }
 
-  return deleteUserFromDb(id);
+  await deleteUserFromDb(id);
+
+  return { error: null };
 };
