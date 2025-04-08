@@ -22,13 +22,13 @@ export class DeleteUserService {
     share(),
   );
 
-  private deleteUserSucces$ = this.deleteUser$.pipe(successStream(), share());
+  private deleteUserSuccess$ = this.deleteUser$.pipe(successStream(), share());
 
-  deleteUserSuccessWithData$ = this.deleteUserSucces$.pipe(
+  deleteUserSuccessWithData$ = this.deleteUserSuccess$.pipe(
     filter((data) => data.error === null),
   );
 
-  private deleteUserSuccessWithError$ = this.deleteUserSucces$.pipe(
+  private deleteUserSuccessWithError$ = this.deleteUserSuccess$.pipe(
     filter((data) => data.error !== null),
     map((data) => data.error),
   );
