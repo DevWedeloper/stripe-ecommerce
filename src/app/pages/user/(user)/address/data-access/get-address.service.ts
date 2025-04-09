@@ -32,7 +32,7 @@ export class GetAddressService {
     this.updateAddressService.updateAddressSuccess$,
     this.setAsDefaultAddressService.setAsDefaultSuccess$,
     this.deleteAddressService.deleteAddressSuccess$,
-  );
+  ).pipe(startWith(undefined));
 
   private addresses$ = this.trigger$.pipe(
     materializeAndShare(() =>
