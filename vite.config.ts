@@ -60,10 +60,19 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     analog({
       liveReload: true,
+      ssr: true,
       nitro: {
         alias: {
           src: path.resolve(__dirname, './src'),
         },
+        routeRules: {
+          '/': {
+            prerender: false,
+          },
+        },
+      },
+      prerender: {
+        routes: [],
       },
     }),
     tsconfigPaths(),
