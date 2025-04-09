@@ -14,9 +14,9 @@ import { AppService } from './shared/data-access/app.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  // private appService = inject(AppService);
+  private appService = inject(AppService);
 
   constructor() {
-    // this.appService.checkIfRedirectedFromMagicLink();
+    this.appService.checkIfRedirectedFromMagicLink();
   }
 }
