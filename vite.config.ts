@@ -41,6 +41,10 @@ export default defineConfig(({ mode }) => ({
       'lodash-es',
       'pica',
       'isomorphic-fetch',
+
+      'drizzle-zod',
+      'drizzle-orm',
+      'drizzle-orm/pg-core',
     ],
   },
   ssr: {
