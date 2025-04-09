@@ -67,7 +67,7 @@ export default defineConfig(({ mode }) => ({
       },
       prerender: {
         routes: async () => {
-          return [];
+          return ['/'];
         },
       },
     }),
