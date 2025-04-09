@@ -1,7 +1,6 @@
 /// <reference types="vitest" />
 
 import analog from '@analogjs/platform';
-import { PrerenderRoute } from 'nitropack';
 import * as path from 'path';
 import { defineConfig } from 'vite';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
@@ -65,11 +64,6 @@ export default defineConfig(({ mode }) => ({
         alias: {
           src: path.resolve(__dirname, './src'),
         },
-      },
-      prerender: {
-        postRenderingHooks: [
-          async (route: PrerenderRoute) => console.log(route),
-        ],
       },
     }),
     tsconfigPaths(),
