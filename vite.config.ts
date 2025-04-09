@@ -64,11 +64,6 @@ export default defineConfig(({ mode }) => ({
         alias: {
           src: path.resolve(__dirname, './src'),
         },
-        routeRules: {
-          '/': {
-            prerender: false,
-          },
-        },
       },
       prerender: {
         routes: async () => {
