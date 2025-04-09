@@ -1,6 +1,14 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { merge, scan, shareReplay, startWith, Subject, switchMap } from 'rxjs';
+import {
+  merge,
+  scan,
+  share,
+  shareReplay,
+  startWith,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { CreateAddressService } from 'src/app/shared/data-access/address/create-address.service';
 import { UpdateAddressService } from 'src/app/shared/data-access/address/update-address.service';
 import {
@@ -61,7 +69,7 @@ export class GetAddressService {
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  private addressesError$ = this.addresses$.pipe(errorStream());
+  private addressesError$ = this.addresses$.pipe(errorStream(), share());
 
   private status$ = finalizedStatusStream({
     success: this.addressesSuccess$,
