@@ -163,12 +163,27 @@ export default class UserProductDetailPageComponent {
 
   private isFormDataUnmodified = toSignal(
     combineLatest([
-      this.originalFormData$,
+      this.originalFormData$.pipe(
+        map((data) =>
+          data
+            ? {
+                ...data,
+                tagIds: [...(data.tagIds ?? [])].sort((a, b) => a - b),
+              }
+            : data,
+        ),
+      ),
       this.form$.pipe(
         switchMap((data) =>
           data.valueChanges.pipe(
             startWith(data.getRawValue()),
-            map(() => data.getRawValue()),
+            map(() => {
+              const raw = data.getRawValue();
+              return {
+                ...raw,
+                tagIds: [...raw.tagIds ?? []].sort((a, b) => a - b),
+              };
+            }),
           ),
         ),
       ),
