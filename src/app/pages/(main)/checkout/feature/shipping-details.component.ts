@@ -65,6 +65,7 @@ import { ChangeAddressButtonComponent } from './change-address/change-address-bu
             (completePurchase)="completePurchase()"
           >
             <app-address-form-checkout
+              addressForm
               [form]="form()"
               [countries]="countries()"
               (statusChanges)="statusChange($event)"
