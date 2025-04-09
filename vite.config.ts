@@ -60,6 +60,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     analog({
+      static: true,
       liveReload: true,
       nitro: {
         alias: {
