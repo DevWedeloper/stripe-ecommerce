@@ -11,7 +11,7 @@ import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.componen
 import { metaWith } from 'src/app/shared/utils/meta';
 import { CartDetailsComponent } from './feature/cart-details.component';
 import { ShippingDetailsComponent } from './feature/shipping-details.component';
-import { TestCardsComponent } from './feature/test-cards/test-cards.component';
+import { TestCardsComponent } from './ui/test-cards/test-cards.component';
 
 export const routeMeta: RouteMeta = {
   meta: metaWith(
