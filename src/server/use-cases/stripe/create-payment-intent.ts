@@ -1,11 +1,11 @@
-import { CartItemReference } from 'src/db/types';
+import { CartItemSchema } from 'src/schemas/order';
 import { stripe } from './stripe';
 
 interface PaymentIntentParams {
   totalAmountInCents: number;
   userId: string | null;
   orderDate: Date;
-  cart: CartItemReference[];
+  cart: CartItemSchema[];
 }
 
 export const createPaymentIntent = async ({

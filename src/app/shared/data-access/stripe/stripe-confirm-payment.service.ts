@@ -15,6 +15,7 @@ import {
   switchMap,
   withLatestFrom,
 } from 'rxjs';
+import { CreateOrderSchema } from 'src/schemas/order';
 import { TrpcClient } from 'src/trpc-client';
 import { errorStream, statusStream, successStream } from '../../utils/rxjs';
 import { FinalizedAddressService } from '../address/finalized-address.service';
@@ -86,16 +87,23 @@ export class StripeConfirmPaymentService {
       ),
     ),
     withLatestFrom(this.paymentIntentId$, this.paymentIntentMetadata$),
-    switchMap(([{ addressId, receiverId }, id, metadata]) =>
-      this._trpc.stripe.updatePaymentIntentMetadata.mutate({
+    switchMap(([{ addressId, receiverId }, id, metadata]) => {
+      const addressDetails: Pick<
+        CreateOrderSchema,
+        'shippingAddressId' | 'receiverId'
+      > = {
+        shippingAddressId: addressId,
+        receiverId: receiverId,
+      };
+
+      return this._trpc.stripe.updatePaymentIntentMetadata.mutate({
         id,
         metadata: {
           ...metadata,
-          shippingAddressId: addressId,
-          receiverId: receiverId,
+          ...addressDetails,
         },
-      }),
-    ),
+      });
+    }),
     withLatestFrom(this.clientSecret$, this.confirmationTokenId$),
     map(([_, clientSecret, confirmationTokenId]) => {
       if (!clientSecret) {

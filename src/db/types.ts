@@ -40,14 +40,6 @@ export type VariationObject = {
   order: VariationOptions['order'];
 };
 
-export type CartItemReference = {
-  sellerUserId: string;
-  productItemId: ProductItems['productId'];
-  sku: ProductItems['sku'];
-  quantity: number;
-  price: number;
-};
-
 export type AddressAndReceiverData = Awaited<
   ReturnType<typeof getPaginatedAddressesByUserId>
 >['addresses'][number];

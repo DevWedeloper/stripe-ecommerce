@@ -1,18 +1,9 @@
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { db } from 'src/db';
 import { orderItems, orders, productItems } from 'src/db/schema';
-import { CartItemReference } from 'src/db/types';
+import { CartItemSchema, CreateOrderSchema } from 'src/schemas/order';
 
-type CreateOrder = {
-  total: number;
-  userId: string | null;
-  orderDate: Date;
-  shippingAddressId: number;
-  receiverId: number;
-  productItems: CartItemReference[];
-};
-
-export const createOrder = async (data: CreateOrder): Promise<void> => {
+export const createOrder = async (data: CreateOrderSchema): Promise<void> => {
   const groupedBySeller = data.productItems.reduce(
     (acc, item) => {
       if (!acc[item.sellerUserId]) {
@@ -21,7 +12,7 @@ export const createOrder = async (data: CreateOrder): Promise<void> => {
       acc[item.sellerUserId].push(item);
       return acc;
     },
-    {} as Record<string, CartItemReference[]>,
+    {} as Record<string, CartItemSchema[]>,
   );
 
   const ordersToInsert = Object.keys(groupedBySeller).map((sellerUserId) => {

@@ -1,18 +1,9 @@
+import { cartItemSchema } from 'src/schemas/order';
 import { positiveIntSchema } from 'src/schemas/shared/numbers';
 import { createPaymentIntent } from 'src/server/use-cases/stripe/create-payment-intent';
 import { updatePaymentIntentMetadata } from 'src/server/use-cases/stripe/update-payment-intent-metadata';
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
-
-const cartItemSchema = z.object({
-  sellerUserId: z.string(),
-  productItemId: z.number(),
-  sku: z.string(),
-  quantity: z.number(),
-  price: z.number(),
-});
-
-const cartSchema = z.array(cartItemSchema);
 
 export const stripeRouter = router({
   createPaymentIntent: publicProcedure
@@ -21,7 +12,7 @@ export const stripeRouter = router({
         totalAmountInCents: positiveIntSchema,
         userId: z.string().or(z.null()),
         orderDate: z.coerce.date(),
-        cart: cartSchema,
+        cart: z.array(cartItemSchema),
       }),
     )
     .mutation(
