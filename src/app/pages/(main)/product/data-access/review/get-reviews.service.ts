@@ -15,6 +15,8 @@ import {
   switchMap,
   take,
 } from 'rxjs';
+import { getS3ImageUrl } from 'src/app/shared/utils/image-object';
+import { environment } from 'src/environments/environment';
 import {
   GetReviewsSchema,
   ratingFilterSchema,
@@ -23,6 +25,7 @@ import {
   reviewSortBySchema,
 } from 'src/schemas/review';
 import { TrpcClient } from 'src/trpc-client';
+import { getAvatarPath } from 'src/utils/image';
 import {
   errorStream,
   finalizedStatusStream,
@@ -110,6 +113,18 @@ export class GetReviewsService {
 
   private reviewsSuccess$ = this.reviews$.pipe(
     successStream(),
+    map((data) => ({
+      ...data,
+      reviews: data.reviews.map((review) => ({
+        ...review,
+        avatarPath: review.avatarPath
+          ? getS3ImageUrl({
+              path: getAvatarPath(review.avatarPath, 'icon'),
+              bucketName: environment.avatarsS3Bucket,
+            })
+          : null,
+      })),
+    })),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 

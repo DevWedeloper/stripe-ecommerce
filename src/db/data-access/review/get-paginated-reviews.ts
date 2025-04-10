@@ -78,7 +78,7 @@ export const getPaginatedReviews = async (
     .innerJoin(orderItems, eq(userReviews.orderItemId, orderItems.id))
     .innerJoin(productItems, eq(orderItems.productItemId, productItems.id))
     .innerJoin(products, eq(productItems.productId, products.id))
-    .innerJoin(users, eq(products.userId, users.id))
+    .innerJoin(users, eq(userReviews.userId, users.id))
     .innerJoin(variationsQuery, eq(productItems.id, variationsQuery.id))
     .where(
       and(
