@@ -1,5 +1,4 @@
-import { createSelectSchema } from 'drizzle-zod';
-import { orderStatusEnum } from 'src/db/schema';
+import { orderStatusSchema } from 'src/schemas/order';
 import { getOrdersByUserId } from 'src/server/use-cases/order/get-orders-by-user-id';
 import { updateOrderStatus } from 'src/server/use-cases/order/update-order-status';
 import { z } from 'zod';
@@ -11,7 +10,7 @@ export const ordersRouter = router({
       z.object({
         page: z.number(),
         pageSize: z.number(),
-        status: z.optional(createSelectSchema(orderStatusEnum)),
+        status: z.optional(orderStatusSchema),
       }),
     )
     .query(
@@ -27,7 +26,7 @@ export const ordersRouter = router({
     .input(
       z.object({
         orderId: z.number(),
-        status: createSelectSchema(orderStatusEnum),
+        status: orderStatusSchema,
       }),
     )
     .mutation(

@@ -1,6 +1,14 @@
 import { z } from 'zod';
 import { positiveIntSchema } from './shared/numbers';
 
+export const orderStatusSchema = z.enum([
+  'Pending',
+  'Processed',
+  'Shipped',
+  'Delivered',
+  'Cancelled',
+]);
+
 export const cartItemSchema = z.object({
   sellerUserId: z.string(),
   productItemId: positiveIntSchema,
