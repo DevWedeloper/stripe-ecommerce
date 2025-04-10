@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z, ZodIssueCode } from 'zod';
 
 export const imageSchema = z
   .instanceof(File)
@@ -8,7 +8,7 @@ export const imageSchema = z
       const fileType = file.type || extension;
 
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: ZodIssueCode.custom,
         message: `File type "${fileType}" is not supported. Only image files are allowed.`,
       });
     }
