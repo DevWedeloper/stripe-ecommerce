@@ -39,7 +39,7 @@ export const getPaginatedOrdersByUserId = async (
         canEdit: sql<boolean>`
           case 
             when ${orders.status} = 'Delivered'
-              and ${orders.deliveredDate} >= (now() - interval '1 day')
+              and ${userReviews.createdAt} >= (now() - interval '1 day')
               and ${userReviews.id} is not null
               and ${userReviews.isDeleted} = false
             then true
