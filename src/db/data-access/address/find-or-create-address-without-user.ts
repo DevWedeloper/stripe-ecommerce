@@ -39,7 +39,7 @@ export const findOrCreateAddressWithoutUser = async (
       returning id
     )
 
-    select a.id as addressId, r.id as receiverId
+    select a.id as "addressId", r.id as "receiverId"
     from address_id a, receiver_id r
   `;
 
