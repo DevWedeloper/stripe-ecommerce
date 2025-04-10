@@ -41,6 +41,7 @@ export const getPaginatedOrdersByUserId = async (
             when ${orders.status} = 'Delivered'
               and ${orders.deliveredDate} >= (now() - interval '1 day')
               and ${userReviews.id} is not null
+              and ${userReviews.isDeleted} = false
             then true
             else false
           end
@@ -49,6 +50,8 @@ export const getPaginatedOrdersByUserId = async (
           case
             when ${orders.status} = 'Delivered'
               and ${userReviews.createdAt} >= (now() - interval '1 day')
+              and ${userReviews.id} is not null
+              and ${userReviews.isDeleted} = false
             then true
             else false
           end
