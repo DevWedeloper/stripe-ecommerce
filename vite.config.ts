@@ -71,9 +71,7 @@ export default defineConfig(({ mode }) => ({
         },
       },
       prerender: {
-        routes: async () => {
-          return [];
-        },
+        routes: [''],
       },
     }),
     tsconfigPaths(),
