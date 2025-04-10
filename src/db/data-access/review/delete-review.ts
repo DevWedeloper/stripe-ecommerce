@@ -4,7 +4,8 @@ import { userReviews } from 'src/db/schema';
 
 export const deleteReview = async (userId: string, orderItemId: number) =>
   db
-    .delete(userReviews)
+    .update(userReviews)
+    .set({ isDeleted: true })
     .where(
       and(
         eq(userReviews.userId, userId),
