@@ -53,9 +53,12 @@ export class AuthService {
   getUser$ = this.getUserTriggerSubject$.pipe(
     switchMap(() => {
       if (isPlatformServer(this.PLATFORM_ID)) {
-        return this._trpc.auth.getUser
-          .query()
-          .pipe(tap((data) => this.transferState.set(getUserKey, data)));
+        return this._trpc.auth.getUser.query().pipe(
+          tap((data) => {
+            console.log('setting getUserKey...');
+            this.transferState.set(getUserKey, data);
+          }),
+        );
       } else {
         const data = this.transferState.get(getUserKey, null);
         if (!data) {

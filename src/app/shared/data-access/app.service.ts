@@ -150,6 +150,8 @@ export class AppService {
       originalUrl,
     };
 
+    console.log('setting requestMetadataKey...', data);
+
     this.transferState.set(requestMetadataKey, data);
 
     return data;
