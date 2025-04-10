@@ -7,7 +7,6 @@ import {
   filter,
   map,
   merge,
-  of,
   share,
   shareReplay,
   withLatestFrom,
@@ -22,12 +21,18 @@ import {
 import { showError } from 'src/app/shared/utils/toast';
 import { OrderStatusEnum } from 'src/db/schema';
 import { TrpcClient } from 'src/trpc-client';
+import { CreateReviewService } from './review/create-review.service';
+import { DeleteReviewService } from './review/delete-review.service';
+import { UpdateReviewService } from './review/update-review.service';
 import { UpdateOrderStatusService } from './update-order-status.service';
 
 export class BaseGetOrder {
   private PLATFORM_ID = inject(PLATFORM_ID);
   private _trpc = inject(TrpcClient);
   protected updateOrderStatusService = inject(UpdateOrderStatusService);
+  protected createReviewService = inject(CreateReviewService);
+  protected updateReviewService = inject(UpdateReviewService);
+  protected deleteReviewService = inject(DeleteReviewService);
 
   private PAGE_SIZE = 10;
   protected get ORDER_STATUS(): OrderStatusEnum | undefined {
@@ -47,10 +52,12 @@ export class BaseGetOrder {
     ),
   );
 
-  protected trigger$ = merge(
-    this.filter$,
-    this.updateOrderStatusService.updateOrderStatusSuccess$,
-  );
+  protected get trigger$() {
+    return merge(
+      this.filter$,
+      this.updateOrderStatusService.updateOrderStatusSuccess$,
+    );
+  }
 
   private orders$ = this.trigger$.pipe(
     withLatestFrom(this.filter$),
