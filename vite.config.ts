@@ -45,6 +45,13 @@ export default defineConfig(({ mode }) => ({
       'drizzle-zod',
       'drizzle-orm',
       'drizzle-orm/pg-core',
+
+      '@ng-icons/core',
+      '@ng-icons/lucide',
+      'class-variance-authority',
+      'zod',
+      'blurhash',
+      'canvas'
     ],
   },
   ssr: {
