@@ -59,7 +59,7 @@ export class EditReviewDialogComponent {
 
     return initializeReviewForm(this.fb, {
       rating: 5,
-      comment: 'example review!',
+      comment: '',
     });
   });
 
