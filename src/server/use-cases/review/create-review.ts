@@ -12,7 +12,7 @@ export const createReview = async (
     data.orderItemId,
   );
 
-  if (existingUserReview.isDeleted) {
+  if (existingUserReview && existingUserReview.isDeleted) {
     return {
       data: null,
       error: {
