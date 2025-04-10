@@ -21,37 +21,38 @@ export default defineConfig(({ mode }) => ({
   },
   optimizeDeps: {
     include: [
-      '@analogjs/trpc',
+      '@angular/common',
+      '@angular/forms',
       '@angular/cdk/clipboard',
       '@angular/cdk/drag-drop',
       '@angular/cdk/layout',
       '@angular/cdk/observers',
-      '@angular/common',
-      '@angular/forms',
-
+    
+      '@analogjs/trpc',
+    
+      '@supabase/ssr',
+    
       '@spartan-ng/brain/**',
+    
       'ngx-scrollbar',
       'ngx-sonner',
       'ngx-stripe',
       'embla-carousel-angular',
       'ngx-image-cropper',
-
-      '@supabase/ssr',
-
-      'lodash-es',
-      'pica',
-      'isomorphic-fetch',
-
-      'drizzle-zod',
-      'drizzle-orm',
-      'drizzle-orm/pg-core',
-
       '@ng-icons/core',
       '@ng-icons/lucide',
       'class-variance-authority',
+    
+      'lodash-es',
+      'pica',
+      'isomorphic-fetch',
       'zod',
       'blurhash',
-      'canvas'
+      'canvas',
+    
+      'drizzle-zod',
+      'drizzle-orm',
+      'drizzle-orm/pg-core',
     ],
   },
   ssr: {
