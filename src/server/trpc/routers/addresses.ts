@@ -8,7 +8,7 @@ import { getAddressesByUserId } from 'src/server/use-cases/address/get-addresses
 import { setAsDefaultAddress } from 'src/server/use-cases/address/set-as-default-address';
 import { updateAddress } from 'src/server/use-cases/address/update-address';
 import { z } from 'zod';
-import { protectedProcedure, router } from '../trpc';
+import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 export const addressRouter = router({
   createAddress: protectedProcedure.input(createAddressSchema).mutation(
@@ -20,7 +20,7 @@ export const addressRouter = router({
     }) => await createAddress(id, input),
   ),
 
-  createAddressWithoutUser: protectedProcedure
+  createAddressWithoutUser: publicProcedure
     .input(createAddressSchema)
     .mutation(async ({ input }) => await createAddressWithoutUser(input)),
 

@@ -13,6 +13,7 @@ import {
   of,
   share,
   switchMap,
+  tap,
   withLatestFrom,
 } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
@@ -87,14 +88,20 @@ export class StripeConfirmPaymentService {
     ),
     withLatestFrom(this.paymentIntentId$, this.paymentIntentMetadata$),
     switchMap(([{ addressId, receiverId }, id, metadata]) =>
-      this._trpc.stripe.updatePaymentIntentMetadata.mutate({
-        id,
-        metadata: {
-          ...metadata,
-          addressId: addressId,
-          receiverId: receiverId,
-        },
-      }),
+      this._trpc.stripe.updatePaymentIntentMetadata
+        .mutate({
+          id,
+          metadata: {
+            ...metadata,
+            addressId: addressId,
+            receiverId: receiverId,
+          },
+        })
+        .pipe(
+          tap((data) => {
+            console.log(data);
+          }),
+        ),
     ),
     withLatestFrom(this.clientSecret$, this.confirmationTokenId$),
     map(([_, clientSecret, confirmationTokenId]) => {
