@@ -11,9 +11,12 @@ export class GetOrderCompletedListService extends BaseGetOrder {
   private updateReviewService = inject(UpdateReviewService);
   private deleteReviewService = inject(DeleteReviewService);
 
+  protected override get ORDER_STATUS() {
+    return 'Delivered' as const;
+  }
+
   constructor() {
     super();
-    this.ORDER_STATUS = 'Delivered';
     this.trigger$ = merge(
       this.filter$,
       this.updateOrderStatusService.updateOrderStatusSuccess$,

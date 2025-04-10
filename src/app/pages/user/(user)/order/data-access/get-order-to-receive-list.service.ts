@@ -3,8 +3,7 @@ import { BaseGetOrder } from './base-get-order';
 
 @Injectable()
 export class GetOrderToReceiveListService extends BaseGetOrder {
-  constructor() {
-    super();
-    this.ORDER_STATUS = 'Shipped';
+  protected override get ORDER_STATUS() {
+    return 'Shipped' as const;
   }
 }

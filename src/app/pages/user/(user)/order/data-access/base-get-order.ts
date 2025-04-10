@@ -7,6 +7,7 @@ import {
   filter,
   map,
   merge,
+  of,
   share,
   shareReplay,
   withLatestFrom,
@@ -29,7 +30,9 @@ export class BaseGetOrder {
   protected updateOrderStatusService = inject(UpdateOrderStatusService);
 
   private PAGE_SIZE = 10;
-  protected ORDER_STATUS: OrderStatusEnum | undefined = undefined;
+  protected get ORDER_STATUS(): OrderStatusEnum | undefined {
+    return undefined;
+  }
 
   private page$ = new BehaviorSubject<number>(1);
 

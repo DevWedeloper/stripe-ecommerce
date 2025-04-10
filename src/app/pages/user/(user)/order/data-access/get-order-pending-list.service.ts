@@ -3,8 +3,7 @@ import { BaseGetOrder } from './base-get-order';
 
 @Injectable()
 export class GetOrderPendingListService extends BaseGetOrder {
-  constructor() {
-    super();
-    this.ORDER_STATUS = 'Pending';
+  protected override get ORDER_STATUS() {
+    return 'Pending' as const;
   }
 }
