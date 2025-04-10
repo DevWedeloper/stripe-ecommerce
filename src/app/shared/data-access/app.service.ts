@@ -74,6 +74,8 @@ export class AppService {
   clearUrl = signal(false);
 
   constructor() {
+    console.log('AppService initialized');
+
     effect(() => {
       const error = this.errorFromRedirect();
       if (error && isPlatformBrowser(this.PLATFORM_ID)) {
