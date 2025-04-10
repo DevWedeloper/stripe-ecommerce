@@ -91,7 +91,7 @@ export class StripeConfirmPaymentService {
         id,
         metadata: {
           ...metadata,
-          addressId: addressId,
+          shippingAddressId: addressId,
           receiverId: receiverId,
         },
       }),
