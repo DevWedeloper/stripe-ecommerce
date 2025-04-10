@@ -67,6 +67,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     analog({
+      ssr: true,
       liveReload: true,
       nitro: {
         alias: {
@@ -74,7 +75,7 @@ export default defineConfig(({ mode }) => ({
         },
         routeRules: {
           '/': {
-            ssr: true,
+            prerender: false,
           },
         },
       },
