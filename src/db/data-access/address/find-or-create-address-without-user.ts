@@ -1,5 +1,7 @@
-import { sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
+import { union } from 'drizzle-orm/pg-core';
 import { db } from 'src/db';
+import { addresses, receivers } from 'src/db/schema';
 import { CreateAddressSchema } from 'src/schemas/address';
 
 type AddressAndReceiverResult = {
@@ -10,39 +12,53 @@ type AddressAndReceiverResult = {
 export const findOrCreateAddressWithoutUser = async (
   data: CreateAddressSchema,
 ): Promise<AddressAndReceiverResult> => {
-  const query = sql`
-    with created_address as (
-      insert into addresses (address_line1, address_line2, city, state, postal_code, country_id)
-      select ${data.addressLine1}, ${data.addressLine2}, ${data.city}, ${data.state}, ${data.postalCode}, ${data.countryId}
-      on conflict (address_line1, address_line2, city, state, postal_code, country_id) do nothing
-      returning id
+  const createdAddressQuery = db
+    .$with('created_address_query')
+    .as(
+      db
+        .insert(addresses)
+        .values(data)
+        .onConflictDoNothing()
+        .returning({ id: addresses.id }),
+    );
+
+  const addressIdQuery = db.$with('address_id_query').as(
+    union(
+      db.select({ id: createdAddressQuery.id }).from(createdAddressQuery),
+      db
+        .select({
+          id: addresses.id,
+        })
+        .from(addresses)
+        .where(
+          and(
+            eq(addresses.addressLine1, data.addressLine1),
+            !!data.addressLine2
+              ? eq(addresses.addressLine2, data.addressLine2)
+              : undefined,
+            eq(addresses.city, data.city),
+            eq(addresses.state, data.state),
+            eq(addresses.postalCode, data.postalCode),
+            eq(addresses.countryId, data.countryId),
+          ),
+        ),
     ),
+  );
 
-    address_id as (
-      select id from created_address
+  const receiverIdQuery = db
+    .$with('receiver_id_query')
+    .as(db.insert(receivers).values(data).returning({ id: receivers.id }));
 
-      union
+  const query = db
+    .with(createdAddressQuery, addressIdQuery, receiverIdQuery)
+    .select({
+      addressId: addressIdQuery.id,
+      receiverId: receiverIdQuery.id,
+    })
+    .from(addressIdQuery)
+    .innerJoin(receiverIdQuery, sql`1 = 1`);
 
-      select a.id
-      from addresses a
-      where address_line1 = ${data.addressLine1}
-        and address_line2 = ${data.addressLine2}
-        and city = ${data.city}
-        and state = ${data.state}
-        and postal_code = ${data.postalCode}
-        and country_id = ${data.countryId}
-    ),
+  const [result] = await query;
 
-    receiver_id as (
-      insert into receivers (full_name)
-      values (${data.fullName})
-      returning id
-    )
-
-    select a.id as "addressId", r.id as "receiverId"
-    from address_id a, receiver_id r
-  `;
-
-  const [result] = (await db.execute(query)) as AddressAndReceiverResult[];
   return result;
 };
