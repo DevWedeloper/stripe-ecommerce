@@ -74,8 +74,6 @@ export class AppService {
   clearUrl = signal(false);
 
   constructor() {
-    console.log('AppService initialized');
-
     effect(() => {
       const error = this.errorFromRedirect();
       if (error && isPlatformBrowser(this.PLATFORM_ID)) {
@@ -151,8 +149,6 @@ export class AppService {
       baseUrl,
       originalUrl,
     };
-
-    console.log('setting requestMetadataKey...', data);
 
     this.transferState.set(requestMetadataKey, data);
 
