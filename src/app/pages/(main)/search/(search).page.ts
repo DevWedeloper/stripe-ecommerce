@@ -15,6 +15,7 @@ export const routeMeta: RouteMeta = {
     'Browse through a wide range of products based on your search.',
   ),
   title: 'Stripe Ecommerce | Search',
+  providers: [SearchService],
 };
 
 @Component({
