@@ -29,35 +29,35 @@ import { ReviewCardComponent } from '../ui/review/review-card.component';
   providers: [GetReviewsService],
   template: `
     @if (!isInitialLoading()) {
-      @if (reviews().length > 0) {
-        <div class="flex justify-end">
-          <div class="flex gap-2">
-            <brn-select [(ngModel)]="sortBy" placeholder="Sort by">
-              <hlm-select-trigger>
-                <hlm-select-value />
-              </hlm-select-trigger>
-              <hlm-select-content>
-                <hlm-option value="recent">Recent</hlm-option>
-                <hlm-option value="highest">Highest</hlm-option>
-                <hlm-option value="lowest">Lowest</hlm-option>
-              </hlm-select-content>
-            </brn-select>
+      <div class="flex justify-end">
+        <div class="flex gap-2">
+          <brn-select [(ngModel)]="sortBy" placeholder="Sort by">
+            <hlm-select-trigger>
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option value="recent">Recent</hlm-option>
+              <hlm-option value="highest">Highest</hlm-option>
+              <hlm-option value="lowest">Lowest</hlm-option>
+            </hlm-select-content>
+          </brn-select>
 
-            <brn-select [(ngModel)]="rating" placeholder="Select rating">
-              <hlm-select-trigger>
-                <hlm-select-value />
-              </hlm-select-trigger>
-              <hlm-select-content>
-                <hlm-option [value]="5">5 stars</hlm-option>
-                <hlm-option [value]="4">4 stars</hlm-option>
-                <hlm-option [value]="3">3 stars</hlm-option>
-                <hlm-option [value]="2">2 stars</hlm-option>
-                <hlm-option [value]="1">1 star</hlm-option>
-                <hlm-option>None</hlm-option>
-              </hlm-select-content>
-            </brn-select>
-          </div>
+          <brn-select [(ngModel)]="rating" placeholder="Select rating">
+            <hlm-select-trigger>
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-option [value]="5">5 stars</hlm-option>
+              <hlm-option [value]="4">4 stars</hlm-option>
+              <hlm-option [value]="3">3 stars</hlm-option>
+              <hlm-option [value]="2">2 stars</hlm-option>
+              <hlm-option [value]="1">1 star</hlm-option>
+              <hlm-option>None</hlm-option>
+            </hlm-select-content>
+          </brn-select>
         </div>
+      </div>
+      @if (reviews().length > 0) {
         <div class="mt-4 flex flex-col gap-2">
           @for (review of reviews(); track review.id) {
             <app-review-card [review]="review" />
