@@ -68,7 +68,6 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     analog({
-      liveReload: true,
       nitro: {
         alias: {
           src: path.resolve(__dirname, './src'),
