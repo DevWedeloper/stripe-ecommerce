@@ -2,6 +2,7 @@
 
 import analog from '@analogjs/platform';
 import * as path from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -27,13 +28,13 @@ export default defineConfig(({ mode }) => ({
       '@angular/cdk/drag-drop',
       '@angular/cdk/layout',
       '@angular/cdk/observers',
-    
+
       '@analogjs/trpc',
-    
+
       '@supabase/ssr',
-    
+
       '@spartan-ng/brain/**',
-    
+
       'ngx-scrollbar',
       'ngx-sonner',
       'ngx-stripe',
@@ -42,14 +43,14 @@ export default defineConfig(({ mode }) => ({
       '@ng-icons/core',
       '@ng-icons/lucide',
       'class-variance-authority',
-    
+
       'lodash-es',
       'pica',
       'isomorphic-fetch',
       'zod',
       'blurhash',
       'canvas',
-    
+
       'drizzle-zod',
       'drizzle-orm',
       'drizzle-orm/pg-core',
@@ -76,6 +77,10 @@ export default defineConfig(({ mode }) => ({
     }),
     tsconfigPaths(),
     chunkSplitPlugin(),
+    visualizer({
+      filename: 'dist/stats.html',
+      open: true,
+    }),
   ],
   test: {
     globals: true,
