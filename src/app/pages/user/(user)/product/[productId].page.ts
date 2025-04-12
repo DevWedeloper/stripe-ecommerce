@@ -1,6 +1,10 @@
 import { RouteMeta } from '@analogjs/router';
 import { Component, computed, inject } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 import { FormBuilder, ValueChangeEvent } from '@angular/forms';
 import { isEqual } from 'lodash-es';
 import { combineLatest, filter, map, startWith, switchMap } from 'rxjs';
@@ -168,7 +172,7 @@ export default class UserProductDetailPageComponent {
           data
             ? {
                 ...data,
-                tagIds: [...(data.tagIds ?? [])].sort((a, b) => a - b),
+                tagIds: [...data.tagIds].sort((a, b) => a - b),
               }
             : data,
         ),
@@ -181,7 +185,7 @@ export default class UserProductDetailPageComponent {
               const raw = data.getRawValue();
               return {
                 ...raw,
-                tagIds: [...raw.tagIds ?? []].sort((a, b) => a - b),
+                tagIds: [...raw.tagIds].sort((a, b) => a - b),
               };
             }),
           ),
@@ -217,6 +221,19 @@ export default class UserProductDetailPageComponent {
       initialValue: false,
     },
   );
+
+  constructor() {
+    // TODO: Temporary fix, due to spartan select setting null on empty selection, remove when fixed
+    this.form$
+      .pipe(
+        switchMap((form) => form.controls.tagIds.valueChanges),
+        takeUntilDestroyed(),
+      )
+      .subscribe((value) => {
+        if (!value)
+          this.form().controls.tagIds.setValue([], { emitEvent: false });
+      });
+  }
 
   protected updateProduct(): void {
     this.updateProductService.updateProduct({
