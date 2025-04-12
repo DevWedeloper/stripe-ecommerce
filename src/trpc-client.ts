@@ -10,8 +10,9 @@ export const cacheLink: TRPCLink<AppRouter> = () => {
 
   return ({ next, op }) => {
     const cacheKey = `${op.path}:${JSON.stringify(op.input)}`;
+    const isCacheEnabled = op.context['noCache'] !== true;
 
-    if (op.type === 'query' && cache.has(cacheKey)) {
+    if (op.type === 'query' && cache.has(cacheKey) && isCacheEnabled) {
       return observable((observer) => {
         observer.next(cache.get(cacheKey));
         observer.complete();
@@ -25,7 +26,8 @@ export const cacheLink: TRPCLink<AppRouter> = () => {
     return observable((observer) => {
       const unsubscribe = next(op).subscribe({
         next(value) {
-          if (op.type === 'query') {
+          const shouldCache = op.type === 'query' && isCacheEnabled;
+          if (shouldCache) {
             cache.set(cacheKey, value);
           }
           observer.next(value);

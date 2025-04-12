@@ -7,7 +7,7 @@ export const isNotAuthenticatedGuard: CanActivateFn = () => {
   const router = inject(Router);
   const authService = inject(AuthService);
 
-  return authService.user$.pipe(
-    map((user) => (!user ? true : router.parseUrl('/'))),
-  );
+  return authService
+    .getUserAndSet$()
+    .pipe(map((user) => (!user ? true : router.parseUrl('/'))));
 };

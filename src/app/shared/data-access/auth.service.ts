@@ -9,7 +9,7 @@ import {
   TransferState,
 } from '@angular/core';
 import { pendingUntilEvent, toSignal } from '@angular/core/rxjs-interop';
-import { AuthTokenResponse, UserResponse } from '@supabase/supabase-js';
+import { AuthTokenResponse, User, UserResponse } from '@supabase/supabase-js';
 import {
   map,
   merge,
@@ -38,6 +38,7 @@ export class AuthService {
   private request = injectRequest();
 
   private getUserTriggerSubject$ = new Subject<void>();
+  private setUser$ = new Subject<User | null>();
   private loginTriggerSubject$ = new Subject<UserCredentials>();
   private updateEmailTriggerSubject$ = new Subject<EmailUpdate>();
   private updatePasswordTriggerSubject$ = new Subject<PasswordUpdate>();
@@ -53,7 +54,7 @@ export class AuthService {
   getUser$ = this.getUserTriggerSubject$.pipe(
     switchMap(() => {
       if (isPlatformServer(this.PLATFORM_ID)) {
-        return this._trpc.auth.getUser.query().pipe(
+        return this.getUserNoCache$().pipe(
           tap((data) => this.transferState.set(getUserKey, data)),
         );
       } else {
@@ -115,6 +116,7 @@ export class AuthService {
 
   user$ = merge(
     this.getUser$.pipe(map(({ data }) => data.user)),
+    this.setUser$,
     this.login$.pipe(map(({ data }) => data.user)),
     this.updateEmail$.pipe(map(({ data }) => data.user)),
     this.updatePassword$.pipe(map(({ data }) => data.user)),
@@ -136,6 +138,13 @@ export class AuthService {
 
   getUser(): void {
     this.getUserTriggerSubject$.next();
+  }
+
+  getUserAndSet$() {
+    return this.getUserNoCache$().pipe(
+      map(({ data }) => data.user),
+      tap((data) => this.setUser$.next(data)),
+    );
   }
 
   login(data: UserCredentials) {
@@ -160,5 +169,11 @@ export class AuthService {
 
   deleteUser(id: string) {
     this.deleteUserTriggerSubject$.next(id);
+  }
+
+  private getUserNoCache$() {
+    return this._trpc.auth.getUser.query(undefined, {
+      context: { noCache: true },
+    });
   }
 }
