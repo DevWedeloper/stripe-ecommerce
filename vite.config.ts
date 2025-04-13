@@ -74,7 +74,7 @@ export default defineConfig(({ mode }) => ({
         },
       },
       prerender: {
-        routes: ['/login', '/sign-up', '/forgot-password', '/reset-password'],
+        routes: ['/', '/login', '/sign-up', '/forgot-password', '/reset-password'],
       },
     }),
     tsconfigPaths(),
