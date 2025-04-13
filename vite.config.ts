@@ -72,6 +72,9 @@ export default defineConfig(({ mode }) => ({
         alias: {
           src: path.resolve(__dirname, './src'),
         },
+        prerender: {
+          ignore: ['/'],
+        },
       },
     }),
     tsconfigPaths(),
