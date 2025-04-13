@@ -73,15 +73,6 @@ export default defineConfig(({ mode }) => ({
           src: path.resolve(__dirname, './src'),
         },
       },
-      prerender: {
-        routes: [
-          '/',
-          '/login',
-          '/sign-up',
-          '/forgot-password',
-          '/reset-password',
-        ],
-      },
     }),
     tsconfigPaths(),
     chunkSplitPlugin(),
