@@ -1,5 +1,5 @@
 import { injectRequest } from '@analogjs/router/tokens';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import {
   effect,
   inject,
@@ -11,11 +11,17 @@ import {
   untracked,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, map, materialize, merge, share } from 'rxjs';
+import { AuthTokenResponse } from '@supabase/supabase-js';
+import { filter, map, merge, of, share, Subject, tap } from 'rxjs';
 import { getEnvVar } from 'src/env';
-import { errorStream, successStream } from '../utils/rxjs';
-import { showError } from '../utils/toast';
-import { AuthService } from './auth.service';
+import { TrpcClient } from 'src/trpc-client';
+import { AuthService } from '../../shared/data-access/auth.service';
+import {
+  errorStream,
+  materializeAndShare,
+  successStream,
+} from '../../shared/utils/rxjs';
+import { showError } from '../../shared/utils/toast';
 
 type RequestMetadata = {
   referer: string;
@@ -24,32 +30,44 @@ type RequestMetadata = {
 };
 
 const requestMetadataKey = makeStateKey<RequestMetadata>('requestMetadata');
+const exchangeCodeForSessionKey = makeStateKey<AuthTokenResponse>(
+  'exchangeCodeForSession',
+);
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AppService {
+@Injectable()
+export class MagicLinkService {
   private PLATFORM_ID = inject(PLATFORM_ID);
   private transferState = inject(TransferState);
+  private _trpc = inject(TrpcClient);
   private authService = inject(AuthService);
   private request = injectRequest();
 
-  private getUser$ = this.authService.getUser$.pipe(materialize(), share());
-
-  private getUserSuccess$ = this.getUser$.pipe(successStream(), share());
-
-  private getUserSuccessWithError$ = this.getUserSuccess$.pipe(
-    filter((data) => data.error !== null),
-    map((data) => data.error),
-  );
-
-  private getUserError$ = this.getUser$.pipe(errorStream());
+  private exchangeCodeForSessionTriggerSubject$ = new Subject<string>();
 
   private exchangeCodeForSession$ =
-    this.authService.exchangeCodeForSession$.pipe(materialize(), share());
+    this.exchangeCodeForSessionTriggerSubject$.pipe(
+      materializeAndShare((code) => {
+        if (isPlatformServer(this.PLATFORM_ID)) {
+          return this._trpc.auth.exchangeCodeForSession
+            .mutate({ code })
+            .pipe(
+              tap((data) =>
+                this.transferState.set(exchangeCodeForSessionKey, data),
+              ),
+            );
+        } else {
+          const data = this.transferState.get(exchangeCodeForSessionKey, null);
+          if (!data) {
+            throw new Error('exchangeCodeForSessionKey was not set');
+          }
+          return of(data);
+        }
+      }),
+    );
 
   private exchangeCodeForSessionSuccess$ = this.exchangeCodeForSession$.pipe(
     successStream(),
+    tap(({ data }) => this.authService.setUser(data.user)),
     share(),
   );
 
@@ -63,8 +81,6 @@ export class AppService {
     this.exchangeCodeForSession$.pipe(errorStream());
 
   private error$ = merge(
-    this.getUserSuccessWithError$,
-    this.getUserError$,
     this.exchangeCodeForSessionSuccessWithError$,
     this.exchangeCodeForSessionError$,
   ).pipe(share());
@@ -93,7 +109,6 @@ export class AppService {
     const requestMetadata = this.getRequestMetadata();
 
     if (!requestMetadata) {
-      this.authService.getUser();
       console.warn('requestMetadataKey was not set.');
       return;
     }
@@ -104,7 +119,6 @@ export class AppService {
     const normalizedReferer = normalizeUrl(referer);
 
     if (normalizedEmailSenderUrl !== normalizedReferer) {
-      this.authService.getUser();
       return;
     }
 
@@ -118,11 +132,9 @@ export class AppService {
     this.clearUrl.set(true);
 
     if (code) {
-      this.authService.exchangeCodeForSession(code);
+      this.exchangeCodeForSessionTriggerSubject$.next(code);
       return;
     }
-
-    this.authService.getUser();
 
     if (error && errorCode && errorDescription) {
       const message = `${errorCode} (${error}): ${errorDescription}`;

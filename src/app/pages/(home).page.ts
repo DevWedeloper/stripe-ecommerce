@@ -5,15 +5,16 @@ import {
   effect,
   inject,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideList, lucideSearch } from '@ng-icons/lucide';
 import { HlmCardDirective } from '@spartan-ng/ui-card-helm';
 import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
-import { AppService } from '../shared/data-access/app.service';
+import { filter, take } from 'rxjs';
 import { FooterComponent } from '../shared/layout/footer/footer.component';
 import { HeaderComponent } from '../shared/layout/header/header.component';
 import { metaWith } from '../shared/utils/meta';
+import { MagicLinkService } from './data-access/magic-link.service';
 
 export const routeMeta: RouteMeta = {
   meta: metaWith(
@@ -33,7 +34,7 @@ export const routeMeta: RouteMeta = {
     HeaderComponent,
     FooterComponent,
   ],
-  providers: [provideIcons({ lucideList, lucideSearch })],
+  providers: [MagicLinkService, provideIcons({ lucideList, lucideSearch })],
   template: `
     <app-header />
     <main class="p-4 md:p-8">
@@ -80,11 +81,18 @@ export const routeMeta: RouteMeta = {
 })
 export default class HomePageComponent {
   private router = inject(Router);
-  private appService = inject(AppService);
+  private magicLinkService = inject(MagicLinkService);
 
   constructor() {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd && event.id === 1),
+        take(1),
+      )
+      .subscribe(() => this.magicLinkService.checkIfRedirectedFromMagicLink());
+
     effect(() => {
-      const clearUrl = this.appService.clearUrl();
+      const clearUrl = this.magicLinkService.clearUrl();
       if (clearUrl) {
         this.router.navigate([], {
           queryParams: null,
