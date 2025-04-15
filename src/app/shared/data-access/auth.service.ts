@@ -78,27 +78,27 @@ export class AuthService {
     );
   }
 
-  setUser(data: User | null) {
+  setUser(data: User | null): void {
     this.setUser$.next(data);
   }
 
-  login(data: UserCredentials) {
+  login(data: UserCredentials): void {
     this.loginTriggerSubject$.next(data);
   }
 
-  updateEmail(data: EmailUpdate) {
+  updateEmail(data: EmailUpdate): void {
     this.updateEmailTriggerSubject$.next(data);
   }
 
-  updatePassword(data: PasswordUpdate) {
+  updatePassword(data: PasswordUpdate): void {
     this.updatePasswordTriggerSubject$.next(data);
   }
 
-  signOut() {
+  signOut(): void {
     this.signOutTriggerSubject$.next();
   }
 
-  deleteUser(id: string) {
+  deleteUser(id: string): void {
     this.deleteUserTriggerSubject$.next(id);
   }
 
