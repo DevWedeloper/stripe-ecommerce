@@ -1,9 +1,14 @@
 import { paginationSchema } from 'src/schemas/pagination';
-import { createProductSchema, updateProductSchema } from 'src/schemas/product';
+import {
+  confirmCartSchema,
+  createProductSchema,
+  updateProductSchema,
+} from 'src/schemas/product';
 import { positiveIntSchema } from 'src/schemas/shared/numbers';
 import { createProduct } from 'src/server/use-cases/product/create-product';
 import { deleteProductByUserId } from 'src/server/use-cases/product/delete-product-by-user-id';
 import { getProductById } from 'src/server/use-cases/product/get-product-by-id';
+import { getProductPricingDetails } from 'src/server/use-cases/product/get-product-pricing-details';
 import { getProductsByCategoryName } from 'src/server/use-cases/product/get-products-by-category-name';
 import { getProductsByUserId } from 'src/server/use-cases/product/get-products-by-user-id';
 import { getUserProductById } from 'src/server/use-cases/product/get-user-product-by-id';
@@ -74,6 +79,10 @@ export const productsRouter = router({
         input,
       }) => await getUserProductById({ ...input, userId: id }),
     ),
+
+  getPricingDetails: publicProcedure
+    .input(confirmCartSchema)
+    .query(async ({ input }) => await getProductPricingDetails(input)),
 
   updateByUserId: protectedProcedure.input(updateProductSchema).mutation(
     async ({

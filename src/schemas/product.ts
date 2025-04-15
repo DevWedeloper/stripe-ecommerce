@@ -7,6 +7,7 @@ import {
   hasValidVariations,
 } from 'src/utils/product';
 import { z, ZodIssueCode } from 'zod';
+import { positiveIntSchema } from './shared/numbers';
 
 const productImagesInsertWithoutProductId = createInsertSchema(
   productImages,
@@ -162,3 +163,11 @@ export const updateProductSchema = z.object({
 });
 
 export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
+
+export const confirmCartSchema = z.array(
+  z.object({
+    productItemId: positiveIntSchema,
+  }),
+);
+
+export type ConfirmCartSchema = z.infer<typeof confirmCartSchema>;
