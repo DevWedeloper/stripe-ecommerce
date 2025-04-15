@@ -8,7 +8,7 @@ import {
 import { FormBuilder, ValueChangeEvent } from '@angular/forms';
 import { isEqual } from 'lodash-es';
 import { combineLatest, filter, map, startWith, switchMap } from 'rxjs';
-import { LeafCategoriesService } from 'src/app/shared/data-access/leaf-categories.service';
+import { LeafCategoriesService } from 'src/app/pages/user/(user)/product/data-access/leaf-categories.service';
 import { TagsService } from 'src/app/shared/data-access/tags.service';
 import { EmptyProductDetailsComponent } from 'src/app/shared/ui/fallback/empty-product-details.component';
 import { GoBackButtonComponent } from 'src/app/shared/ui/go-back-button.component';

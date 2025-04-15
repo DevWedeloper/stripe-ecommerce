@@ -2,8 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { materialize, share, shareReplay } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
-import { errorStream, successStream } from '../utils/rxjs';
-import { showError } from '../utils/toast';
+import { errorStream, successStream } from '../../../../../shared/utils/rxjs';
+import { showError } from '../../../../../shared/utils/toast';
 
 @Injectable({
   providedIn: 'root',

@@ -12,7 +12,7 @@ import { FormBuilder, ValueChangeEvent } from '@angular/forms';
 import { HlmScrollAreaDirective } from '@spartan-ng/ui-scrollarea-helm';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { filter } from 'rxjs';
-import { LeafCategoriesService } from 'src/app/shared/data-access/leaf-categories.service';
+import { LeafCategoriesService } from 'src/app/pages/user/(user)/product/data-access/leaf-categories.service';
 import { TagsService } from 'src/app/shared/data-access/tags.service';
 import { toggleDisableStream } from 'src/app/shared/utils/rxjs';
 import { CreateProductService } from '../data-access/create-product.service';
