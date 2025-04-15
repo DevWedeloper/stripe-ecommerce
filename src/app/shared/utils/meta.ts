@@ -21,7 +21,6 @@ export const metaWith = (title: string, description: string) => [
   },
   {
     property: 'og:url',
-    // TODO: Change to actual url
     content: 'https://stripe-ecommerce-devwedeloper.vercel.app/',
   },
   {
@@ -30,7 +29,6 @@ export const metaWith = (title: string, description: string) => [
   },
   {
     property: 'og:image',
-    // TODO: Change to actual url
     content: 'https://stripe-ecommerce-devwedeloper.vercel.app/favicon.ico',
   },
   {
