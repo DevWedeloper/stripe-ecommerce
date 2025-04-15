@@ -100,7 +100,7 @@ export class ProductDetailsComponent {
       stock: currentItem.stock,
       price: currentItem.price,
       variations: currentItem.variations,
-      productItemId: product.id,
+      productItemId: currentItem.id,
       quantity: quantity,
     });
   }
