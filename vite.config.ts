@@ -50,6 +50,7 @@ export default defineConfig(({ mode }) => ({
       'zod',
       'blurhash',
       'canvas',
+      'superjson',
 
       'drizzle-zod',
       'drizzle-orm',
