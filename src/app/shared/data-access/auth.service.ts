@@ -1,9 +1,8 @@
-import { injectRequest } from '@analogjs/router/tokens';
-import { effect, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { pendingUntilEvent, toSignal } from '@angular/core/rxjs-interop';
 import { User } from '@supabase/supabase-js';
 import { map, merge, share, shareReplay, Subject, switchMap, tap } from 'rxjs';
-import { TrpcClient, TrpcHeaders } from 'src/trpc-client';
+import { TrpcClient } from 'src/trpc-client';
 import { EmailUpdate, PasswordUpdate, UserCredentials } from '../types/auth';
 
 @Injectable({
@@ -11,7 +10,6 @@ import { EmailUpdate, PasswordUpdate, UserCredentials } from '../types/auth';
 })
 export class AuthService {
   private _trpc = inject(TrpcClient);
-  private request = injectRequest();
 
   private setUser$ = new Subject<User | null>();
   private loginTriggerSubject$ = new Subject<UserCredentials>();
@@ -62,24 +60,11 @@ export class AuthService {
 
   user = toSignal(this.user$, { initialValue: null });
 
-  constructor() {
-    effect(() =>
-      TrpcHeaders.update((headers) => ({
-        ...headers,
-        cookie: this.request?.headers.cookie,
-      })),
-    );
-  }
-
   getUserAndSet$() {
     return this.getUserNoCache$().pipe(
       map(({ data }) => data.user),
       tap((data) => this.setUser$.next(data)),
     );
-  }
-
-  setUser(data: User | null): void {
-    this.setUser$.next(data);
   }
 
   login(data: UserCredentials): void {

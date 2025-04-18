@@ -1,5 +1,5 @@
 import { injectRequest } from '@analogjs/router/tokens';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   effect,
   inject,
@@ -10,17 +10,7 @@ import {
   TransferState,
   untracked,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AuthTokenResponse } from '@supabase/supabase-js';
-import { filter, map, merge, of, share, Subject, tap } from 'rxjs';
 import { getEnvVar } from 'src/env';
-import { TrpcClient } from 'src/trpc-client';
-import { AuthService } from '../../shared/data-access/auth.service';
-import {
-  errorStream,
-  materializeAndShare,
-  successStream,
-} from '../../shared/utils/rxjs';
 import { showError } from '../../shared/utils/toast';
 
 type RequestMetadata = {
@@ -30,60 +20,12 @@ type RequestMetadata = {
 };
 
 const requestMetadataKey = makeStateKey<RequestMetadata>('requestMetadata');
-const exchangeCodeForSessionKey = makeStateKey<AuthTokenResponse>(
-  'exchangeCodeForSession',
-);
 
 @Injectable()
 export class MagicLinkService {
   private PLATFORM_ID = inject(PLATFORM_ID);
   private transferState = inject(TransferState);
-  private _trpc = inject(TrpcClient);
-  private authService = inject(AuthService);
   private request = injectRequest();
-
-  private exchangeCodeForSessionTriggerSubject$ = new Subject<string>();
-
-  private exchangeCodeForSession$ =
-    this.exchangeCodeForSessionTriggerSubject$.pipe(
-      materializeAndShare((code) => {
-        if (isPlatformServer(this.PLATFORM_ID)) {
-          return this._trpc.auth.exchangeCodeForSession
-            .mutate({ code })
-            .pipe(
-              tap((data) =>
-                this.transferState.set(exchangeCodeForSessionKey, data),
-              ),
-            );
-        } else {
-          const data = this.transferState.get(exchangeCodeForSessionKey, null);
-          if (!data) {
-            throw new Error('exchangeCodeForSessionKey was not set');
-          }
-          return of(data);
-        }
-      }),
-    );
-
-  private exchangeCodeForSessionSuccess$ = this.exchangeCodeForSession$.pipe(
-    successStream(),
-    tap(({ data }) => this.authService.setUser(data.user)),
-    share(),
-  );
-
-  private exchangeCodeForSessionSuccessWithError$ =
-    this.exchangeCodeForSessionSuccess$.pipe(
-      filter((data) => data.error !== null),
-      map((data) => data.error),
-    );
-
-  private exchangeCodeForSessionError$ =
-    this.exchangeCodeForSession$.pipe(errorStream());
-
-  private error$ = merge(
-    this.exchangeCodeForSessionSuccessWithError$,
-    this.exchangeCodeForSessionError$,
-  ).pipe(share());
 
   private errorFromRedirect = signal<string | null>(null);
 
@@ -96,13 +38,6 @@ export class MagicLinkService {
         untracked(() => showError(error));
       }
     });
-
-    this.error$
-      .pipe(
-        filter(() => isPlatformBrowser(this.PLATFORM_ID)),
-        takeUntilDestroyed(),
-      )
-      .subscribe((error) => showError(error.message));
   }
 
   checkIfRedirectedFromMagicLink(): void {
@@ -124,17 +59,11 @@ export class MagicLinkService {
 
     const { searchParams } = new URL(originalUrl || '', baseUrl);
 
-    const code = searchParams.get('code');
     const error = searchParams.get('error');
     const errorCode = searchParams.get('error_code');
     const errorDescription = searchParams.get('error_description');
 
     this.clearUrl.set(true);
-
-    if (code) {
-      this.exchangeCodeForSessionTriggerSubject$.next(code);
-      return;
-    }
 
     if (error && errorCode && errorDescription) {
       const message = `${errorCode} (${error}): ${errorDescription}`;

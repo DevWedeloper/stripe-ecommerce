@@ -20,7 +20,12 @@ export class SignUpService {
   private signUpTrigger$ = new Subject<UserRegistration>();
 
   private signUp$ = this.signUpTrigger$.pipe(
-    materializeAndShare((data) => this._trpc.auth.signUp.mutate(data)),
+    materializeAndShare((data) =>
+      this._trpc.auth.signUp.mutate({
+        ...data,
+        redirectTo: window.location.origin,
+      }),
+    ),
   );
 
   private signUpSuccess$ = this.signUp$.pipe(successStream(), share());

@@ -36,6 +36,7 @@ export const authRouter = router({
       z.object({
         email: emailSchema,
         password: passwordWithValidationSchema,
+        redirectTo: z.string(),
       }),
     )
     .mutation(
