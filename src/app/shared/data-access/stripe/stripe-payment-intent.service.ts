@@ -32,10 +32,16 @@ export class StripePaymentIntentService {
         totalAmountInCents: convertToCents(this.total()),
         userId: this.user()?.id ?? null,
         orderDate: new Date(),
-        cart: this.cart().map(({ userId, ...rest }) => ({
-          sellerUserId: userId,
-          ...rest,
-        })),
+        cart: this.cart().map(({ userId, ...rest }) => {
+          if (userId === null) {
+            throw new Error('userId cannot be null');
+          }
+
+          return {
+            sellerUserId: userId,
+            ...rest,
+          };
+        }),
       }),
     ),
   );
