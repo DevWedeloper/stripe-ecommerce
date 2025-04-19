@@ -1,6 +1,7 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { AuthError } from '@supabase/supabase-js';
 import { filter, map, materialize, merge, share } from 'rxjs';
 import { AuthService } from 'src/app/shared/data-access/auth.service';
 import {
@@ -25,11 +26,11 @@ export class DeleteUserService {
   private deleteUserSuccess$ = this.deleteUser$.pipe(successStream(), share());
 
   deleteUserSuccessWithData$ = this.deleteUserSuccess$.pipe(
-    filter((data) => data.error === null),
+    filter((data): data is { error: null } => data.error === null),
   );
 
   private deleteUserSuccessWithError$ = this.deleteUserSuccess$.pipe(
-    filter((data) => data.error !== null),
+    filter((data): data is { error: AuthError } => data.error !== null),
     map((data) => data.error),
   );
 

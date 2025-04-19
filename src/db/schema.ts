@@ -30,17 +30,11 @@ export const users = pgTable(
   {
     id: uuid('id')
       .primaryKey()
-      .references(() => authUsers.id)
-      .notNull(),
+      .references(() => authUsers.id, { onDelete: 'cascade' }),
     email: varchar('email', { length: 256 }).notNull(),
     avatarPath: text('avatar_path'),
-    isDeleted: boolean('is_deleted').notNull().default(false),
   },
-  (t) => [
-    uniqueIndex('unique_active_email')
-      .on(t.email)
-      .where(sql`${t.isDeleted} = false`),
-  ],
+  (t) => [unique('email').on(t.email)],
 ).enableRLS();
 
 export const countries = pgTable('countries', {
@@ -115,7 +109,9 @@ export const orders = pgTable(
   'orders',
   {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-    userId: uuid('user_id').references(() => users.id),
+    userId: uuid('user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
     orderDate: timestamp('order_date').notNull(),
     deliveredDate: timestamp('delivered_date'),
     shippingAddressId: integer('shipping_address_id')
@@ -153,9 +149,9 @@ export const products = pgTable(
   'products',
   {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-    userId: uuid('user_id')
-      .references(() => users.id)
-      .notNull(),
+    userId: uuid('user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
     name: text('name').notNull(),
     description: text('description').notNull(),
     isDeleted: boolean('is_deleted').default(false).notNull(),
@@ -326,9 +322,9 @@ export const userReviews = pgTable(
   'user_reviews',
   {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-    userId: uuid('user_id')
-      .references(() => users.id)
-      .notNull(),
+    userId: uuid('user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
     orderItemId: integer('order_item_id')
       .references(() => orderItems.id)
       .notNull(),

@@ -86,17 +86,40 @@ ALTER TYPE "public"."order_status" OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."handle_new_user"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
-    AS $$
-BEGIN
-    INSERT INTO public.users (id, email)
-    VALUES (NEW.id, NEW.email);
-
-    RETURN NEW;
-END;
-$$;
+    AS $$begin
+  insert into public.users (id, email)
+  values (new.id, new.email);
+  return new;
+end;$$;
 
 
 ALTER FUNCTION "public"."handle_new_user"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."handle_user_delete"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update public.products
+  set is_deleted = true
+  where user_id = old.id;
+  return old;
+end;$$;
+
+
+ALTER FUNCTION "public"."handle_user_delete"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."handle_user_update"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update public.users
+  set email = new.email
+  where id = new.id;
+  return new;
+end;$$;
+
+
+ALTER FUNCTION "public"."handle_user_update"() OWNER TO "postgres";
 
 SET default_tablespace = '';
 
@@ -301,7 +324,7 @@ CREATE TABLE IF NOT EXISTS "public"."products" (
     "id" integer NOT NULL,
     "name" "text" NOT NULL,
     "description" "text" NOT NULL,
-    "user_id" "uuid" NOT NULL,
+    "user_id" "uuid",
     "is_deleted" boolean DEFAULT false NOT NULL
 );
 
@@ -373,7 +396,7 @@ ALTER TABLE "public"."user_addresses" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."user_reviews" (
     "id" integer NOT NULL,
-    "user_id" "uuid" NOT NULL,
+    "user_id" "uuid",
     "order_item_id" integer NOT NULL,
     "rating" integer NOT NULL,
     "comment" "text" NOT NULL,
@@ -400,8 +423,7 @@ ALTER TABLE "public"."user_reviews" ALTER COLUMN "id" ADD GENERATED ALWAYS AS ID
 CREATE TABLE IF NOT EXISTS "public"."users" (
     "id" "uuid" NOT NULL,
     "email" character varying(256) NOT NULL,
-    "avatar_path" "text",
-    "is_deleted" boolean DEFAULT false NOT NULL
+    "avatar_path" "text"
 );
 
 
@@ -468,6 +490,11 @@ ALTER TABLE ONLY "public"."countries"
 
 ALTER TABLE ONLY "public"."countries"
     ADD CONSTRAINT "countries_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."users"
+    ADD CONSTRAINT "email" UNIQUE ("email");
 
 
 
@@ -617,10 +644,6 @@ CREATE INDEX "tags_search_index" ON "public"."tags" USING "gin" ("to_tsvector"('
 
 
 
-CREATE UNIQUE INDEX "unique_active_email" ON "public"."users" USING "btree" ("email") WHERE ("is_deleted" = false);
-
-
-
 CREATE UNIQUE INDEX "unique_thumbnail_per_product" ON "public"."product_images" USING "btree" ("product_id", "is_thumbnail") WHERE ("is_thumbnail" = true);
 
 
@@ -680,7 +703,7 @@ ALTER TABLE ONLY "public"."orders"
 
 
 ALTER TABLE ONLY "public"."orders"
-    ADD CONSTRAINT "orders_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id");
+    ADD CONSTRAINT "orders_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE SET NULL;
 
 
 
@@ -740,7 +763,7 @@ ALTER TABLE ONLY "public"."product_tags"
 
 
 ALTER TABLE ONLY "public"."products"
-    ADD CONSTRAINT "products_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id");
+    ADD CONSTRAINT "products_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE SET NULL;
 
 
 
@@ -765,12 +788,12 @@ ALTER TABLE ONLY "public"."user_reviews"
 
 
 ALTER TABLE ONLY "public"."user_reviews"
-    ADD CONSTRAINT "user_reviews_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id");
+    ADD CONSTRAINT "user_reviews_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE SET NULL;
 
 
 
 ALTER TABLE ONLY "public"."users"
-    ADD CONSTRAINT "users_id_users_id_fk" FOREIGN KEY ("id") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "users_id_users_id_fk" FOREIGN KEY ("id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
 
 
 
@@ -1036,12 +1059,30 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 
 
 
-
-
-
 GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "anon";
 GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."handle_user_delete"() TO "anon";
+GRANT ALL ON FUNCTION "public"."handle_user_delete"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."handle_user_delete"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."handle_user_update"() TO "anon";
+GRANT ALL ON FUNCTION "public"."handle_user_update"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."handle_user_update"() TO "service_role";
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1246,6 +1287,12 @@ GRANT ALL ON SEQUENCE "public"."variations_id_seq" TO "service_role";
 
 
 
+
+
+
+
+
+
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "postgres";
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "anon";
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "authenticated";
@@ -1307,6 +1354,14 @@ RESET ALL;
 --
 
 CREATE OR REPLACE TRIGGER "on_auth_user_created" AFTER INSERT ON "auth"."users" FOR EACH ROW EXECUTE FUNCTION "public"."handle_new_user"();
+
+
+
+CREATE OR REPLACE TRIGGER "on_auth_user_delete" AFTER DELETE ON "auth"."users" FOR EACH ROW EXECUTE FUNCTION "public"."handle_user_delete"();
+
+
+
+CREATE OR REPLACE TRIGGER "on_auth_user_updated" AFTER UPDATE ON "auth"."users" FOR EACH ROW EXECUTE FUNCTION "public"."handle_user_update"();
 
 
 
