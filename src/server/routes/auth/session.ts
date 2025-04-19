@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
   const error = query['error'] as string | undefined;
   const errorCode = query['error_code'] as string | undefined;
   const errorDescription = query['error_description'] as string | undefined;
+  const next = query['next'] as string | undefined;
 
   const params = new URLSearchParams();
 
@@ -25,6 +26,8 @@ export default defineEventHandler(async (event) => {
   const host = headers.host;
   const protocol = getRequestProtocol(event);
   const baseURL = `${protocol}://${host}`;
+  const path = next ? `/${next}` : '';
+  const finalURL = `${baseURL}${path}?${params.toString()}`;
 
   if (code) {
     const supabase = createClient(event);
@@ -36,5 +39,5 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  return sendRedirect(event, `${baseURL}/?${params.toString()}`);
+  return sendRedirect(event, `${finalURL}/?${params.toString()}`);
 });

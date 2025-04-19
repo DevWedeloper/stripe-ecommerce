@@ -5,5 +5,5 @@ export const resetPasswordForEmail = (
   { email, url }: { email: string; url: string },
 ) =>
   supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${url}/reset-password`,
+    redirectTo: `${url}/api/auth/session?next=reset-password`,
   });
