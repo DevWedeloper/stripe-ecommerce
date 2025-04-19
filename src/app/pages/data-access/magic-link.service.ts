@@ -10,11 +10,9 @@ import {
   TransferState,
   untracked,
 } from '@angular/core';
-import { getEnvVar } from 'src/env';
 import { showError } from '../../shared/utils/toast';
 
 type RequestMetadata = {
-  referer: string;
   baseUrl: string;
   originalUrl: string;
 };
@@ -48,14 +46,7 @@ export class MagicLinkService {
       return;
     }
 
-    const { referer, baseUrl, originalUrl } = requestMetadata;
-    const emailSenderUrl = getEnvVar('VITE_EMAIL_SENDER_URL');
-    const normalizedEmailSenderUrl = normalizeUrl(emailSenderUrl);
-    const normalizedReferer = normalizeUrl(referer);
-
-    if (normalizedEmailSenderUrl !== normalizedReferer) {
-      return;
-    }
+    const { baseUrl, originalUrl } = requestMetadata;
 
     const { searchParams } = new URL(originalUrl || '', baseUrl);
 
@@ -79,14 +70,12 @@ export class MagicLinkService {
       return request;
     }
 
-    const referer = this.request?.headers.referer || '';
     const baseUrl = `${this.request?.headers['x-forwarded-proto'] || 'http'}://${
       this.request?.headers['host']
     }`;
     const originalUrl = this.request?.originalUrl || '';
 
     const data = {
-      referer,
       baseUrl,
       originalUrl,
     };
@@ -96,6 +85,3 @@ export class MagicLinkService {
     return data;
   }
 }
-
-const normalizeUrl = (url: string) =>
-  url.endsWith('/') ? url.slice(0, -1) : url;

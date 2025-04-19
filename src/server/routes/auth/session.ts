@@ -5,7 +5,6 @@ import {
   getRequestProtocol,
   sendRedirect,
 } from 'h3';
-import { getEnvVar } from 'src/env';
 import { createClient } from 'src/supabase/server';
 
 export default defineEventHandler(async (event) => {
@@ -25,17 +24,16 @@ export default defineEventHandler(async (event) => {
 
   const host = headers.host;
   const protocol = getRequestProtocol(event);
-  const referer = headers.referer;
   const baseURL = `${protocol}://${host}`;
 
-  const emailSenderUrl = getEnvVar('VITE_EMAIL_SENDER_URL');
-  const normalizedEmailSenderUrl = normalizeUrl(emailSenderUrl);
-  const normalizedReferer = normalizeUrl(referer || '');
-
-  if (code && normalizedEmailSenderUrl === normalizedReferer) {
+  if (code) {
     const supabase = createClient(event);
 
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (!error) {
+      console.log('Successfully exchanged code for session.');
+    }
 
     if (error) {
       console.error('Failed to exchange code for session:', error);
@@ -44,6 +42,3 @@ export default defineEventHandler(async (event) => {
 
   return sendRedirect(event, `${baseURL}/?${params.toString()}`);
 });
-
-const normalizeUrl = (url: string) =>
-  url.endsWith('/') ? url.slice(0, -1) : url;
