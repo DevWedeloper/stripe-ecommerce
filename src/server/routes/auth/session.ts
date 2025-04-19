@@ -31,10 +31,6 @@ export default defineEventHandler(async (event) => {
 
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (!error) {
-      console.log('Successfully exchanged code for session.');
-    }
-
     if (error) {
       console.error('Failed to exchange code for session:', error);
     }
