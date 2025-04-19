@@ -30,9 +30,10 @@ export class ForgotPasswordService {
     share(),
   );
 
-  private forgotPasswordSuccessWithData$ = this.forgotPasswordSuccess$.pipe(
+  forgotPasswordSuccessWithData$ = this.forgotPasswordSuccess$.pipe(
     filter((data) => data.error === null),
     map((data) => data.data),
+    share(),
   );
 
   private forgotPasswordSuccessWithError$ = this.forgotPasswordSuccess$.pipe(

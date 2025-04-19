@@ -1,6 +1,11 @@
 import { RouteMeta } from '@analogjs/router';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  viewChild,
+} from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ValueChangeEvent } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
@@ -70,8 +75,11 @@ export default class ForgotPasswordPageComponent {
   private fb = inject(FormBuilder);
   private forgotPasswordService = inject(ForgotPasswordService);
 
+  private success$ = this.forgotPasswordService.forgotPasswordSuccessWithData$;
   protected isLoading = this.forgotPasswordService.isLoading;
   private error$ = this.forgotPasswordService.error$;
+
+  private forgotPasswordForm = viewChild.required(ForgotPasswordFormComponent);
 
   protected form = this.fb.nonNullable.group({
     ...emailField,
@@ -87,6 +95,12 @@ export default class ForgotPasswordPageComponent {
   protected disable = toSignal(this.disable$, {
     initialValue: false,
   });
+
+  constructor() {
+    this.success$
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.forgotPasswordForm().formDir().resetForm());
+  }
 
   protected onSubmit(): void {
     this.forgotPasswordService.forgotPassword(this.form.getRawValue());

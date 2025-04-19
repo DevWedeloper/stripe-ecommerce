@@ -3,8 +3,9 @@ import {
   Component,
   input,
   output,
+  viewChild,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormGroupDirective } from '@angular/forms';
 import {
   authInputErrorProvider,
   sharedFormDeps,
@@ -50,6 +51,8 @@ export class ForgotPasswordFormComponent {
   isLoading = input.required<boolean>();
   disable = input.required<boolean>();
   submitChange = output<void>();
+
+  formDir = viewChild.required(FormGroupDirective);
 
   protected onSubmit(): void {
     this.submitChange.emit();
