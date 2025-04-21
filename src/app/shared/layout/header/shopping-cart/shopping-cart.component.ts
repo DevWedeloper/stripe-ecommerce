@@ -56,6 +56,7 @@ import { CartItemComponent } from './cart-item.component';
           </span>
         }
         <ng-icon hlm size="sm" name="lucideShoppingCart" />
+        <span class="sr-only">Open shopping cart</span>
       </button>
       <div hlmPopoverContent *brnPopoverContent="let ctx" class="w-80 p-2">
         <ng-scrollbar hlm class="h-96">

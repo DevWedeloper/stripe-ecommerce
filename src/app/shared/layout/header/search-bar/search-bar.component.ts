@@ -41,6 +41,7 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
       />
       <button hlmBtn size="sm" variant="outline">
         <ng-icon hlm size="sm" name="lucideSearch" />
+        <span class="sr-only">Search for product</span>
       </button>
     </form>
   `,
