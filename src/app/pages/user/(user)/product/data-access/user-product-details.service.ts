@@ -38,16 +38,18 @@ export class UserProductDetailsService {
   );
 
   private product$ = this.productId$.pipe(
-    pendingUntilEvent(),
     materializeAndShare((productId) =>
       this._trpc.products.getByUserId.query({
         productId,
       }),
     ),
-    shareReplay({ bufferSize: 1, refCount: true }),
+    pendingUntilEvent(),
   );
 
-  productSuccess$ = this.product$.pipe(successStream());
+  productSuccess$ = this.product$.pipe(
+    successStream(),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
 
   private productError$ = this.product$.pipe(errorStream(), share());
 

@@ -94,10 +94,10 @@ export class ProductListsService {
   );
 
   private products$ = this.filter$.pipe(
-    pendingUntilEvent(),
     materializeAndShare((categoryFilter) =>
       this._trpc.products.getByCategoryName.query(categoryFilter),
     ),
+    pendingUntilEvent(),
   );
 
   private productsSuccess$ = this.products$.pipe(

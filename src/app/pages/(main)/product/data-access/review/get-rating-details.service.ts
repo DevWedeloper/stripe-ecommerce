@@ -5,9 +5,13 @@ import {
   toSignal,
 } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { map, materialize, share, shareReplay, switchMap } from 'rxjs';
+import { map, share, shareReplay } from 'rxjs';
 import { TrpcClient } from 'src/trpc-client';
-import { errorStream, successStream } from '../../../../../shared/utils/rxjs';
+import {
+  errorStream,
+  materializeAndShare,
+  successStream,
+} from '../../../../../shared/utils/rxjs';
 import { showError } from '../../../../../shared/utils/toast';
 
 @Injectable()
@@ -30,12 +34,10 @@ export class GetRatingDetailsService {
   );
 
   private getRatingDetails$ = this.productId$.pipe(
-    pendingUntilEvent(),
-    switchMap((productId) =>
+    materializeAndShare((productId) =>
       this._trpc.reviews.getRatingDetails.query({ productId }),
     ),
-    materialize(),
-    shareReplay({ bufferSize: 1, refCount: true }),
+    pendingUntilEvent(),
   );
 
   private getRatingDetailsSuccess$ = this.getRatingDetails$.pipe(

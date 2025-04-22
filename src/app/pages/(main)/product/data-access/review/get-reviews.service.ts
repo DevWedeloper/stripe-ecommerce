@@ -9,10 +9,8 @@ import {
   combineLatest,
   distinctUntilChanged,
   map,
-  materialize,
   share,
   shareReplay,
-  switchMap,
   take,
 } from 'rxjs';
 import { getS3ImageUrl } from 'src/app/shared/utils/image-object';
@@ -30,6 +28,7 @@ import {
   errorStream,
   finalizedStatusStream,
   initialLoading,
+  materializeAndShare,
   successStream,
 } from '../../../../../shared/utils/rxjs';
 import { parseToPositiveInt } from '../../../../../shared/utils/schema';
@@ -105,10 +104,8 @@ export class GetReviewsService {
   );
 
   private reviews$ = this.filter$.pipe(
+    materializeAndShare((data) => this._trpc.reviews.getPaginated.query(data)),
     pendingUntilEvent(),
-    switchMap((data) => this._trpc.reviews.getPaginated.query(data)),
-    materialize(),
-    shareReplay({ bufferSize: 1, refCount: true }),
   );
 
   private reviewsSuccess$ = this.reviews$.pipe(

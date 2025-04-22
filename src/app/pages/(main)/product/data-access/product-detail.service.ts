@@ -45,8 +45,8 @@ export class ProductDetailService {
   );
 
   private product$ = this.productId$.pipe(
-    pendingUntilEvent(),
     materializeAndShare((id) => this._trpc.products.getById.query(id)),
+    pendingUntilEvent(),
   );
 
   private productSuccess$ = this.product$.pipe(

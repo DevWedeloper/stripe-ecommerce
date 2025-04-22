@@ -59,11 +59,11 @@ export class UserProductListService {
   );
 
   private products$ = this.trigger$.pipe(
-    pendingUntilEvent(),
     withLatestFrom(this.filter$),
     materializeAndShare(([_, filter]) =>
       this._trpc.products.getAllByUserId.query(filter),
     ),
+    pendingUntilEvent(),
   );
 
   private productsSuccess$ = this.products$.pipe(

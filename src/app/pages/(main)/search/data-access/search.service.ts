@@ -49,10 +49,10 @@ export class SearchService {
   private keyword$ = this.filter$.pipe(map((filter) => filter.keyword));
 
   private products$ = this.filter$.pipe(
-    pendingUntilEvent(),
     materializeAndShare((keywordFilter) =>
       this._trpc.products.searchByKeyword.query(keywordFilter),
     ),
+    pendingUntilEvent(),
   );
 
   private productsSuccess$ = this.products$.pipe(
