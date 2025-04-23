@@ -1,10 +1,6 @@
 import { RouteMeta } from '@analogjs/router';
 import { Component, computed, inject } from '@angular/core';
-import {
-  takeUntilDestroyed,
-  toObservable,
-  toSignal,
-} from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ValueChangeEvent } from '@angular/forms';
 import { isEqual } from 'lodash-es';
 import { combineLatest, filter, map, startWith, switchMap } from 'rxjs';
@@ -221,19 +217,6 @@ export default class UserProductDetailPageComponent {
       initialValue: false,
     },
   );
-
-  constructor() {
-    // TODO: Temporary fix, due to spartan select setting null on empty selection, remove when fixed
-    this.form$
-      .pipe(
-        switchMap((form) => form.controls.tagIds.valueChanges),
-        takeUntilDestroyed(),
-      )
-      .subscribe((value) => {
-        if (!value)
-          this.form().controls.tagIds.setValue([], { emitEvent: false });
-      });
-  }
 
   protected updateProduct(): void {
     this.updateProductService.updateProduct({
